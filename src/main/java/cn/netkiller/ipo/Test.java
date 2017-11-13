@@ -23,15 +23,15 @@ public class Test {
         // TODO code application logic here
         System.out.println("Starting...");
         
-        FileInput fi = new FileInput("C:\\Users\\neoch\\Documents\\NetBeansProjects\\ipo\\ipo\\target\\classes\\input.txt");
+        FileInput fi = new FileInput("C:\\Users\\neoch\\Documents\\NetBeansProjects\\ipo\\target\\classes\\input.txt");
 //        System.out.print(fi.readLine());
         
         Input input = new Input();
         input.add(fi);
 //        input.read();
 
-        Output output = new Output()
-        output.add(new OutputStdout())
+        Output output = new Output();
+        output.add(new OutputStdout());
         
         InputProcessOutput ipo = new InputProcessOutput();
         ipo.setInput(input);
