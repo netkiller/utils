@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class Input {
 
-    private FileInput input;
+    private InputInterface input;
 
     public Input() {
 
@@ -33,13 +33,8 @@ public class Input {
 
     public String read() {
 //        this.input.read();
-        String string = "";
-        String str = "";
-        while ((str = this.input.readLine()) != null) {
-//            System.out.println(str);
-            string += str;
-        }
-        return string;
+
+        return this.input.readLine();
 
     }
 }

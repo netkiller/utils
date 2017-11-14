@@ -5,10 +5,27 @@
  */
 package cn.netkiller.ipo.process;
 
+import java.util.List;
+import java.util.ArrayList;
+
 /**
  *
  * @author neoch
  */
 public class Process {
-    
+    private final List<ProcessInterface> process = new ArrayList<ProcessInterface>();
+    public void add(Replace process){
+        this.process.add(process);
+    }
+    public String run(String tmp){
+        String line = tmp;
+        for(ProcessInterface proc : this.process){
+            line = proc.run(line);
+        }
+//        this.process.forEach((proc) -> {
+//            System.out.println(proc.toString());
+//             line = proc.run(line);
+//        });
+        return line;
+    }
 }

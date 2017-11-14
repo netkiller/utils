@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  *
  * @author neoch
  */
-public class FileInput {
+public class FileInput implements InputInterface {
 
     private File file;
     private FileInputStream fileInputStream;
@@ -38,7 +38,7 @@ public class FileInput {
             bufferedReader = new BufferedReader(inputStreamReader);
 
         } catch (FileNotFoundException ex) {
-             Logger.getLogger(FileInput.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FileInput.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -50,6 +50,7 @@ public class FileInput {
 
         return str;
     }
+
     public String readLine() {
         try {
             return bufferedReader.readLine();
@@ -58,6 +59,7 @@ public class FileInput {
         }
         return null;
     }
+
     public void close() {
         try {
             bufferedReader.close();
@@ -67,5 +69,10 @@ public class FileInput {
             Logger.getLogger(FileInput.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    @Override
+    public void open() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.netkiller.ipo;
+package cn.netkiller.ipo.test;
 
+import cn.netkiller.ipo.InputProcessOutput;
 import cn.netkiller.ipo.input.FileInput;
 import cn.netkiller.ipo.input.Input;
 import cn.netkiller.ipo.output.Output;
 import cn.netkiller.ipo.output.OutputStdout;
+import cn.netkiller.ipo.process.Process;
+import cn.netkiller.ipo.process.Replace;
 
 /**
  *
@@ -33,8 +36,14 @@ public class Test {
         Output output = new Output();
         output.add(new OutputStdout());
         
+        Process process = new Process();
+        process.add(new Replace("Hello","Netkiller "));
+        process.add(new Replace("Neo","<Neo>"));
+        process.add(new Replace("Tom","[Tom]"));
+        
         InputProcessOutput ipo = new InputProcessOutput();
         ipo.setInput(input);
+        ipo.setProcess(process);
         ipo.setOutput(output);
         ipo.launch();
     }

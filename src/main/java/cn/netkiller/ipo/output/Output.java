@@ -11,11 +11,18 @@ package cn.netkiller.ipo.output;
  */
 public class Output {
     
-    private OutputStdout output;
+    private OutputInterface output;
     public void add(OutputStdout output){
         this.output = output;
     }
     public void write(String output){
         this.output.write(output);
+    }
+    public void close(){
+        
+    }
+
+    public void add(OutputJson json) {
+        this.output = json;
     }
 }
