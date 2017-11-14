@@ -34,12 +34,9 @@ public class CsvFileToJson {
 
         Input input = new Input();
         input.add(csv);
-//        input.read();
-
+        
         Output output = new Output();
         List<String> colume = new ArrayList<String>(Arrays.asList("id","name","age","address"));
-//        colume.add("id");
-//        colume.add("name");
         OutputJson json = new OutputJson(colume);
         output.add(json);
 
