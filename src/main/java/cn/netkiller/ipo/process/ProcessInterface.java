@@ -16,5 +16,5 @@ public interface ProcessInterface {
      * @param tmp
      * @return
      */
-    public String run(String tmp);
+    public String run(String line);
 }

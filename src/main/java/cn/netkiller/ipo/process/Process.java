@@ -35,4 +35,9 @@ public class Process {
 		this.process.add(nginxAccessProcess);
 
 	}
+
+	public void add(DropProcess dropProcess) {
+		this.process.add(dropProcess);
+
+	}
 }
