@@ -15,32 +15,36 @@ import cn.netkiller.ipo.process.Process;
  */
 public class InputProcessOutput {
 
-    private Input input;
-    private Output output;
-    private Process process;
+	private Input input;
+	private Output output;
+	private Process process;
 
-    public void setInput(Input input) {
-        this.input = input;
-    }
+	public void setInput(Input input) {
+		this.input = input;
+	}
 
-    public void setOutput(Output output) {
-        this.output = output;
-    }
+	public void setOutput(Output output) {
+		this.output = output;
+	}
 
-    public void setProcess(Process process) {
-        this.process = process;
-    }
+	public void setProcess(Process process) {
+		this.process = process;
+	}
 
-    public void launch() {
+	public void debug() {
 
-        String line = null;
+	}
 
-        while ((line = input.read()) != null) {
-//            System.out.println(str);
-            String tmp = this.process.run(line);
-            this.output.write(tmp);
-        }
+	public void launch() {
 
-//        this.output.write("Helloword");
-    }
+		String line = null;
+
+		while ((line = input.read()) != null) {
+			// System.out.println(str);
+			String tmp = this.process.run(line);
+			this.output.write(tmp);
+		}
+
+		// this.output.write("Helloword");
+	}
 }
