@@ -26,7 +26,7 @@ public class Test {
         // TODO code application logic here
         System.out.println("Starting...");
         
-        FileInput fi = new FileInput("C:\\Users\\neoch\\Documents\\NetBeansProjects\\ipo\\target\\classes\\input.txt");
+        FileInput fi = new FileInput("/tmp/access.log");
 //        System.out.print(fi.readLine());
         
         Input input = new Input();
