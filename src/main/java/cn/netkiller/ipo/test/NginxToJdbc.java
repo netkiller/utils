@@ -16,15 +16,14 @@ import cn.netkiller.ipo.process.Process;
 
 public class NginxToJdbc {
 	public static void main(String[] args) {
-		// TODO code application logic here
-		System.out.println("Starting...");
+
 
 		Config config = new Config();
+		System.out.println(config.get("output.jdbc.url"));
 
-		System.out.println(config.get("sss"));
-
-		FileInput fi = new FileInput(config.get("input.file"));
-		// System.out.print(fi.readLine());
+		
+		
+		FileInput fi = new FileInput(String.format("%s/%s%s%s", config.get("input.file.path"), config.get("input.file.prefix"), config.get("input.file.filename"), config.get("input.file.suffix")));
 
 		Input input = new Input();
 		input.add(fi);
@@ -42,10 +41,10 @@ public class NginxToJdbc {
 		map.put("deviceId", "deviceId");
 
 		OutputJdbc jdbc = new OutputJdbc("stat_app_log", map);
-		jdbc.setDriver("com.mysql.cj.jdbc.Driver");
-		jdbc.setUrl("jdbc:mysql://123.207.61.25:3306/test?useSSL=false");
-		jdbc.setUsername("test");
-		jdbc.setPassword("123456");
+		jdbc.setDriver(config.get("output.jdbc.driver"));
+		jdbc.setUrl(config.get("output.jdbc.url"));
+		jdbc.setUsername(config.get("output.jdbc.username"));
+		jdbc.setPassword(config.get("output.jdbc.password"));
 
 		output.add(jdbc);
 

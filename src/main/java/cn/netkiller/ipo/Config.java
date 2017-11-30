@@ -11,7 +11,7 @@ public class Config {
 
 	public Config() {
 
-		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+//		System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
 		try {
 			properties.load(new FileInputStream("ipo.properties"));
