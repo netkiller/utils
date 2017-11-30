@@ -4,6 +4,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class OutputJdbc implements OutputInterface {
 
@@ -14,9 +23,15 @@ public class OutputJdbc implements OutputInterface {
 	private String url;
 	private String username;
 	private String password;
+	private String table;
 
-	public OutputJdbc() {
+	private Map<String, String> map = new LinkedHashMap<String, String>();
 
+	private Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+
+	public OutputJdbc(String table, Map<String, String> map) {
+		this.table = table;
+		this.map = map;
 	}
 
 	protected void finalize() {
@@ -43,11 +58,17 @@ public class OutputJdbc implements OutputInterface {
 	@Override
 	public void open() {
 		try {
-			Class.forName(this.driver);
+
+			Class.forName(this.driver).newInstance();
 			this.connection = DriverManager.getConnection(this.url, this.username, this.password);
+			this.stmt = this.connection.createStatement();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 
@@ -57,12 +78,25 @@ public class OutputJdbc implements OutputInterface {
 
 	@Override
 	public void write(String output) {
+
+		@SuppressWarnings("unchecked")
+		Map<String, String> source = gson.fromJson(output, LinkedHashMap.class);
+
 		try {
-			this.stmt = this.connection.createStatement();
-			this.stmt.execute("INSERT INTO EMPLOYEE (ID,FIRST_NAME,LAST_NAME,STAT_CD) VALUES (1,'Lokesh','Gupta',5)");
+			List<String> valuesList = new ArrayList<String>();
+			for (String value : map.values()) {
+				valuesList.add(source.get(value));
+			}
+			String fields = StringUtils.join(map.keySet(), "`,`");
+			String values = StringUtils.join(valuesList, "\",\"");
+
+			String sql = String.format("INSERT INTO `%s`(`%s`) value(\"%s\")", this.table, fields, values);
+			System.out.println(sql);
+			this.stmt.execute(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		System.out.println(output);
 	}
 
 	@Override

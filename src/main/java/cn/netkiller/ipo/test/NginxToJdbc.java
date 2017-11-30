@@ -1,5 +1,9 @@
 package cn.netkiller.ipo.test;
 
+import java.util.Map;
+import java.util.LinkedHashMap;
+
+import cn.netkiller.ipo.Config;
 import cn.netkiller.ipo.InputProcessOutput;
 import cn.netkiller.ipo.input.FileInput;
 import cn.netkiller.ipo.input.Input;
@@ -15,7 +19,11 @@ public class NginxToJdbc {
 		// TODO code application logic here
 		System.out.println("Starting...");
 
-		FileInput fi = new FileInput("D:\\workspace\\ipo\\src\\main\\resources\\access.log");
+		Config config = new Config();
+
+		System.out.println(config.get("sss"));
+
+		FileInput fi = new FileInput(config.get("input.file"));
 		// System.out.print(fi.readLine());
 
 		Input input = new Input();
@@ -27,13 +35,18 @@ public class NginxToJdbc {
 
 		Output output = new Output();
 		output.add(new OutputStdout());
-		
-		OutputJdbc jdbc = new OutputJdbc();
-		jdbc.setDriver("com.mysql.jdbc.Driver");
+
+		Map<String, String> map = new LinkedHashMap<String, String>();
+
+		map.put("logType", "logType");
+		map.put("deviceId", "deviceId");
+
+		OutputJdbc jdbc = new OutputJdbc("stat_app_log", map);
+		jdbc.setDriver("com.mysql.cj.jdbc.Driver");
 		jdbc.setUrl("jdbc:mysql://123.207.61.25:3306/test?useSSL=false");
 		jdbc.setUsername("test");
 		jdbc.setPassword("123456");
-		
+
 		output.add(jdbc);
 
 		InputProcessOutput ipo = new InputProcessOutput();
