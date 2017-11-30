@@ -48,7 +48,7 @@ public class InputProcessOutput {
 		String line = null;
 
 		while ((line = input.read()) != null) {
-			// System.out.println(str);
+//			System.out.println(line);
 			String tmp = this.process.run(line);
 			if (tmp != null) {
 				this.output.open();
@@ -59,7 +59,7 @@ public class InputProcessOutput {
 	}
 
 	public void launch() {
-		if (this.batchNumber == 0) {
+		if (this.batchNumber == 1) {
 			this.run();
 		} else {
 			this.run(this.batchNumber);
@@ -86,11 +86,15 @@ public class InputProcessOutput {
 			}
 
 		}
-		this.output.open();
+		
+		
 		for (String out : processLines) {
+			this.output.open();
 			this.output.write(out);
+			this.output.close();
 		}
-		this.output.close();
+		
+		
 
 	}
 }

@@ -1,6 +1,7 @@
 package cn.netkiller.ipo.test;
 
 import java.util.Map;
+import java.io.File;
 import java.util.LinkedHashMap;
 
 import cn.netkiller.ipo.Config;
@@ -10,27 +11,28 @@ import cn.netkiller.ipo.input.Input;
 import cn.netkiller.ipo.output.Output;
 import cn.netkiller.ipo.output.OutputJdbc;
 import cn.netkiller.ipo.output.OutputStdout;
-import cn.netkiller.ipo.process.DropProcess;
-import cn.netkiller.ipo.process.NginxAccessProcess;
+import cn.netkiller.ipo.process.ExcludeProcess;
 import cn.netkiller.ipo.process.Process;
+import cn.netkiller.ipo.process.nginx.NginxAccessGetParameterProcess;
+import cn.netkiller.ipo.process.nginx.NginxAccessProcess;
 
 public class NginxToJdbc {
 	public static void main(String[] args) {
 
-
 		Config config = new Config();
-		System.out.println(config.get("output.jdbc.url"));
 
-		
-		
-		FileInput fi = new FileInput(String.format("%s/%s%s%s", config.get("input.file.path"), config.get("input.file.prefix"), config.get("input.file.filename"), config.get("input.file.suffix")));
+		System.out.println(config.get("output.jdbc.url"));
+		String filename = String.format("%s%s%s%s%s", config.get("input.file.path"), File.separator, config.get("input.file.prefix"), config.get("input.file.filename"), config.get("input.file.suffix"));
+		System.out.println(filename);
+		FileInput fi = new FileInput(filename);
 
 		Input input = new Input();
 		input.add(fi);
 
 		Process process = new Process();
-		process.add(new NginxAccessProcess());
-		process.add(new DropProcess("\"logType\":\"1\""));
+//		process.add(new NginxAccessProcess());
+		process.add(new NginxAccessGetParameterProcess());
+//		process.add(new ExcludeProcess("\"logType\":\"1\""));
 
 		Output output = new Output();
 		output.add(new OutputStdout());
@@ -46,7 +48,7 @@ public class NginxToJdbc {
 		jdbc.setUsername(config.get("output.jdbc.username"));
 		jdbc.setPassword(config.get("output.jdbc.password"));
 
-		output.add(jdbc);
+//		output.add(jdbc);
 
 		InputProcessOutput ipo = new InputProcessOutput();
 		ipo.setInput(input);

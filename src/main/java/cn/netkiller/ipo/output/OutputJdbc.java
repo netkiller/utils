@@ -61,7 +61,6 @@ public class OutputJdbc implements OutputInterface {
 
 			Class.forName(this.driver).newInstance();
 			this.connection = DriverManager.getConnection(this.url, this.username, this.password);
-			this.stmt = this.connection.createStatement();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -78,6 +77,7 @@ public class OutputJdbc implements OutputInterface {
 
 	@Override
 	public void write(String output) {
+		// System.out.println(output);
 
 		@SuppressWarnings("unchecked")
 		Map<String, String> source = gson.fromJson(output, LinkedHashMap.class);
@@ -85,24 +85,30 @@ public class OutputJdbc implements OutputInterface {
 		try {
 			List<String> valuesList = new ArrayList<String>();
 			for (String value : map.values()) {
-				valuesList.add(source.get(value));
+				if (source.containsKey(value)) {
+					valuesList.add(source.get(value));
+				} else {
+					valuesList.add("");
+				}
 			}
 			String fields = StringUtils.join(map.keySet(), "`,`");
 			String values = StringUtils.join(valuesList, "\",\"");
 
 			String sql = String.format("INSERT INTO `%s`(`%s`) value(\"%s\")", this.table, fields, values);
 			System.out.println(sql);
+			this.stmt = this.connection.createStatement();
 			this.stmt.execute(sql);
+			this.stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println(output);
+
 	}
 
 	@Override
 	public void close() {
 		try {
-			stmt.close();
+
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

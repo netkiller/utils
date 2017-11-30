@@ -1,10 +1,10 @@
 package cn.netkiller.ipo.process;
 
-public class DropProcess implements ProcessInterface {
+public class ExcludeProcess implements ProcessInterface {
 
 	private String string;
 
-	public DropProcess(String string) {
+	public ExcludeProcess(String string) {
 		this.string = string;
 	}
 

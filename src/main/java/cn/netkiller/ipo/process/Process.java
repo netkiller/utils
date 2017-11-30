@@ -6,6 +6,10 @@
 package cn.netkiller.ipo.process;
 
 import java.util.List;
+
+import cn.netkiller.ipo.process.nginx.NginxAccessGetParameterProcess;
+import cn.netkiller.ipo.process.nginx.NginxAccessProcess;
+
 import java.util.ArrayList;
 
 /**
@@ -15,14 +19,21 @@ import java.util.ArrayList;
 public class Process {
 	private final List<ProcessInterface> process = new ArrayList<ProcessInterface>();
 
-	public void add(Replace process) {
+	public Process() {
+	}
+	public Process add(Replace process) {
 		this.process.add(process);
+		return this;
 	}
 
 	public String run(String tmp) {
 		String line = tmp;
+//		System.out.println(line);
 		for (ProcessInterface proc : this.process) {
 			line = proc.run(line);
+			if(line == null) {
+				break;
+			}
 		}
 		// this.process.forEach((proc) -> {
 		// System.out.println(proc.toString());
@@ -31,13 +42,24 @@ public class Process {
 		return line;
 	}
 
-	public void add(NginxAccessProcess nginxAccessProcess) {
+	public Process add(NginxAccessProcess nginxAccessProcess) {
 		this.process.add(nginxAccessProcess);
-
+		return this;
 	}
 
-	public void add(DropProcess dropProcess) {
-		this.process.add(dropProcess);
+	public Process add(ExcludeProcess excludeProcess) {
+		this.process.add(excludeProcess);
+		return this;
+	}
+
+	public Process add(IncludeProcess includeProcess) {
+		this.process.add(includeProcess);
+		return this;
+	}
+
+	public Process add(NginxAccessGetParameterProcess nginxAccessGetParameterProcess) {
+		this.process.add(nginxAccessGetParameterProcess);
+		return this;
 
 	}
 }

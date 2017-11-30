@@ -5,37 +5,52 @@
  */
 package cn.netkiller.ipo.output;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author neoch
  */
 public class Output {
 
-	private OutputInterface output;
+	private final List<OutputInterface> outputs = new ArrayList<OutputInterface>();
 
-	public void add(OutputStdout output) {
-		this.output = output;
+	public void open() {
+		for (OutputInterface output : this.outputs) {
+			output.open();
+		}
 	}
 
-	public void write(String output) {
-		this.output.write(output);
+	public void write(String line) {
+		if (line != null) {
+			for (OutputInterface output : this.outputs) {
+				output.write(line);
+			}
+		}
+
 	}
 
 	public void close() {
-		this.output.close();
+		for (OutputInterface output : this.outputs) {
+			output.close();
+		}
 	}
 
-	public void add(OutputJson json) {
-		this.output = json;
+	public Output add(OutputStdout outputStdout) {
+		this.outputs.add(outputStdout);
+		return this;
 	}
 
-	public void add(OutputJdbc outputJdbc) {
-		this.output = outputJdbc;
+	public Output add(OutputJson outputJson) {
+		this.outputs.add(outputJson);
+		return this;
 
 	}
 
-	public void open() {
-		this.output.open();
-		
+	public Output add(OutputJdbc outputJdbc) {
+		this.outputs.add(outputJdbc);
+		return this;
 	}
+
 }
