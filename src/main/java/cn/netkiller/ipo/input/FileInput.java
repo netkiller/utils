@@ -27,15 +27,17 @@ public class FileInput implements InputInterface {
 	private InputStreamReader inputStreamReader;
 	private BufferedReader bufferedReader;
 
+	private String filename;
+
 	public FileInput(String filename) {
+		this.filename = filename;
 		logger.info(filename);
-		this.open(filename);
 	}
 
-	public void open(String filename) {
+	public void open() {
 
 		try {
-			file = new File(filename);
+			file = new File(this.filename);
 			fileInputStream = new FileInputStream(file);
 			inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
 			bufferedReader = new BufferedReader(inputStreamReader);
@@ -55,7 +57,7 @@ public class FileInput implements InputInterface {
 	}
 
 	public String readLine() {
-		try {
+		try {			
 			return bufferedReader.readLine();
 		} catch (IOException ex) {
 			logger.error(ex.getMessage());
@@ -71,12 +73,6 @@ public class FileInput implements InputInterface {
 		} catch (IOException ex) {
 			logger.error(ex.getMessage());
 		}
-
-	}
-
-	@Override
-	public void open() {
-		// TODO Auto-generated method stub
 
 	}
 

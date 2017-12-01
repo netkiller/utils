@@ -17,7 +17,7 @@ import cn.netkiller.ipo.process.Process;
 
 /**
  *
- * @author neoch
+ * @author netkiller
  */
 public class InputProcessOutput {
 	private final static Logger logger = LoggerFactory.getLogger(InputProcessOutput.class);
@@ -48,37 +48,31 @@ public class InputProcessOutput {
 		this.batchNumber = batchNumber;
 	}
 
-	private void run() {
-		logger.info("String input ...");
-		String line = null;
-
-		while ((line = input.read()) != null) {
-			// System.out.println(line);
-			String tmp = this.process.run(line);
-			if (tmp != null) {
-				this.output.open();
-				this.output.write(tmp);
-				this.output.close();
-			}
-		}
-	}
-
 	public void launch() {
-		if (this.batchNumber == 1) {
-			this.run();
-		} else {
-			this.run(this.batchNumber);
-		}
 
-		// this.output.write("Helloword");
+		logger.info("==================== Begin ====================");
+		this.input.open();
+		this.output.open();
+		do {
+			this.run(this.batchNumber);
+//			logger.info("==================== Batch Done ====================");
+		} while (this.input.hasNextLine());
+		this.input.close();
+		this.output.close();
+		logger.info("==================== End ====================");
+
 	}
 
 	private void run(int batchNumber) {
+
 		List<String> inputLines = new ArrayList<String>();
+		
 		for (int i = 0; i < this.batchNumber; i++) {
-			String line = input.read();
-			if (line != null) {
-				inputLines.add(line);
+			List<String> lines = input.reads();
+			for (String line : lines) {
+				if (line != null) {
+					inputLines.add(line);
+				}
 			}
 		}
 
@@ -89,12 +83,12 @@ public class InputProcessOutput {
 			if (line != null) {
 				processLines.add(line);
 			}
-
 		}
-		this.output.open();
+
 		for (String out : processLines) {
 			this.output.write(out);
 		}
-		this.output.close();
+
 	}
+
 }
