@@ -3,6 +3,9 @@ package cn.netkiller.ipo.process.nginx;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -10,6 +13,7 @@ import cn.netkiller.ipo.process.ProcessInterface;
 
 public class NginxAccessGetParameterProcess extends NginxAccessProcess implements ProcessInterface {
 
+	private final static Logger logger = LoggerFactory.getLogger(NginxAccessGetParameterProcess.class);
 	private Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 	// private String regex;
 
@@ -23,6 +27,7 @@ public class NginxAccessGetParameterProcess extends NginxAccessProcess implement
 
 	@Override
 	public String run(String line) {
+		logger.info("Process line {}", line);
 		String newLine = super.run(line);
 		@SuppressWarnings("unchecked")
 		Map<String, String> map = gson.fromJson(newLine, LinkedHashMap.class);
@@ -53,7 +58,7 @@ public class NginxAccessGetParameterProcess extends NginxAccessProcess implement
 
 		}
 		// }
-		System.out.println(map.toString());
+		logger.debug("Process map ", map.toString());
 		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
 		return gson.toJson(map);

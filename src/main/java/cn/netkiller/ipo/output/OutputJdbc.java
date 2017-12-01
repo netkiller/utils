@@ -10,14 +10,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class OutputJdbc implements OutputInterface {
 
+	private final static Logger logger = LoggerFactory.getLogger(OutputJdbc.class);
 	private Connection connection = null;
-	private Statement stmt = null;
 
 	private String driver;
 	private String url;
@@ -40,19 +42,22 @@ public class OutputJdbc implements OutputInterface {
 
 	public void setDriver(String driver) {
 		this.driver = driver;
+		logger.info("jdbc.driver {}", driver);
 	}
 
 	public void setUrl(String url) {
 		this.url = url;
+		logger.info("jdbc.url {}", url);
 	}
 
 	public void setUsername(String username) {
 		this.username = username;
-
+		logger.info("jdbc.username {}", username);
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
+		logger.info("jdbc.password {}", "******");
 	}
 
 	@Override
@@ -77,7 +82,7 @@ public class OutputJdbc implements OutputInterface {
 
 	@Override
 	public void write(String output) {
-		// System.out.println(output);
+		logger.info("Output {}", output);
 
 		@SuppressWarnings("unchecked")
 		Map<String, String> source = gson.fromJson(output, LinkedHashMap.class);
@@ -95,10 +100,10 @@ public class OutputJdbc implements OutputInterface {
 			String values = StringUtils.join(valuesList, "\",\"");
 
 			String sql = String.format("INSERT INTO `%s`(`%s`) value(\"%s\")", this.table, fields, values);
-			System.out.println(sql);
-			this.stmt = this.connection.createStatement();
-			this.stmt.execute(sql);
-			this.stmt.close();
+			logger.info("SQL {}", sql);
+			Statement stmt = this.connection.createStatement();
+			stmt.execute(sql);
+			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -108,7 +113,6 @@ public class OutputJdbc implements OutputInterface {
 	@Override
 	public void close() {
 		try {
-
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

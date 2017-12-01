@@ -5,11 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-public class Config {
+public class Configuration {
 
 	private Properties properties = new Properties();
 
-	public Config() {
+	public Configuration() {
 
 //		System.out.println("Working Directory = " + System.getProperty("user.dir"));
 

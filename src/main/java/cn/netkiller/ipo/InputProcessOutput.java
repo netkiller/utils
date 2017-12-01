@@ -8,6 +8,9 @@ package cn.netkiller.ipo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cn.netkiller.ipo.input.Input;
 import cn.netkiller.ipo.output.Output;
 import cn.netkiller.ipo.process.Process;
@@ -17,6 +20,7 @@ import cn.netkiller.ipo.process.Process;
  * @author neoch
  */
 public class InputProcessOutput {
+	private final static Logger logger = LoggerFactory.getLogger(InputProcessOutput.class);
 
 	private Input input;
 	private Output output;
@@ -45,10 +49,11 @@ public class InputProcessOutput {
 	}
 
 	private void run() {
+		logger.info("String input ...");
 		String line = null;
 
 		while ((line = input.read()) != null) {
-//			System.out.println(line);
+			// System.out.println(line);
 			String tmp = this.process.run(line);
 			if (tmp != null) {
 				this.output.open();
@@ -86,15 +91,10 @@ public class InputProcessOutput {
 			}
 
 		}
-		
-		
+		this.output.open();
 		for (String out : processLines) {
-			this.output.open();
 			this.output.write(out);
-			this.output.close();
 		}
-		
-		
-
+		this.output.close();
 	}
 }
