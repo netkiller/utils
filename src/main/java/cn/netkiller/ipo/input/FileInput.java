@@ -11,16 +11,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.netkiller.ipo.Input;
-
 /**
  *
- * @author neoch
+ * @author netkiller
  */
 public class FileInput implements InputInterface {
 
@@ -37,7 +34,7 @@ public class FileInput implements InputInterface {
 		logger.info(filename);
 	}
 
-	public Input open() {
+	public boolean open() {
 
 		try {
 			file = new File(this.filename);
@@ -50,7 +47,7 @@ public class FileInput implements InputInterface {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return true;
 	}
 
 	public String read() {
@@ -61,7 +58,7 @@ public class FileInput implements InputInterface {
 	}
 
 	public String readLine() {
-		try {			
+		try {
 			return bufferedReader.readLine();
 		} catch (IOException ex) {
 			logger.error(ex.getMessage());
@@ -69,7 +66,7 @@ public class FileInput implements InputInterface {
 		return null;
 	}
 
-	public Input close() {
+	public boolean close() {
 		try {
 			bufferedReader.close();
 			inputStreamReader.close();
@@ -77,20 +74,8 @@ public class FileInput implements InputInterface {
 		} catch (IOException ex) {
 			logger.error(ex.getMessage());
 		}
-		return null;
+		return true;
 
-	}
-
-	@Override
-	public boolean hasNextLine() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public List<String> readLines() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	// @Override

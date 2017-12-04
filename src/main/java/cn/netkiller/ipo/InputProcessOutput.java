@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.netkiller.ipo.input.InputInterface;
-import cn.netkiller.ipo.input.StdinInput;
 import cn.netkiller.ipo.output.OutputInterface;
 import cn.netkiller.ipo.process.ProcessInterface;
 
@@ -23,9 +22,9 @@ import cn.netkiller.ipo.process.ProcessInterface;
 public class InputProcessOutput {
 	private final static Logger logger = LoggerFactory.getLogger(InputProcessOutput.class);
 
-	private InputInterface input;
-	private OutputInterface output;
-	private ProcessInterface process;
+	private Input input;
+	private Output output;
+	private Process process;
 
 	private int batchNumber = 0;
 	private boolean exit = false;
@@ -61,9 +60,10 @@ public class InputProcessOutput {
 				if (!this.run(this.batchNumber)) {
 					Thread.sleep(1000);
 				}
-				if(exit) {
-					break;
+				if (exit) {
+					loop = false;
 				}
+				logger.debug("shutdown() => {}", exit);
 			} while (loop);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -103,52 +103,40 @@ public class InputProcessOutput {
 		return isNextBatch;
 
 	}
+
 	public void shutdown() {
 		this.exit = true;
 	}
-	
-//	public void shutdown(Shutdown shutdown) {
-//		
-//		Thread exit = new Thread(new Runnable() {
-//			@Override
-//			public void run() {
-//				try {
-//					Thread.sleep(10000);
-//					ipo.shutdown();
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				
-//			}
-//		});
-//		exit.setName("sendmail");
-//		exit.start();
-//	}
-	
+
+	// public void shutdown(Shutdown shutdown) {
+	//
+	// Thread exit = new Thread(new Runnable() {
+	// @Override
+	// public void run() {
+	// try {
+	// Thread.sleep(10000);
+	// ipo.shutdown();
+	// } catch (InterruptedException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// }
+	// });
+	// exit.setName("sendmail");
+	// exit.start();
+	// }
+
 	public void setInput(InputInterface input) {
-		this.input = input;
+		this.input = (Input) input;
 	}
 
 	public void setProcess(ProcessInterface process) {
-		this.process = process;
+		this.process = (Process) process;
 	}
 
 	public void setOutput(OutputInterface output) {
-		this.output = output;
+		this.output = (Output) output;
 	}
 
-	public void setInput(StdinInput stdin) {
-		this.input = stdin;
-	}
-
-	public void setProcess(Process process) {
-		this.process = process;
-
-	}
-
-	public void setOutput(Output output) {
-		this.output = output;
-
-	}
 }

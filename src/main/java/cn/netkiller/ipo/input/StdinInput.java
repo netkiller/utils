@@ -5,8 +5,6 @@ import java.io.BufferedReader;
 //import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +22,9 @@ public class StdinInput implements InputInterface {
 	}
 
 	@Override
-	public Input open() {
+	public boolean open() {
 		stdin = new BufferedReader(new InputStreamReader(System.in));
-		return null;
+		return true;
 
 	}
 
@@ -46,29 +44,29 @@ public class StdinInput implements InputInterface {
 		return this.nextLine;
 	}
 
-	public List<String> readLines() {
-		List<String> lines = new ArrayList<String>();
-		this.nextLine = false;
-
-		String tmp = this.readLine();
-		if (tmp != null && !tmp.equals("")) {
-			lines.add(tmp);
-			this.nextLine = true;
-			// logger.debug(tmp);
-		}
-
-		return lines;
-	}
+	// public List<String> readLines() {
+	// List<String> lines = new ArrayList<String>();
+	// this.nextLine = false;
+	//
+	// String tmp = this.readLine();
+	// if (tmp != null && !tmp.equals("")) {
+	// lines.add(tmp);
+	// this.nextLine = true;
+	// // logger.debug(tmp);
+	// }
+	//
+	// return lines;
+	// }
 
 	@Override
-	public Input close() {
+	public boolean close() {
 		try {
 			this.stdin.close();
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}
 
-		return null;
+		return true;
 	}
 
 }

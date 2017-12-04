@@ -8,8 +8,8 @@ package cn.netkiller.ipo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 import cn.netkiller.ipo.input.FileInput;
 import cn.netkiller.ipo.input.InputInterface;
@@ -20,7 +20,7 @@ import cn.netkiller.ipo.input.StdinInput;
  * @author netkiller
  */
 public class Input implements InputInterface {
-	private final static Logger logger = LoggerFactory.getLogger(Input.class);
+	// private final static Logger logger = LoggerFactory.getLogger(Input.class);
 	private final List<InputInterface> inputs = new ArrayList<InputInterface>();
 	private boolean nextLine = false;
 
@@ -28,18 +28,18 @@ public class Input implements InputInterface {
 
 	}
 
-	public Input open() {
+	public boolean open() {
 		for (InputInterface input : this.inputs) {
 			input.open();
 		}
-		return this;
+		return true;
 	}
 
-	public Input close() {
+	public boolean close() {
 		for (InputInterface input : this.inputs) {
 			input.close();
 		}
-		return this;
+		return true;
 	}
 
 	public boolean hasNextLine() {
@@ -77,4 +77,5 @@ public class Input implements InputInterface {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

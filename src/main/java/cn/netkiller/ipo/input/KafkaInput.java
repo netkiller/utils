@@ -1,16 +1,10 @@
 package cn.netkiller.ipo.input;
 
-import java.util.List;
-
-import cn.netkiller.ipo.Input;
-
 public class KafkaInput implements InputInterface {
 
 	@Override
-	public Input open() {
-		return null;
-		// TODO Auto-generated method stub
-
+	public boolean open() {
+		return true;
 	}
 
 	@Override
@@ -20,22 +14,7 @@ public class KafkaInput implements InputInterface {
 	}
 
 	@Override
-	public Input close() {
-		return null;
-		// TODO Auto-generated method stub
-
+	public boolean close() {
+		return true;
 	}
-
-	@Override
-	public boolean hasNextLine() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public List<String> readLines() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

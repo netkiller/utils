@@ -5,18 +5,12 @@
  */
 package cn.netkiller.ipo.input;
 
-import java.util.List;
-
-import cn.netkiller.ipo.Input;
-
 /**
  *
- * @author neoch
+ * @author netkiller
  */
 public interface InputInterface {
-    public Input open();
+    public boolean open();
     public String readLine();
-    public Input close();
-	public boolean hasNextLine();
-	public List<String> readLines();
+    public boolean close();
 }

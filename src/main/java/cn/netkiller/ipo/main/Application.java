@@ -70,7 +70,7 @@ public class Application {
 				
 			}
 		});
-		exit.setName("sendmail");
+		exit.setName("shutdown");
 		exit.start();
 
 		
