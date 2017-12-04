@@ -27,4 +27,7 @@ public class Configuration {
 		return properties.getProperty(key);
 	}
 
+	public boolean contains(String key) {
+		return properties.contains(key);
+	}
 }

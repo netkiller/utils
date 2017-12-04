@@ -3,16 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.netkiller.ipo.output;
+package cn.netkiller.ipo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.netkiller.ipo.output.OutputInterface;
+import cn.netkiller.ipo.output.OutputJdbc;
+import cn.netkiller.ipo.output.OutputJson;
+import cn.netkiller.ipo.output.OutputStdout;
 
 /**
  *
  * @author neoch
  */
-public class Output {
+public class Output implements OutputInterface {
 
 	private final List<OutputInterface> outputs = new ArrayList<OutputInterface>();
 

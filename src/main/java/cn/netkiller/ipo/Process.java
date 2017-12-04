@@ -3,10 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.netkiller.ipo.process;
+package cn.netkiller.ipo;
 
 import java.util.List;
 
+import cn.netkiller.ipo.process.ExcludeProcess;
+import cn.netkiller.ipo.process.IncludeProcess;
+import cn.netkiller.ipo.process.ProcessInterface;
+import cn.netkiller.ipo.process.Replace;
 import cn.netkiller.ipo.process.nginx.NginxAccessGetParameterProcess;
 import cn.netkiller.ipo.process.nginx.NginxAccessProcess;
 
@@ -16,11 +20,12 @@ import java.util.ArrayList;
  *
  * @author neoch
  */
-public class Process {
+public class Process implements ProcessInterface {
 	private final List<ProcessInterface> process = new ArrayList<ProcessInterface>();
 
 	public Process() {
 	}
+
 	public Process add(Replace process) {
 		this.process.add(process);
 		return this;
@@ -28,10 +33,10 @@ public class Process {
 
 	public String run(String tmp) {
 		String line = tmp;
-//		System.out.println(line);
+		// System.out.println(line);
 		for (ProcessInterface proc : this.process) {
 			line = proc.run(line);
-			if(line == null) {
+			if (line == null) {
 				break;
 			}
 		}
@@ -61,5 +66,10 @@ public class Process {
 		this.process.add(nginxAccessGetParameterProcess);
 		return this;
 
+	}
+
+	public Process add(Object object) {
+		this.process.add((ProcessInterface) object);
+		return this;
 	}
 }

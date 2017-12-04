@@ -7,14 +7,14 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedHashMap;
 
 import cn.netkiller.ipo.Configuration;
+import cn.netkiller.ipo.Input;
 import cn.netkiller.ipo.InputProcessOutput;
+import cn.netkiller.ipo.Output;
+import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.FileInput;
-import cn.netkiller.ipo.input.Input;
-import cn.netkiller.ipo.output.Output;
 import cn.netkiller.ipo.output.OutputJdbc;
 import cn.netkiller.ipo.output.OutputStdout;
 import cn.netkiller.ipo.process.IncludeProcess;
-import cn.netkiller.ipo.process.Process;
 import cn.netkiller.ipo.process.nginx.NginxAccessGetParameterProcess;
 
 public class NginxToJdbc {

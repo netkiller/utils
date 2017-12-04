@@ -5,12 +5,12 @@
  */
 package cn.netkiller.ipo.test;
 
+import cn.netkiller.ipo.Input;
 import cn.netkiller.ipo.InputProcessOutput;
+import cn.netkiller.ipo.Output;
+import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.FileInput;
-import cn.netkiller.ipo.input.Input;
-import cn.netkiller.ipo.output.Output;
 import cn.netkiller.ipo.output.OutputStdout;
-import cn.netkiller.ipo.process.Process;
 import cn.netkiller.ipo.process.Replace;
 
 /**
