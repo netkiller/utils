@@ -14,7 +14,6 @@ public class StdinToStdout {
 		String s = "";
 		try {
 			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-			// s = stdIn.readLine();
 
 			while ((s = stdIn.readLine()) != null) {
 				System.out.println(s);

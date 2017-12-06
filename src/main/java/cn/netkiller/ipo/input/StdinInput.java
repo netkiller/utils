@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 //import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,12 @@ public class StdinInput implements InputInterface {
 
 	@Override
 	public boolean open() {
-		stdin = new BufferedReader(new InputStreamReader(System.in));
+		try {
+			stdin = new BufferedReader(new InputStreamReader(System.in, "utf-8"), 1024 * 1024 * 1024);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return true;
 
 	}
