@@ -13,19 +13,25 @@ public class JsonValueSubstring implements ProcessInterface {
 	private final static Logger logger = LoggerFactory.getLogger(JsonValueSubstring.class);
 	private Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 	Map<String, String> mapping = new LinkedHashMap<String, String>();
-	
+
 	public JsonValueSubstring(Map<String, String> mapping) {
 		this.mapping = mapping;
 	}
-	
+
 	@Override
 	public String run(String line) {
-		
+
 		@SuppressWarnings("unchecked")
 		Map<String, String> map = gson.fromJson(line, LinkedHashMap.class);
-		for(String key : this.mapping.keySet()) {
-			if(map.containsKey(key)) {
-				map.put(key, map.get(key).substring(0, Integer.valueOf(this.mapping.get(key))));
+		for (String key : this.mapping.keySet()) {
+			if (map.containsKey(key)) {
+				int len = Integer.valueOf(this.mapping.get(key));
+				if (map.get(key).length() < len) {
+					map.put(key, map.get(key));
+				} else {
+					map.put(key, map.get(key).substring(0, len));
+				}
+
 			}
 		}
 		logger.debug("{}", map);
