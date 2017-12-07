@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 import cn.netkiller.ipo.process.ProcessInterface;
 
@@ -31,8 +32,9 @@ public class NginxAccessGetParameterProcess extends NginxAccessProcess implement
 		logger.info("Process line {}", line);
 		String newLine = super.run(line);
 		try {
-			@SuppressWarnings("unchecked")
-			Map<String, String> map = gson.fromJson(newLine, LinkedHashMap.class);
+
+			Map<String, String> map = gson.fromJson(newLine, new TypeToken<Map<String, String>>() {
+			}.getType());
 			String request = map.get("request");
 			// throw new UnsupportedOperationException("Not supported yet.");
 			// Map<String, String> map = new HashMap<String, String>();

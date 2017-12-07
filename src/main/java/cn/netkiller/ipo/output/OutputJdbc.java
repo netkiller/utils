@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 public class OutputJdbc implements OutputInterface {
 
@@ -84,8 +85,8 @@ public class OutputJdbc implements OutputInterface {
 	public void write(String output) {
 		logger.info("Output {}", output);
 
-		@SuppressWarnings("unchecked")
-		Map<String, String> source = gson.fromJson(output, LinkedHashMap.class);
+		Map<String, String> source = gson.fromJson(output, new TypeToken<Map<String, String>>() {
+		}.getType());
 
 		try {
 			List<String> valuesList = new ArrayList<String>();
