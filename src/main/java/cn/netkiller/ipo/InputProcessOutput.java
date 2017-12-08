@@ -19,7 +19,7 @@ import cn.netkiller.ipo.process.ProcessInterface;
  *
  * @author netkiller
  */
-public class InputProcessOutput {
+public class InputProcessOutput implements Runnable {
 	private final static Logger logger = LoggerFactory.getLogger(InputProcessOutput.class);
 
 	private Input input;
@@ -28,52 +28,67 @@ public class InputProcessOutput {
 
 	private int batchNumber = 0;
 	private boolean exit = false;
+	private boolean pipeline = false;
+	private String name = "";
 
-	public void debug() {
+	public InputProcessOutput() {
+		this.name = "InputProcessOutput";
+	}
 
+	public InputProcessOutput(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return this.name;
 	}
 
 	public void setBatch(int batchNumber) {
 		this.batchNumber = batchNumber;
 	}
 
-	public void launch() {
-
-		logger.info("==================== Begin ====================");
-		this.input.open();
-		this.output.open();
-		do {
-			this.run(this.batchNumber);
-			// logger.info("==================== Batch Done ====================");
-		} while (this.input.hasNextLine());
-		this.input.close();
-		this.output.close();
-		logger.info("==================== End ====================");
-
+	public void setPipeline(boolean pipeline) {
+		this.pipeline = pipeline;
 	}
 
-	public void launch(boolean loop) {
+	public void launch() {
+		this.run();
+	}
+
+	@Override
+	public void run() {
+		logger.debug("==================== Begin {} ====================", this.name);
 		this.input.open();
 		this.output.open();
-		try {
+		if (this.pipeline) {
+			try {
+				do {
+					if (!this.execute(this.batchNumber)) {
+						Thread.sleep(1000);
+					}
+					if (exit) {
+						this.pipeline = false;
+					}
+					logger.debug("shutdown() => {}", exit);
+				} while (this.pipeline);
+			} catch (InterruptedException e) {
+				logger.debug(e.getMessage());
+			}
+		} else {
 			do {
-				if (!this.run(this.batchNumber)) {
-					Thread.sleep(1000);
-				}
+				this.execute(this.batchNumber);
+				// logger.info("==================== Batch Done ====================");
 				if (exit) {
-					loop = false;
+					break;
 				}
-				logger.debug("shutdown() => {}", exit);
-			} while (loop);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			} while (this.input.hasNextLine());
 		}
 		this.input.close();
 		this.output.close();
+		logger.debug("==================== End {} ====================", this.name);
 	}
 
-	private boolean run(int batchNumber) {
+	private boolean execute(int batchNumber) {
 		boolean isNextBatch = false;
 		List<String> inputLines = new ArrayList<String>();
 
@@ -107,25 +122,6 @@ public class InputProcessOutput {
 	public void shutdown() {
 		this.exit = true;
 	}
-
-	// public void shutdown(Shutdown shutdown) {
-	//
-	// Thread exit = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// try {
-	// Thread.sleep(10000);
-	// ipo.shutdown();
-	// } catch (InterruptedException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	//
-	// }
-	// });
-	// exit.setName("sendmail");
-	// exit.start();
-	// }
 
 	public void setInput(InputInterface input) {
 		this.input = (Input) input;

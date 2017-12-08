@@ -8,13 +8,23 @@ import java.util.Properties;
 public class Configuration {
 
 	private Properties properties = new Properties();
+	private String filename = "ipo.properties";
 
 	public Configuration() {
+		this.load();
+	}
 
-//		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+	public Configuration(String filename) {
+		this.filename = filename;
+		this.load();
+	}
+
+	public void load() {
+
+		// System.out.println("Working Directory = " + System.getProperty("user.dir"));
 
 		try {
-			properties.load(new FileInputStream("ipo.properties"));
+			properties.load(new FileInputStream(this.filename));
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 		} catch (IOException e) {

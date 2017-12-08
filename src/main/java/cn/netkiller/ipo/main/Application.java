@@ -7,6 +7,7 @@ import cn.netkiller.ipo.Input;
 import cn.netkiller.ipo.InputProcessOutput;
 import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.Process;
+import cn.netkiller.ipo.input.FileInput;
 import cn.netkiller.ipo.input.InputInterface;
 import cn.netkiller.ipo.input.StdinInput;
 import cn.netkiller.ipo.output.OutputStdout;
@@ -23,26 +24,11 @@ public class Application {
 
 		// logger.debug("begin...");
 
-		
-		
-		
-//		 StdinInput stdin = new StdinInput();
-
-		// stdin.readLine();
-
-		// String line;
-		// while ((line = stdin.readLine()) != null) {
-		// System.out.println(line);
-		// }
-
 		Input input = new Input();
-		input.add(new StdinInput());
+		// StdinInput stdin = new StdinInput();
+		// input.add(new StdinInput());
 
-		// for (String line : stdin.readLines()) {
-		//
-		// System.out.println(line);
-
-		// }
+		input.add(new FileInput("D:\\workspace\\ipo\\target\\project\\input.txt"));
 
 		Output output = new Output();
 		output.add(new OutputStdout());
@@ -53,10 +39,7 @@ public class Application {
 		// process.add(new Replace("Tom", "[Tom]"));
 		//
 		InputProcessOutput ipo = new InputProcessOutput();
-		
-		
-		
-		
+
 		Thread exit = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -67,20 +50,18 @@ public class Application {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}
 		});
 		exit.setName("shutdown");
 		exit.start();
 
-		
-		
-		
 		ipo.setInput(input);
 		ipo.setProcess(process);
 		ipo.setOutput(output);
 		ipo.setBatch(5);
-		ipo.launch(true);
+		ipo.setPipeline(true);
+		ipo.launch();
 
 		// logger.debug("end...");
 	}
