@@ -14,7 +14,7 @@ import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.FileInput;
 import cn.netkiller.ipo.output.OutputJdbc;
 import cn.netkiller.ipo.output.OutputStdout;
-import cn.netkiller.ipo.process.IncludeProcess;
+import cn.netkiller.ipo.process.Include;
 import cn.netkiller.ipo.process.nginx.NginxAccessGetParameterProcess;
 
 public class NginxToJdbc {
@@ -35,7 +35,7 @@ public class NginxToJdbc {
 		// input.add(new FileInput("D:\\workspace\\import\\target\\project\\access.log-20171125"));
 
 		Process process = new Process();
-		process.add(new IncludeProcess("logType=3")).add(new IncludeProcess("businessPlatform=3"));
+		process.add(new Include("logType=3")).add(new Include("businessPlatform=3"));
 		// process.add(new NginxAccessProcess());
 		process.add(new NginxAccessGetParameterProcess());
 		// process.add(new ExcludeProcess("\"logType\":\"1\""));

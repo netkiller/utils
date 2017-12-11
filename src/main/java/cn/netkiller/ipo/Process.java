@@ -7,8 +7,8 @@ package cn.netkiller.ipo;
 
 import java.util.List;
 
-import cn.netkiller.ipo.process.ExcludeProcess;
-import cn.netkiller.ipo.process.IncludeProcess;
+import cn.netkiller.ipo.process.Exclude;
+import cn.netkiller.ipo.process.Include;
 import cn.netkiller.ipo.process.ProcessInterface;
 import cn.netkiller.ipo.process.Replace;
 import cn.netkiller.ipo.process.nginx.NginxAccessGetParameterProcess;
@@ -52,12 +52,12 @@ public class Process implements ProcessInterface {
 		return this;
 	}
 
-	public Process add(ExcludeProcess excludeProcess) {
+	public Process add(Exclude excludeProcess) {
 		this.process.add(excludeProcess);
 		return this;
 	}
 
-	public Process add(IncludeProcess includeProcess) {
+	public Process add(Include includeProcess) {
 		this.process.add(includeProcess);
 		return this;
 	}

@@ -32,7 +32,7 @@ public class InputProcessOutput implements Runnable {
 	private String name = "";
 
 	public InputProcessOutput() {
-		this.name = "InputProcessOutput";
+		this.name = this.getClass().getName();
 	}
 
 	public InputProcessOutput(String name) {
@@ -43,12 +43,24 @@ public class InputProcessOutput implements Runnable {
 		return this.name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public void setBatch(int batchNumber) {
 		this.batchNumber = batchNumber;
 	}
 
+	public int getBatch() {
+		return this.batchNumber;
+	}
+
 	public void setPipeline(boolean pipeline) {
 		this.pipeline = pipeline;
+	}
+
+	public boolean getPipeline() {
+		return this.pipeline;
 	}
 
 	public void launch() {
@@ -133,6 +145,38 @@ public class InputProcessOutput implements Runnable {
 
 	public void setOutput(OutputInterface output) {
 		this.output = (Output) output;
+	}
+
+	public Input getInput() {
+		return input;
+	}
+
+	public void setInput(Input input) {
+		this.input = input;
+	}
+
+	public Output getOutput() {
+		return output;
+	}
+
+	public void setOutput(Output output) {
+		this.output = output;
+	}
+
+	public Process getProcess() {
+		return process;
+	}
+
+	public void setProcess(Process process) {
+		this.process = process;
+	}
+
+	public boolean isExit() {
+		return exit;
+	}
+
+	public void setExit(boolean exit) {
+		this.exit = exit;
 	}
 
 }
