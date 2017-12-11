@@ -12,8 +12,8 @@ import cn.netkiller.ipo.InputProcessOutput;
 import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.FileInput;
-import cn.netkiller.ipo.output.OutputJdbc;
-import cn.netkiller.ipo.output.OutputStdout;
+import cn.netkiller.ipo.output.JdbcOutput;
+import cn.netkiller.ipo.output.StdoutOutput;
 import cn.netkiller.ipo.process.Include;
 import cn.netkiller.ipo.process.nginx.NginxAccessGetParameterProcess;
 
@@ -41,7 +41,7 @@ public class NginxToJdbc {
 		// process.add(new ExcludeProcess("\"logType\":\"1\""));
 
 		Output output = new Output();
-		output.add(new OutputStdout());
+		output.add(new StdoutOutput());
 
 		Map<String, String> map = new LinkedHashMap<String, String>();
 

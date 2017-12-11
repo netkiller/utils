@@ -5,7 +5,7 @@ import cn.netkiller.ipo.InputProcessOutputMatchChain;
 import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.FileInput;
-import cn.netkiller.ipo.output.OutputStdout;
+import cn.netkiller.ipo.output.StdoutOutput;
 import cn.netkiller.ipo.process.Include;
 import cn.netkiller.ipo.process.Replace;
 
@@ -25,7 +25,7 @@ public class InputProcessOutputMatchChainTest {
 		process1.add(new Replace("Hello", "Helloworld!!!"));
 
 		Output output = new Output();
-		output.add(new OutputStdout());
+		output.add(new StdoutOutput());
 
 		InputProcessOutputMatchChain mc = new InputProcessOutputMatchChain();
 		mc.setInput(input);

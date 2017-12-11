@@ -7,15 +7,21 @@ import cn.netkiller.ipo.test.MyRunnable;
 
 public class Batch extends Thread {
 	private List<InputProcessOutput> tasks = new ArrayList<InputProcessOutput>();
+
 	public Batch() {
-		
+
 	}
+
 	private void add(InputProcessOutput ipo) {
 		this.tasks.add(ipo);
 	}
-	
+
+	private void add(InputProcessOutputMatchChain ipo) {
+		this.tasks.add(ipo);
+	}
+
 	public void run() {
-		for(InputProcessOutput task : tasks) {
+		for (InputProcessOutput task : tasks) {
 			new Thread(new MyRunnable(task.getName())).start();
 		}
 	}

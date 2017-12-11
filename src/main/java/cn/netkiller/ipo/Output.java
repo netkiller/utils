@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.netkiller.ipo.output.OutputInterface;
-import cn.netkiller.ipo.output.OutputJdbc;
-import cn.netkiller.ipo.output.OutputJson;
-import cn.netkiller.ipo.output.OutputStdout;
+import cn.netkiller.ipo.output.JdbcOutput;
+import cn.netkiller.ipo.output.JsonOutput;
+import cn.netkiller.ipo.output.StdoutOutput;
 
 /**
  *
@@ -42,18 +42,18 @@ public class Output implements OutputInterface {
 		}
 	}
 
-	public Output add(OutputStdout outputStdout) {
+	public Output add(StdoutOutput outputStdout) {
 		this.outputs.add(outputStdout);
 		return this;
 	}
 
-	public Output add(OutputJson outputJson) {
+	public Output add(JsonOutput outputJson) {
 		this.outputs.add(outputJson);
 		return this;
 
 	}
 
-	public Output add(OutputJdbc outputJdbc) {
+	public Output add(JdbcOutput outputJdbc) {
 		this.outputs.add(outputJdbc);
 		return this;
 	}

@@ -7,7 +7,7 @@ import cn.netkiller.ipo.InputProcessOutput;
 import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.KafkaInput;
-import cn.netkiller.ipo.output.OutputStdout;
+import cn.netkiller.ipo.output.StdoutOutput;
 import cn.netkiller.ipo.process.Replace;
 
 public class KafkaConsumer {
@@ -35,7 +35,7 @@ public class KafkaConsumer {
 		process.add(new Replace("Hello", "Helloworld!!!"));
 
 		Output output = new Output();
-		output.add(new OutputStdout());
+		output.add(new StdoutOutput());
 
 		InputProcessOutput ipo = new InputProcessOutput();
 		ipo.setInput(input);

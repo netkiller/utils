@@ -8,9 +8,7 @@ import cn.netkiller.ipo.InputProcessOutput;
 import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.FileInput;
-import cn.netkiller.ipo.input.InputInterface;
-import cn.netkiller.ipo.input.StdinInput;
-import cn.netkiller.ipo.output.OutputStdout;
+import cn.netkiller.ipo.output.StdoutOutput;
 import cn.netkiller.ipo.process.Replace;
 
 public class Application {
@@ -31,7 +29,7 @@ public class Application {
 		input.add(new FileInput("D:\\workspace\\ipo\\target\\project\\input.txt"));
 
 		Output output = new Output();
-		output.add(new OutputStdout());
+		output.add(new StdoutOutput());
 
 		Process process = new Process();
 		process.add(new Replace("Hello", "Netkiller "));

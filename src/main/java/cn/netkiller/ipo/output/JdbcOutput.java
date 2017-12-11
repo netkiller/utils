@@ -17,9 +17,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-public class OutputJdbc implements OutputInterface {
+public class JdbcOutput implements OutputInterface {
 
-	private final static Logger logger = LoggerFactory.getLogger(OutputJdbc.class);
+	private final static Logger logger = LoggerFactory.getLogger(JdbcOutput.class);
 	private Connection connection = null;
 
 	private String driver;
@@ -32,7 +32,7 @@ public class OutputJdbc implements OutputInterface {
 
 	private Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
-	public OutputJdbc(String table, Map<String, String> map) {
+	public JdbcOutput(String table, Map<String, String> map) {
 		this.table = table;
 		this.map = map;
 	}

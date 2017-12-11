@@ -9,7 +9,7 @@ package cn.netkiller.ipo.output;
  *
  * @author neoch
  */
-public class OutputStdout implements OutputInterface {
+public class StdoutOutput implements OutputInterface {
 
     public void open() {
 

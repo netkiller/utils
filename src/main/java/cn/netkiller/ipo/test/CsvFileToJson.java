@@ -9,7 +9,7 @@ import cn.netkiller.ipo.Input;
 import cn.netkiller.ipo.InputProcessOutput;
 import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.input.CsvFileInput;
-import cn.netkiller.ipo.output.OutputJson;
+import cn.netkiller.ipo.output.JsonOutput;
 import cn.netkiller.ipo.process.Replace;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +37,7 @@ public class CsvFileToJson {
         
         Output output = new Output();
         List<String> colume = new ArrayList<String>(Arrays.asList("id","name","age","address"));
-        OutputJson json = new OutputJson(colume);
+        JsonOutput json = new JsonOutput(colume);
         output.add(json);
 
         cn.netkiller.ipo.Process process = new cn.netkiller.ipo.Process();

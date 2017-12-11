@@ -17,12 +17,12 @@ import java.util.Map;
  *
  * @author neoch
  */
-public class OutputJson implements OutputInterface {
+public class JsonOutput implements OutputInterface {
 
     private List<String> colume = new ArrayList<String>();
 
 
-    public OutputJson(List<String> colume) {
+    public JsonOutput(List<String> colume) {
         this.colume = colume;
     }
     @Override

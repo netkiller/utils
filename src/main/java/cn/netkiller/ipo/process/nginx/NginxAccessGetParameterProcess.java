@@ -1,6 +1,5 @@
 package cn.netkiller.ipo.process.nginx;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
