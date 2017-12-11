@@ -15,7 +15,7 @@ public class Kafka {
 		// TODO Auto-generated method stub
 		Properties props = new Properties();
 		props.put("bootstrap.servers", "123.207.61.225:9092");
-		props.put("group.id", "test");
+		props.put("group.id", "test-consumer-group");
 		props.put("enable.auto.commit", "true");
 		props.put("auto.commit.interval.ms", "1000");
 		props.put("session.timeout.ms", "30000");

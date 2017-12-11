@@ -13,6 +13,7 @@ import java.util.List;
 
 import cn.netkiller.ipo.input.FileInput;
 import cn.netkiller.ipo.input.InputInterface;
+import cn.netkiller.ipo.input.KafkaInput;
 import cn.netkiller.ipo.input.StdinInput;
 
 /**
@@ -76,6 +77,11 @@ public class Input implements InputInterface {
 	public String readLine() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Input add(KafkaInput kafkaInput) {
+		this.inputs.add(kafkaInput);
+		return this;
 	}
 
 }
