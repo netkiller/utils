@@ -43,7 +43,7 @@ public class InputProcessOutputMatchChain extends InputProcessOutput {
 					if (this.isExit()) {
 						this.setPipeline(false);
 					}
-					logger.debug("shutdown() => {}", this.isExit());
+//					logger.debug("shutdown() => {}", this.isExit());
 				} while (this.getPipeline());
 			} catch (InterruptedException e) {
 				logger.debug(e.getMessage());

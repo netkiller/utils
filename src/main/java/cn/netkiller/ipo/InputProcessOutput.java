@@ -81,7 +81,7 @@ public class InputProcessOutput implements Runnable {
 					if (exit) {
 						this.pipeline = false;
 					}
-					logger.debug("shutdown() => {}", exit);
+//					logger.debug("shutdown() => {}", exit);
 				} while (this.pipeline);
 			} catch (InterruptedException e) {
 				logger.debug(e.getMessage());

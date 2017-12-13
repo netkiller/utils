@@ -88,6 +88,8 @@ public class JdbcOutput implements OutputInterface {
 		Map<String, String> source = gson.fromJson(output, new TypeToken<Map<String, String>>() {
 		}.getType());
 
+		logger.info("Output Map {}", source);
+
 		try {
 			List<String> valuesList = new ArrayList<String>();
 			for (String value : map.values()) {
