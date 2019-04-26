@@ -3,7 +3,7 @@ package cn.netkiller.ipo;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.netkiller.ipo.test.MyRunnable;
+import cn.netkiller.test.MyRunnable;
 
 public class Batch extends Thread {
 	private List<InputProcessOutput> tasks = new ArrayList<InputProcessOutput>();

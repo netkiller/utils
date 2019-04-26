@@ -1,4 +1,4 @@
-package cn.netkiller.ipo.test;
+package cn.netkiller.test;
 
 import java.util.Map;
 

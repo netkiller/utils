@@ -1,4 +1,4 @@
-package cn.netkiller.ipo.test;
+package cn.netkiller.test;
 
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;

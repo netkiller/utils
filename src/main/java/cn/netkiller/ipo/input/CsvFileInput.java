@@ -17,17 +17,28 @@ import java.io.IOException;
  */
 public class CsvFileInput extends FileInput {
 
-    private String filename;
+	private String filename;
+	private BufferedReader in;
 
-    public CsvFileInput(String filename) {
-        super(filename);
-        this.filename = filename;
-    }
+	public CsvFileInput(String filename) {
+		super(filename);
+		this.filename = filename;
+	}
 
-    public String getColume() throws FileNotFoundException, IOException {
-        final File namefile = new File(this.filename);
-        final FileReader namereader = new FileReader(namefile);
-        final BufferedReader in = new BufferedReader(namereader);
-        return in.readLine();
-    }
+	public String getColume() throws FileNotFoundException, IOException {
+		final File namefile = new File(this.filename);
+		final FileReader namereader = new FileReader(namefile);
+		in = new BufferedReader(namereader);
+		return in.readLine();
+	}
+
+	public boolean close() {
+		try {
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return super.close();
+
+	}
 }

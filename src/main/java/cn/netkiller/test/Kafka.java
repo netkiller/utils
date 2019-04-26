@@ -1,4 +1,4 @@
-package cn.netkiller.ipo.test;
+package cn.netkiller.test;
 
 import java.util.Arrays;
 import java.util.Properties;
