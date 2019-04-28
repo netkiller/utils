@@ -1,5 +1,7 @@
 package cn.netkiller.ipo.process;
 
+import java.util.Map;
+
 public class KeyValueMap implements ProcessInterface {
 
 	public KeyValueMap(String query_string) {

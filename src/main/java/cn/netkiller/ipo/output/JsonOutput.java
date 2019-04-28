@@ -31,9 +31,9 @@ public class JsonOutput implements OutputInterface {
     }
 
     @Override
-    public void write(String output) {
+    public void write(Object output) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        String[] array = output.split(",");
+        String[] array = ((String) output).split(",");
         List<String> tmpList = new ArrayList<String>(Arrays.asList(array));
         Map<String, String> map = new HashMap<String, String>();
         for (int i = 0; i < this.colume.size(); i++) {

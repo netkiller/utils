@@ -9,8 +9,8 @@ public class GSMModelOutput implements OutputInterface {
 	}
 
 	@Override
-	public void write(String output) {
-		// TODO Auto-generated method stub
+	public void write(Object output) {
+		throw new UnsupportedOperationException("Not supported yet.");
 
 	}
 

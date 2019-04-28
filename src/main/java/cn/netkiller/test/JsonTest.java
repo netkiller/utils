@@ -25,7 +25,6 @@ public class JsonTest {
 		ipo.setInput(input);
 		ipo.setProcess(process);
 		ipo.setOutput(output);
-		ipo.setBatch(2);
 		ipo.launch();
 
 	}

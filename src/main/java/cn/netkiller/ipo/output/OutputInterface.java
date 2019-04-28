@@ -13,7 +13,7 @@ public interface OutputInterface {
 
     public void open();
 
-    public void write(String output);
+    public void write(Object output);
 
     public void close();
 }

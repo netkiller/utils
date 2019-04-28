@@ -37,42 +37,38 @@ public class InputProcessOutputMatchChain extends InputProcessOutput {
 		if (this.getPipeline()) {
 			try {
 				do {
-					if (!this.execute(this.getBatch())) {
+					if (!this.execute()) {
 						Thread.sleep(1000);
 					}
 					if (this.isExit()) {
 						this.setPipeline(false);
 					}
-//					logger.debug("shutdown() => {}", this.isExit());
+					// logger.debug("shutdown() => {}", this.isExit());
 				} while (this.getPipeline());
 			} catch (InterruptedException e) {
 				logger.debug(e.getMessage());
 			}
 		} else {
 			do {
-				this.execute(this.getBatch());
+				this.execute();
 				// logger.info("==================== Batch Done ====================");
 				if (this.isExit()) {
 					break;
 				}
-			} while (this.getInput().hasNextLine());
+			} while (this.getInput().hasNext());
 		}
 		this.getInput().close();
 		logger.debug("==================== End {} ====================", this.getName());
 	}
 
-	private boolean execute(int batchNumber) {
+	private boolean execute() {
 		boolean isNextBatch = false;
 		List<String> inputLines = new ArrayList<String>();
 
-		for (int i = 0; i < this.getBatch(); i++) {
-			List<String> lines = this.getInput().readLines();
-			for (String line : lines) {
-				if (line != null) {
-					inputLines.add(line);
-					isNextBatch = true;
-				}
-			}
+		String line = (String) this.getInput().readLine();
+		if (line != null) {
+			inputLines.add(line);
+			isNextBatch = true;
 		}
 
 		for (Entry<ProcessInterface, OutputInterface> entry : chains.entrySet()) {
@@ -81,7 +77,7 @@ public class InputProcessOutputMatchChain extends InputProcessOutput {
 			List<String> processLines = new ArrayList<String>();
 
 			for (String proc : inputLines) {
-				String line = entry.getKey().run(proc);
+				line = entry.getKey().run(proc);
 				if (line != null) {
 					processLines.add(line);
 				}

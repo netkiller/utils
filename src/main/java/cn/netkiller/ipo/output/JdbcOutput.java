@@ -82,7 +82,8 @@ public class JdbcOutput implements OutputInterface {
 	}
 
 	@Override
-	public void write(String output) {
+	public void write(Object tmp) {
+		String output = (String) tmp;
 		logger.info("Output {}", output);
 
 		Map<String, String> source = gson.fromJson(output, new TypeToken<Map<String, String>>() {

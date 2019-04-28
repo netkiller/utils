@@ -31,7 +31,6 @@ public class InputProcessOutputMatchChainTest {
 		mc.setInput(input);
 		mc.match(process, output);
 		mc.match(process1, output);
-		mc.setBatch(1);
 		mc.launch();
 		// mc.match(new JsonPrcess(), new JsonOutput());
 		

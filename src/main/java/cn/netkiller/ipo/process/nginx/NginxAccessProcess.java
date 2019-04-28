@@ -14,9 +14,9 @@ import com.google.gson.GsonBuilder;
 import cn.netkiller.ipo.process.ProcessInterface;
 
 public class NginxAccessProcess implements ProcessInterface {
-	
+
 	private final static Logger logger = LoggerFactory.getLogger(NginxAccessProcess.class);
-	
+
 	private String regex;
 
 	public NginxAccessProcess() {
@@ -47,7 +47,7 @@ public class NginxAccessProcess implements ProcessInterface {
 			map.put("request_method", matcher.group(3).split("\\?")[0].split(" ")[0]);
 			map.put("request_uri", matcher.group(3).split("\\?")[0].split(" ")[1]);
 			map.put("query_string", matcher.group(3).split("\\?")[1]);
-			map.put("server_protocol", matcher.group(4)); 
+			map.put("server_protocol", matcher.group(4));
 			map.put("status", matcher.group(5));
 			map.put("body_bytes_sent", matcher.group(6));
 			map.put("http_referer", matcher.group(7));

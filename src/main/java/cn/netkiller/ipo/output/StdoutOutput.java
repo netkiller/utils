@@ -15,7 +15,8 @@ public class StdoutOutput implements OutputInterface {
 
     }
 
-    public void write(String output) {
+    public void write(Object output) {
+    	
         System.out.println(output);
     }
 

@@ -10,7 +10,7 @@ public class Include implements ProcessInterface {
 
 	@Override
 	public String run(String line) {
-//		System.out.println(line);
+		// System.out.println(line);
 		if (line.contains(this.string)) {
 			return line;
 		} else {

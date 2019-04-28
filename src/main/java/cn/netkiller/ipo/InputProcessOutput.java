@@ -5,8 +5,9 @@
  */
 package cn.netkiller.ipo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +26,8 @@ public class InputProcessOutput implements Runnable {
 	private Input input;
 	private Output output;
 	private Process process;
+	private Position position;
 
-	private int batchNumber = 0;
 	private boolean exit = false;
 	private boolean pipeline = false;
 	private String name = "";
@@ -45,14 +46,6 @@ public class InputProcessOutput implements Runnable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public void setBatch(int batchNumber) {
-		this.batchNumber = batchNumber;
-	}
-
-	public int getBatch() {
-		return this.batchNumber;
 	}
 
 	public void setPipeline(boolean pipeline) {
@@ -75,59 +68,73 @@ public class InputProcessOutput implements Runnable {
 		if (this.pipeline) {
 			try {
 				do {
-					if (!this.execute(this.batchNumber)) {
+					if (!this.execute()) {
 						Thread.sleep(1000);
 					}
 					if (exit) {
 						this.pipeline = false;
 					}
-//					logger.debug("shutdown() => {}", exit);
+					// logger.debug("shutdown() => {}", exit);
 				} while (this.pipeline);
 			} catch (InterruptedException e) {
 				logger.debug(e.getMessage());
 			}
 		} else {
 			do {
-				this.execute(this.batchNumber);
-				// logger.info("==================== Batch Done ====================");
+				this.execute();
+				logger.debug("==================== Batch Done ====================");
 				if (exit) {
 					break;
 				}
-			} while (this.input.hasNextLine());
+			} while (this.input.hasNext());
 		}
 		this.input.close();
 		this.output.close();
 		logger.debug("==================== End {} ====================", this.name);
 	}
 
-	private boolean execute(int batchNumber) {
-		boolean isNextBatch = false;
-		List<String> inputLines = new ArrayList<String>();
+	private boolean execute() {
+		Object dataType = input.getDataType();
+		logger.warn(input.getDataType().getClass().getTypeName());
+		if (dataType instanceof String) {
+			this.string();
+		}
 
-		for (int i = 0; i < this.batchNumber; i++) {
-			List<String> lines = input.readLines();
-			for (String line : lines) {
-				if (line != null) {
-					inputLines.add(line);
-					isNextBatch = true;
+		if (dataType instanceof HashMap || dataType instanceof LinkedHashMap) {
+			this.map();
+		}
+
+		return false;
+
+	}
+
+	private void string() {
+
+		String line = (String) input.readLine();
+		if (line != null) {
+			String tmp = this.process.run(line);
+			if (tmp != null) {
+				this.output.write(tmp);
+			}
+		}
+
+	}
+
+	private void map() {
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> output = (Map<String, Object>) input.readLine();
+		if (output != null) {
+			if (this.process != null) {
+				output = this.process.run(output);
+			}
+			if (output != null) {
+				this.output.write(output);
+				if (this.position != null) {
+					this.position.set(output);
 				}
 			}
 		}
-
-		List<String> processLines = new ArrayList<String>();
-
-		for (String proc : inputLines) {
-			String line = this.process.run(proc);
-			if (line != null) {
-				processLines.add(line);
-			}
-		}
-
-		for (String out : processLines) {
-			this.output.write(out);
-		}
-
-		return isNextBatch;
 
 	}
 
@@ -177,6 +184,14 @@ public class InputProcessOutput implements Runnable {
 
 	public void setExit(boolean exit) {
 		this.exit = exit;
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
 	}
 
 }

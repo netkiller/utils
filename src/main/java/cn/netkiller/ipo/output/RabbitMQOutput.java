@@ -51,7 +51,8 @@ public class RabbitMQOutput implements OutputInterface {
 	}
 
 	@Override
-	public void write(String output) {
+	public void write(Object tmp) {
+		String output = (String) tmp;
 		try {
 			channel.basicPublish("", this.queue, null, output.getBytes());
 		} catch (IOException e) {

@@ -35,9 +35,9 @@ public class KafkaOutput implements OutputInterface {
 	}
 
 	@Override
-	public void write(String output) {
+	public void write(Object output) {
 		for (String topic : this.topics) {
-			this.producer.send(new ProducerRecord<String, String>(topic, output));
+			this.producer.send(new ProducerRecord<String, String>(topic, (String) output));
 			this.logger.debug("Kafka Output Topic: {}, Value: {}", topic, output);
 		}
 	}

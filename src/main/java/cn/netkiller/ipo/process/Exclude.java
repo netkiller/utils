@@ -1,5 +1,7 @@
 package cn.netkiller.ipo.process;
 
+import java.util.Map;
+
 public class Exclude implements ProcessInterface {
 
 	private String string;

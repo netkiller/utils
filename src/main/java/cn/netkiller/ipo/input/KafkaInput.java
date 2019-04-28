@@ -56,4 +56,16 @@ public class KafkaInput implements InputInterface {
 		return true;
 	}
 
+	@Override
+	public Object getDataType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasNext() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

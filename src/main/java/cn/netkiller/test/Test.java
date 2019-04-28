@@ -26,7 +26,7 @@ public class Test {
         // TODO code application logic here
         System.out.println("Starting...");
         
-        FileInput fi = new FileInput("/tmp/access.log");
+        FileInput fi = new FileInput("/tmp/adobegc.log");
 //        System.out.print(fi.readLine());
         
         Input input = new Input();

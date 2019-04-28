@@ -78,6 +78,18 @@ public class FileInput implements InputInterface {
 
 	}
 
+	@Override
+	public Object getDataType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasNext() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	// @Override
 	// public void open() {
 	// throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

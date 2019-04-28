@@ -11,10 +11,11 @@ package cn.netkiller.ipo.process;
  */
 public interface ProcessInterface {
 
-    /**
-     *
-     * @param tmp
-     * @return
-     */
-    public String run(String line);
+	/**
+	 *
+	 * @param tmp
+	 * @return
+	 */
+	public String run(String line);
+
 }

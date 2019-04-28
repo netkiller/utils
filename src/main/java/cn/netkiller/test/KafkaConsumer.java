@@ -41,7 +41,6 @@ public class KafkaConsumer {
 		ipo.setInput(input);
 		ipo.setProcess(process);
 		ipo.setOutput(output);
-		ipo.setBatch(1);
 		ipo.setPipeline(true);
 		ipo.launch();
 

@@ -35,38 +35,38 @@ public class MultiDataSourceConfig {
 
 	@Bean
 	// @Primary
-	@ConfigurationProperties("spring.datasource.master")
-	public DataSourceProperties masterDataSourceProperties() {
+	@ConfigurationProperties("spring.datasource.input")
+	public DataSourceProperties inputDataSourceProperties() {
 		return new DataSourceProperties();
 	}
 
 	@Bean("Master")
 	// @Primary
-	@ConfigurationProperties("spring.datasource.master")
-	public DataSource masterDataSource() {
-		return masterDataSourceProperties().initializeDataSourceBuilder().build();
+	@ConfigurationProperties("spring.datasource.input")
+	public DataSource inputDataSource() {
+		return inputDataSourceProperties().initializeDataSourceBuilder().build();
 	}
 
-	@Bean("masterJdbcTemplate")
+	@Bean("inputJdbcTemplate")
 	// @Primary
-	public JdbcTemplate masterJdbcTemplate(@Qualifier("Master") DataSource Master) {
+	public JdbcTemplate inputJdbcTemplate(@Qualifier("Master") DataSource Master) {
 		return new JdbcTemplate(Master);
 	}
 
 	@Bean
-	@ConfigurationProperties("spring.datasource.slave")
-	public DataSourceProperties slaveDataSourceProperties() {
+	@ConfigurationProperties("spring.datasource.output")
+	public DataSourceProperties outputDataSourceProperties() {
 		return new DataSourceProperties();
 	}
 
 	@Bean(name = "Slave")
-	@ConfigurationProperties("spring.datasource.slave")
-	public DataSource slaveDataSource() {
-		return slaveDataSourceProperties().initializeDataSourceBuilder().build();
+	@ConfigurationProperties("spring.datasource.output")
+	public DataSource outputDataSource() {
+		return outputDataSourceProperties().initializeDataSourceBuilder().build();
 	}
 
-	@Bean("slaveJdbcTemplate")
-	public JdbcTemplate slaveJdbcTemplate(@Qualifier("Slave") DataSource Master) {
+	@Bean("outputJdbcTemplate")
+	public JdbcTemplate outputJdbcTemplate(@Qualifier("Slave") DataSource Master) {
 		return new JdbcTemplate(Master);
 	}
 
