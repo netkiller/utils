@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 public class JdbcTemplateOutput implements OutputInterface {
 
@@ -16,9 +17,10 @@ public class JdbcTemplateOutput implements OutputInterface {
 
 	private Map<String, String> map = new LinkedHashMap<String, String>();
 
-	// private Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+	private JdbcTemplate outputJdbcTemplate;
 
-	public JdbcTemplateOutput(String table) {
+	public JdbcTemplateOutput(JdbcTemplate outputJdbcTemplate, String table) {
+		this.outputJdbcTemplate = outputJdbcTemplate;
 		this.table = table;
 
 		logger.debug("Output table {}", table);
@@ -31,18 +33,12 @@ public class JdbcTemplateOutput implements OutputInterface {
 
 	@Override
 	public void open() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void write(Object output) {
-		// logger.debug("Output {}", output.toString());
 
-		// Map<String, String> source = gson.fromJson((String) output, new TypeToken<Map<String, String>>() {
-		// }.getType());
-
-		//
 		@SuppressWarnings("unchecked")
 		Map<String, String> tmp = (Map<String, String>) output;
 		logger.info("Output Map {}", tmp.toString());
@@ -73,9 +69,7 @@ public class JdbcTemplateOutput implements OutputInterface {
 			}
 
 			logger.debug("SQL {}", sql);
-			// Statement stmt = this.connection.createStatement();
-			// stmt.execute(sql);
-			// stmt.close();
+			outputJdbcTemplate.execute(sql);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -84,7 +78,6 @@ public class JdbcTemplateOutput implements OutputInterface {
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -10,7 +10,8 @@ import cn.netkiller.ipo.InputProcessOutput;
 import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.input.CsvFileInput;
 import cn.netkiller.ipo.output.JsonOutput;
-import cn.netkiller.ipo.process.Replace;
+import cn.netkiller.ipo.process.string.Replace;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

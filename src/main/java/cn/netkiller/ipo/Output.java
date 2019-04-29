@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.netkiller.ipo.output.OutputInterface;
-import cn.netkiller.ipo.input.JdbcTemplateInput;
 import cn.netkiller.ipo.output.JdbcOutput;
 import cn.netkiller.ipo.output.JdbcTemplateOutput;
 import cn.netkiller.ipo.output.JsonOutput;
@@ -23,7 +22,7 @@ import cn.netkiller.ipo.output.StdoutOutput;
  * @author neoch
  */
 public class Output implements OutputInterface {
-	
+
 	private final static Logger logger = LoggerFactory.getLogger(Output.class);
 
 	private final List<OutputInterface> outputs = new ArrayList<OutputInterface>();

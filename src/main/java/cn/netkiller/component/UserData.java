@@ -23,9 +23,9 @@ import cn.netkiller.ipo.input.JdbcTemplateInput;
 import cn.netkiller.ipo.output.JdbcTemplateOutput;
 import cn.netkiller.ipo.output.StdoutOutput;
 import cn.netkiller.ipo.position.FilePosition;
-import cn.netkiller.ipo.process.Replace;
 import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
+import cn.netkiller.ipo.process.string.Replace;
 
 @Component
 public class UserData implements ApplicationRunner {
@@ -39,9 +39,9 @@ public class UserData implements ApplicationRunner {
 	@Autowired
 	private JdbcTemplate inputJdbcTemplate;
 
-	// @Qualifier("outputJdbcTemplate")
-	// @Autowired
-	// private JdbcTemplate outputJdbcTemplate;
+	@Qualifier("outputJdbcTemplate")
+	@Autowired
+	private JdbcTemplate outputJdbcTemplate;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -71,18 +71,17 @@ public class UserData implements ApplicationRunner {
 		Position position = new Position(new FilePosition("/tmp/pos.txt"), "id");
 
 		// // StdinInput stdin = new StdinInput();
-		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from saas.tbl_eos_contracts limit 5"));
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select id,name from saas.tbl_eos_contracts limit 5"));
 
-		output.add(new JdbcTemplateOutput("test"));
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "test"));
 		output.add(new StdoutOutput());
-		//
+
 		// // input.add(new FileInput(file.getURI().getPath()));
 
-		//
 		process.add(new MapReplace("name", "公司", "====="));
 		process.add(new MapRemove("accept_type"));
 		// process.add(new Replace("Tom", "[Tom]"));
-		// //
+
 		InputProcessOutput ipo = new InputProcessOutput();
 		//
 		// // Thread exit = new Thread(new Runnable() {

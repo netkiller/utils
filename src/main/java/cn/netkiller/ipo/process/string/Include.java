@@ -1,4 +1,6 @@
-package cn.netkiller.ipo.process;
+package cn.netkiller.ipo.process.string;
+
+import cn.netkiller.ipo.process.ProcessInterface;
 
 public class Include implements ProcessInterface {
 

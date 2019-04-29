@@ -1,4 +1,4 @@
-package cn.netkiller.config;
+package cn.netkiller.ipo.config;
 
 import javax.sql.DataSource;
 

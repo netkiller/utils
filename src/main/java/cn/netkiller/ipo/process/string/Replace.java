@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.netkiller.ipo.process;
+package cn.netkiller.ipo.process.string;
 
 import java.util.Map;
+
+import cn.netkiller.ipo.process.ProcessInterface;
 
 /**
  *

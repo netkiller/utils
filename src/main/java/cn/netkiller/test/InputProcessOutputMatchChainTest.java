@@ -6,8 +6,8 @@ import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.FileInput;
 import cn.netkiller.ipo.output.StdoutOutput;
-import cn.netkiller.ipo.process.Include;
-import cn.netkiller.ipo.process.Replace;
+import cn.netkiller.ipo.process.string.Include;
+import cn.netkiller.ipo.process.string.Replace;
 
 public class InputProcessOutputMatchChainTest {
 

@@ -11,16 +11,16 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.netkiller.ipo.process.Exclude;
-import cn.netkiller.ipo.process.Include;
 import cn.netkiller.ipo.process.ProcessInterface;
 import cn.netkiller.ipo.process.ProcessMapInterface;
-import cn.netkiller.ipo.process.Replace;
 import cn.netkiller.ipo.process.json.JsonValueLength;
 import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
 import cn.netkiller.ipo.process.nginx.NginxAccessGetParameterProcess;
 import cn.netkiller.ipo.process.nginx.NginxAccessProcess;
+import cn.netkiller.ipo.process.string.Exclude;
+import cn.netkiller.ipo.process.string.Include;
+import cn.netkiller.ipo.process.string.Replace;
 
 import java.util.ArrayList;
 

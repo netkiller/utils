@@ -14,8 +14,8 @@ import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.FileInput;
 import cn.netkiller.ipo.output.JdbcOutput;
 import cn.netkiller.ipo.output.StdoutOutput;
-import cn.netkiller.ipo.process.Include;
 import cn.netkiller.ipo.process.nginx.NginxAccessGetParameterProcess;
+import cn.netkiller.ipo.process.string.Include;
 
 public class NginxToJdbc {
 	private final static Logger logger = LoggerFactory.getLogger(NginxToJdbc.class);
