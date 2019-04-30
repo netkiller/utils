@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -23,11 +24,13 @@ import cn.netkiller.ipo.input.JdbcTemplateInput;
 import cn.netkiller.ipo.output.JdbcTemplateOutput;
 import cn.netkiller.ipo.output.StdoutOutput;
 import cn.netkiller.ipo.position.FilePosition;
+import cn.netkiller.ipo.process.map.MapPut;
 import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
 import cn.netkiller.ipo.process.string.Replace;
 
 @Component
+@Order(3)
 public class UserData implements ApplicationRunner {
 
 	private final static Logger logger = LoggerFactory.getLogger(UserData.class);
@@ -64,6 +67,9 @@ public class UserData implements ApplicationRunner {
 		// logger.warn(input);
 		// String string = outputJdbcTemplate.queryForObject("select name from lz_users limit 1", String.class);
 		// logger.warn(string);
+		
+		// TRUNCATE `test`.`lz_users`;
+		outputJdbcTemplate.execute("delete from lz_users where created_by = 'import'");
 
 		Input input = new Input(new LinkedHashMap<Object, Object>());
 		Process process = new Process();
@@ -71,16 +77,17 @@ public class UserData implements ApplicationRunner {
 		Position position = new Position(new FilePosition("/tmp/pos.txt"), "id");
 
 		// // StdinInput stdin = new StdinInput();
-		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select id,name from saas.tbl_eos_contracts limit 5"));
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from ipo_user"));
 
-		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "test"));
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_users"));
 		output.add(new StdoutOutput());
 
 		// // input.add(new FileInput(file.getURI().getPath()));
 
 		process.add(new MapReplace("name", "公司", "====="));
 		process.add(new MapRemove("accept_type"));
-		// process.add(new Replace("Tom", "[Tom]"));
+		process.add(new MapPut("created_by", "ipo"));
+		process.add(new MapPut("user_pwd", "123456"));
 
 		InputProcessOutput ipo = new InputProcessOutput();
 		//

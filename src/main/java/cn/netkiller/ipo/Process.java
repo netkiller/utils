@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import cn.netkiller.ipo.process.ProcessInterface;
 import cn.netkiller.ipo.process.ProcessMapInterface;
 import cn.netkiller.ipo.process.json.JsonValueLength;
+import cn.netkiller.ipo.process.map.MapPut;
 import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
 import cn.netkiller.ipo.process.nginx.NginxAccessGetParameterProcess;
@@ -58,7 +59,7 @@ public class Process implements ProcessInterface {
 	}
 
 	public Map<String, Object> run(Map<String, Object> tmp) {
-		Map<String, Object> line = null;
+		Map<String, Object> line = tmp;
 		// System.out.println(line);
 		logger.warn("Process source: {}", tmp.toString());
 		for (ProcessMapInterface process : this.processesMap) {
@@ -107,7 +108,13 @@ public class Process implements ProcessInterface {
 	public Process add(JsonValueLength jsonValueLength) {
 		this.processes.add(jsonValueLength);
 		return this;
-		
+
+	}
+
+	public Process add(MapPut mapPut) {
+		this.processesMap.add(mapPut);
+		return this;
+
 	}
 
 	// public Process add(Object object) {

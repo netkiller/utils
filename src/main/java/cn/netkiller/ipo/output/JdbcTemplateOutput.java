@@ -72,6 +72,7 @@ public class JdbcTemplateOutput implements OutputInterface {
 			outputJdbcTemplate.execute(sql);
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(0);
 		}
 
 	}
