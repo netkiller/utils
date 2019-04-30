@@ -21,13 +21,13 @@ import cn.netkiller.ipo.input.JdbcTemplateInput;
 import cn.netkiller.ipo.output.JdbcTemplateOutput;
 import cn.netkiller.ipo.position.FilePosition;
 import cn.netkiller.ipo.process.map.MapPut;
-import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
 
 @Component
-@Order(20)
-public class Department implements ApplicationRunner {
-	private final static Logger logger = LoggerFactory.getLogger(Department.class);
+@Order(40)
+public class DepartmentsHasUser implements ApplicationRunner {
+	private final static Logger logger = LoggerFactory.getLogger(DepartmentsHasUser.class);
+
 	@Qualifier("inputJdbcTemplate")
 	@Autowired
 	private JdbcTemplate inputJdbcTemplate;
@@ -38,31 +38,36 @@ public class Department implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
+		
+		System.out.println(args.containsOption("table"));
+		System.out.println(args.getOptionValues("table"));
+		System.out.println(args.getOptionValues("table").equals("departments_has_user"));
 		if (args.containsOption("table")) {
-			if (!args.getOptionValues("table").equals("department")) {
+			if (!args.getOptionValues("table").get(0).equals("departments_has_user")) {
 				return;
 			}
 		}
-		logger.debug("==================== Department ====================");
-
-		outputJdbcTemplate.execute("delete from lz_departments where created_by = 'import'");
+		System.out.println("参数");
+		
+		outputJdbcTemplate.execute("delete from lz_auth where created_by = 'import'");
 
 		Input input = new Input(new LinkedHashMap<Object, Object>());
 		Process process = new Process();
 		Output output = new Output();
 		Position position = new Position(new FilePosition("/tmp/pos.txt"), "id");
 
-		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_departments"));
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_departments_has_user"));
 
-		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_departments"));
-		// output.add(new StdoutOutput());
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_auth"));
 
 		process.add(new MapReplace("created_time", null, "now()"));
 		// process.add(new MapRemove("accept_type"));
+		
 		process.add(new MapPut("created_by", "import"));
 		process.add(new MapPut("company_id", "1"));
+		process.add(new MapPut("biz_post_id", "1"));
 
-		InputProcessOutput ipo = new InputProcessOutput();
+		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
 
 		ipo.setInput(input);
 		ipo.setProcess(process);
@@ -70,5 +75,7 @@ public class Department implements ApplicationRunner {
 		// ipo.setPosition(position);
 		// ipo.setPipeline(true);
 		ipo.launch();
+
 	}
+
 }

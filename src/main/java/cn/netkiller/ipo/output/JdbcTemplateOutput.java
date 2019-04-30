@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import cn.netkiller.ipo.util.SqlUtil;
+
 public class JdbcTemplateOutput implements OutputInterface {
 
 	private final static Logger logger = LoggerFactory.getLogger(JdbcTemplateOutput.class);
@@ -40,7 +42,7 @@ public class JdbcTemplateOutput implements OutputInterface {
 	public void write(Object output) {
 
 		@SuppressWarnings("unchecked")
-		Map<String, String> tmp = (Map<String, String>) output;
+		Map<String, Object> tmp = (Map<String, Object>) output;
 		logger.info("Output Map {}", tmp.toString());
 		String sql = "";
 		try {
@@ -59,16 +61,18 @@ public class JdbcTemplateOutput implements OutputInterface {
 				sql = String.format("INSERT INTO `%s`(`%s`) value(\"%s\")", this.table, fields, values);
 			} else {
 
-				String fields = StringUtils.join(tmp.keySet(), "`,`");
-				String values = StringUtils.join(tmp.values(), "\",\"");
+				// String fields = StringUtils.join(tmp.keySet(), "`,`");
+				// String values = StringUtils.join(tmp.values(), "\",\"");
+				//
+				// logger.info("Output Key {}", tmp.keySet().toString());
+				// logger.info("Output Value {}", tmp.values().toString());
+				//
+				// sql = String.format("INSERT INTO `%s`(`%s`) value(\"%s\")", this.table, fields, values);
 
-				logger.info("Output Key {}", tmp.keySet().toString());
-				logger.info("Output Value {}", tmp.values().toString());
-
-				sql = String.format("INSERT INTO `%s`(`%s`) value(\"%s\")", this.table, fields, values);
+				sql = SqlUtil.join(this.table, tmp);
 			}
 
-			logger.debug("SQL {}", sql);
+			logger.debug("SQL: {};", sql);
 			outputJdbcTemplate.execute(sql);
 		} catch (Exception e) {
 			e.printStackTrace();

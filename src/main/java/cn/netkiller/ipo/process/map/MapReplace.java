@@ -20,7 +20,11 @@ public class MapReplace implements ProcessMapInterface {
 		if (row == null) {
 			return null;
 		}
-		if (row.get(this.key) instanceof String) {
+		if (this.oldString == null) {
+			if (row.get(this.key) == null) {
+				row.replace(this.key, this.newString);
+			}
+		} else if (row.get(this.key) instanceof String) {
 			String tmp = (String) row.get(this.key);
 			if (tmp.contains(this.oldString)) {
 				tmp = tmp.replace(this.oldString, this.newString);

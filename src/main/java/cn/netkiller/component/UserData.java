@@ -30,7 +30,7 @@ import cn.netkiller.ipo.process.map.MapReplace;
 import cn.netkiller.ipo.process.string.Replace;
 
 @Component
-@Order(3)
+@Order(30)
 public class UserData implements ApplicationRunner {
 
 	private final static Logger logger = LoggerFactory.getLogger(UserData.class);
@@ -48,6 +48,15 @@ public class UserData implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
+
+		if (args.containsOption("table")) {
+			if (!args.getOptionValues("table").equals("user")) {
+				return;
+			}
+
+		}
+
+		logger.debug("==================== User ====================");
 
 		// String query = "SELECT id, title, content from article where id = ";
 
@@ -67,7 +76,7 @@ public class UserData implements ApplicationRunner {
 		// logger.warn(input);
 		// String string = outputJdbcTemplate.queryForObject("select name from lz_users limit 1", String.class);
 		// logger.warn(string);
-		
+
 		// TRUNCATE `test`.`lz_users`;
 		outputJdbcTemplate.execute("delete from lz_users where created_by = 'import'");
 
@@ -77,17 +86,17 @@ public class UserData implements ApplicationRunner {
 		Position position = new Position(new FilePosition("/tmp/pos.txt"), "id");
 
 		// // StdinInput stdin = new StdinInput();
-		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from ipo_user"));
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_users"));
 
 		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_users"));
 		output.add(new StdoutOutput());
 
 		// // input.add(new FileInput(file.getURI().getPath()));
 
-		process.add(new MapReplace("name", "公司", "====="));
+		process.add(new MapReplace("parent_id", null, "NULL"));
 		process.add(new MapRemove("accept_type"));
-		process.add(new MapPut("created_by", "ipo"));
-		process.add(new MapPut("user_pwd", "123456"));
+		process.add(new MapPut("created_by", "import"));
+		process.add(new MapReplace("user_pwd", null, "123456"));
 
 		InputProcessOutput ipo = new InputProcessOutput();
 		//

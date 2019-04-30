@@ -5,6 +5,9 @@
  */
 package cn.netkiller.test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import cn.netkiller.ipo.Input;
 import cn.netkiller.ipo.InputProcessOutput;
 import cn.netkiller.ipo.Output;
@@ -12,6 +15,7 @@ import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.FileInput;
 import cn.netkiller.ipo.output.StdoutOutput;
 import cn.netkiller.ipo.process.string.Replace;
+import cn.netkiller.ipo.util.SqlUtil;
 
 /**
  *
@@ -26,26 +30,39 @@ public class Test {
         // TODO code application logic here
         System.out.println("Starting...");
         
-        FileInput fi = new FileInput("/tmp/adobegc.log");
-//        System.out.print(fi.readLine());
+        Map<String, Object> map = new HashMap<String,Object>();
+        map.put("id", 10);
+        map.put("name", "neo");
+        map.put("age", null);
         
-        Input input = new Input();
-        input.add(fi);
-//        input.read();
-
-        Output output = new Output();
-        output.add(new StdoutOutput());
+		String s = SqlUtil.join("test",map);
+        System.out.println(s);
         
-        Process process = new Process();
-        process.add(new Replace("Hello","Netkiller "));
-        process.add(new Replace("Neo","<Neo>"));
-        process.add(new Replace("Tom","[Tom]"));
+//        String test="INSERT INTO `lz_departments`(`dept_id`,`dept_code`,`dept_name`,`company_id`,`created_by`,`created_time`) value(\"22\",\"001\",\"广州分公司\",\"1\",\"import\",\"now()\");";
+//        System.out.println(test.replace("now()", "aaa"));
+//        System.out.println(test.replace("\"now()\"", "now()"));
         
-        InputProcessOutput ipo = new InputProcessOutput();
-        ipo.setInput(input);
-        ipo.setProcess(process);
-        ipo.setOutput(output);
-        ipo.launch();
+        
+//        FileInput fi = new FileInput("/tmp/adobegc.log");
+////        System.out.print(fi.readLine());
+//        
+//        Input input = new Input();
+//        input.add(fi);
+////        input.read();
+//
+//        Output output = new Output();
+//        output.add(new StdoutOutput());
+//        
+//        Process process = new Process();
+//        process.add(new Replace("Hello","Netkiller "));
+//        process.add(new Replace("Neo","<Neo>"));
+//        process.add(new Replace("Tom","[Tom]"));
+//        
+//        InputProcessOutput ipo = new InputProcessOutput();
+//        ipo.setInput(input);
+//        ipo.setProcess(process);
+//        ipo.setOutput(output);
+//        ipo.launch();
     }
     
 }

@@ -82,7 +82,7 @@ public class InputProcessOutput implements Runnable {
 		} else {
 			do {
 				this.execute();
-				logger.debug("==================== Batch Done ====================");
+				logger.debug("==================== "+this.name+" ====================");
 				if (exit) {
 					break;
 				}
