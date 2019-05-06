@@ -36,7 +36,7 @@ public class JdbcTemplateInput implements InputInterface {
 
 		if (this.iterator.hasNext()) {
 			Map<String, Object> line = this.iterator.next();
-			logger.warn(line.toString());
+			logger.debug(line.toString());
 			return line;
 		}
 		return null;

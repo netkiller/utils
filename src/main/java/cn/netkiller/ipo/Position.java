@@ -34,4 +34,8 @@ public class Position {
 	public String get() {
 		return this.position.get();
 	}
+
+	public void reset() {
+		this.position.reset();
+	}
 }

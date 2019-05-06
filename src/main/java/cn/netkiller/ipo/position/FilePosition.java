@@ -1,6 +1,7 @@
 package cn.netkiller.ipo.position;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -55,6 +56,13 @@ public class FilePosition implements PositionInterface {
 			}
 		}
 		return pos;
+	}
+
+	@Override
+	public void reset() {
+		File file = new File(this.filename);
+		file.delete();
+
 	}
 
 }

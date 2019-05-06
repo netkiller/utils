@@ -31,4 +31,10 @@ public class RedisPosition implements PositionInterface {
 		return null;
 	}
 
+	@Override
+	public void reset() {
+		stringRedisTemplate.delete(this.cacheKey);
+		
+	}
+
 }

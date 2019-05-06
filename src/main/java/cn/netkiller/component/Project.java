@@ -47,17 +47,12 @@ public class Project implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
-		// stringRedisTemplate.opsForValue().set("hello", "world");
-		// String message = stringRedisTemplate.opsForValue().get("hello");
-		// logger.debug(message);
-
-		outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project where created_by = 'import'");
-
 		Input input = new Input(new LinkedHashMap<Object, Object>());
 		Process process = new Process();
 		Output output = new Output();
 		Position position = new Position(new RedisPosition(stringRedisTemplate, this.getClass().getName()), "id");
-
+		// position.reset();
+		// outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project where created_by = 'import'");
 		String id = position.get();
 		String sql = "select * from import_projects";
 		if (id != null) {
@@ -82,7 +77,6 @@ public class Project implements ApplicationRunner {
 		ipo.setProcess(process);
 		ipo.setOutput(output);
 		ipo.setPosition(position);
-		// ipo.setPipeline(true);
 		ipo.launch();
 
 		System.exit(0);
