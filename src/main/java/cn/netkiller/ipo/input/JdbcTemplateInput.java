@@ -1,6 +1,5 @@
 package cn.netkiller.ipo.input;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -9,15 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-//import org.springframework.stereotype.Component;
-//
-//
-//@Component
 public class JdbcTemplateInput implements InputInterface {
 	private final static Logger logger = LoggerFactory.getLogger(JdbcTemplateInput.class);
 
-	// @Qualifier("inputJdbcTemplate")
-	// @Autowired
 	private JdbcTemplate inputJdbcTemplate;
 
 	private String sql = null;
@@ -26,6 +19,7 @@ public class JdbcTemplateInput implements InputInterface {
 	public JdbcTemplateInput(JdbcTemplate inputJdbcTemplate, String sql) {
 		this.inputJdbcTemplate = inputJdbcTemplate;
 		this.sql = sql;
+		logger.debug("Input SQL {}", this.sql);
 	}
 
 	@Override
@@ -50,7 +44,6 @@ public class JdbcTemplateInput implements InputInterface {
 
 	@Override
 	public boolean close() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

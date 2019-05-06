@@ -27,6 +27,9 @@ public class Output implements OutputInterface {
 
 	private final List<OutputInterface> outputs = new ArrayList<OutputInterface>();
 
+	public Output() {
+	}
+
 	public void open() {
 		for (OutputInterface output : this.outputs) {
 			output.open();

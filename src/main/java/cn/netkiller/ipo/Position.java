@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.netkiller.ipo.position.FilePosition;
 import cn.netkiller.ipo.position.PositionInterface;
+import cn.netkiller.ipo.position.RedisPosition;
 
 public class Position {
 	private final static Logger logger = LoggerFactory.getLogger(Position.class);
@@ -18,9 +19,14 @@ public class Position {
 		this.key = key;
 	}
 
+	public Position(RedisPosition redisPosition, String key) {
+		this.position = redisPosition;
+		this.key = key;
+	}
+
 	public void set(Map<String, Object> map) {
 		String current = String.valueOf(map.get(this.key));
-		logger.debug("Current position: <{}> {}", this.key, current);
+		logger.debug("Current position: {} => {}", this.key, current);
 		this.position.set(current);
 
 	}

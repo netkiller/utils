@@ -72,14 +72,6 @@ public class JdbcTemplateOutput implements OutputInterface {
 				sql = String.format("%s INTO `%s`(`%s`) value(\"%s\")", this.method, this.table, fields, values);
 			} else {
 
-				// String fields = StringUtils.join(tmp.keySet(), "`,`");
-				// String values = StringUtils.join(tmp.values(), "\",\"");
-				//
-				// logger.info("Output Key {}", tmp.keySet().toString());
-				// logger.info("Output Value {}", tmp.values().toString());
-				//
-				// sql = String.format("INSERT INTO `%s`(`%s`) value(\"%s\")", this.table, fields, values);
-
 				sql = SqlUtil.join(this.method, this.table, tmp);
 			}
 

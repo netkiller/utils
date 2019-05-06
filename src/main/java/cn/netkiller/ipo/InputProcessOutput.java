@@ -82,7 +82,7 @@ public class InputProcessOutput implements Runnable {
 		} else {
 			do {
 				this.execute();
-				logger.debug("==================== "+this.name+" ====================");
+				logger.debug("==================== " + this.name + " ====================");
 				if (exit) {
 					break;
 				}
@@ -95,7 +95,7 @@ public class InputProcessOutput implements Runnable {
 
 	private boolean execute() {
 		Object dataType = input.getDataType();
-		logger.warn(input.getDataType().getClass().getTypeName());
+		// logger.debug(input.getDataType().getClass().getTypeName());
 		if (dataType instanceof String) {
 			this.string();
 		}

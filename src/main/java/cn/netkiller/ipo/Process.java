@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import cn.netkiller.ipo.process.ProcessInterface;
 import cn.netkiller.ipo.process.ProcessMapInterface;
 import cn.netkiller.ipo.process.json.JsonValueLength;
+import cn.netkiller.ipo.process.map.MapLeft;
 import cn.netkiller.ipo.process.map.MapPut;
 import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
@@ -113,6 +114,12 @@ public class Process implements ProcessInterface {
 
 	public Process add(MapPut mapPut) {
 		this.processesMap.add(mapPut);
+		return this;
+
+	}
+
+	public Process add(MapLeft mapLeft) {
+		this.processesMap.add(mapLeft);
 		return this;
 
 	}
