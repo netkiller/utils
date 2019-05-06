@@ -40,7 +40,7 @@ public class Input implements InputInterface {
 
 	public boolean open() {
 		for (InputInterface input : this.inputs) {
-			logger.warn("Open input source: {}", input.getClass().getName());
+			logger.debug("Open input source: {}", input.getClass().getName());
 			input.open();
 		}
 		return true;
@@ -48,7 +48,7 @@ public class Input implements InputInterface {
 
 	public boolean close() {
 		for (InputInterface input : this.inputs) {
-			logger.warn("Close input source: {}", input.getClass().getName());
+			logger.debug("Close input source: {}", input.getClass().getName());
 			input.close();
 		}
 		return true;
@@ -66,7 +66,7 @@ public class Input implements InputInterface {
 		for (InputInterface input : this.inputs) {
 			if (input.hasNext()) {
 				this.dataType = input.getDataType();
-//				logger.warn(this.dataType.getClass().getTypeName());
+				// logger.warn(this.dataType.getClass().getTypeName());
 				if (input.getDataType() instanceof String) {
 					String tmp = (String) input.readLine();
 					if (tmp != null && !tmp.equals("")) {

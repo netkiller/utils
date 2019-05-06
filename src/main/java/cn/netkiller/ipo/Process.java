@@ -61,14 +61,14 @@ public class Process implements ProcessInterface {
 	public Map<String, Object> run(Map<String, Object> tmp) {
 		Map<String, Object> line = tmp;
 		// System.out.println(line);
-		logger.warn("Process source: {}", tmp.toString());
+		logger.debug("Process source: {}", tmp.toString());
 		for (ProcessMapInterface process : this.processesMap) {
 			line = process.run(tmp);
 			if (line == null) {
 				break;
 			}
 		}
-		logger.warn("Process target: {}", line.toString());
+		logger.debug("Process target: {}", line.toString());
 		return line;
 	}
 

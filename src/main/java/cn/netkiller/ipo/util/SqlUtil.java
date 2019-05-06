@@ -6,7 +6,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class SqlUtil {
-	public static String join(String table, Map<String, Object> map) {
+
+	final public static class SQL {
+		public final static String INSERT = "INSERT";
+		public final static String REPLACE = "REPLACE";
+	}
+
+	public static String join(String method, String table, Map<String, Object> map) {
 
 		Iterator<Entry<String, Object>> entries = map.entrySet().iterator();
 		StringBuffer sql = new StringBuffer("");
@@ -42,8 +48,8 @@ public class SqlUtil {
 			}
 
 		}
-
-		sql.append("INSERT INTO " + table + " (").append(fields.toString()).append(") VALUE(").append(values.toString()).append(")");
+		sql.append(method);
+		sql.append(" INTO " + table + " (").append(fields.toString()).append(") VALUE(").append(values.toString()).append(")");
 
 		return sql.toString();
 	}

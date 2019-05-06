@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import cn.netkiller.ipo.util.SqlUtil;
+import cn.netkiller.ipo.util.SqlUtil.SQL;
 
 public class JdbcTemplateOutput implements OutputInterface {
 
@@ -21,14 +22,24 @@ public class JdbcTemplateOutput implements OutputInterface {
 
 	private JdbcTemplate outputJdbcTemplate;
 
+	private String method = SQL.INSERT;
+
 	public JdbcTemplateOutput(JdbcTemplate outputJdbcTemplate, String table) {
 		this.outputJdbcTemplate = outputJdbcTemplate;
 		this.table = table;
 
-		logger.debug("Output table {}", table);
+		// logger.debug("Output table {}", table);
 	}
 
-	public JdbcTemplateOutput(String table, Map<String, String> map) {
+	public JdbcTemplateOutput(JdbcTemplate outputJdbcTemplate, String table, String method) {
+		this.outputJdbcTemplate = outputJdbcTemplate;
+		this.table = table;
+		this.method = method;
+		// logger.debug("Output table {}", table);
+	}
+
+	public JdbcTemplateOutput(JdbcTemplate outputJdbcTemplate, String table, Map<String, String> map) {
+		this.outputJdbcTemplate = outputJdbcTemplate;
 		this.table = table;
 		this.map = map;
 	}
@@ -43,7 +54,7 @@ public class JdbcTemplateOutput implements OutputInterface {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> tmp = (Map<String, Object>) output;
-		logger.info("Output Map {}", tmp.toString());
+		// logger.debug("Output Map {}", tmp.toString());
 		String sql = "";
 		try {
 
@@ -58,7 +69,7 @@ public class JdbcTemplateOutput implements OutputInterface {
 				}
 				String fields = StringUtils.join(map.keySet(), "`,`");
 				String values = StringUtils.join(valuesList, "\",\"");
-				sql = String.format("INSERT INTO `%s`(`%s`) value(\"%s\")", this.table, fields, values);
+				sql = String.format("%s INTO `%s`(`%s`) value(\"%s\")", this.method, this.table, fields, values);
 			} else {
 
 				// String fields = StringUtils.join(tmp.keySet(), "`,`");
@@ -69,7 +80,7 @@ public class JdbcTemplateOutput implements OutputInterface {
 				//
 				// sql = String.format("INSERT INTO `%s`(`%s`) value(\"%s\")", this.table, fields, values);
 
-				sql = SqlUtil.join(this.table, tmp);
+				sql = SqlUtil.join(this.method, this.table, tmp);
 			}
 
 			logger.debug("SQL: {};", sql);
