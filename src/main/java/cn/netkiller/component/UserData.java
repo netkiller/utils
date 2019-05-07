@@ -1,7 +1,6 @@
 package cn.netkiller.component;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,24 +9,23 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import cn.netkiller.Application;
 import cn.netkiller.ipo.Input;
 import cn.netkiller.ipo.InputProcessOutput;
 import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.Position;
 import cn.netkiller.ipo.Process;
-import cn.netkiller.ipo.input.FileInput;
 import cn.netkiller.ipo.input.JdbcTemplateInput;
 import cn.netkiller.ipo.output.JdbcTemplateOutput;
 import cn.netkiller.ipo.output.StdoutOutput;
 import cn.netkiller.ipo.position.FilePosition;
+import cn.netkiller.ipo.position.RedisPosition;
 import cn.netkiller.ipo.process.map.MapPut;
 import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
-import cn.netkiller.ipo.process.string.Replace;
 
 @Component
 @Order(30)
@@ -45,6 +43,9 @@ public class UserData implements ApplicationRunner {
 	@Qualifier("outputJdbcTemplate")
 	@Autowired
 	private JdbcTemplate outputJdbcTemplate;
+
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -83,7 +84,7 @@ public class UserData implements ApplicationRunner {
 		Input input = new Input(new LinkedHashMap<Object, Object>());
 		Process process = new Process();
 		Output output = new Output();
-		Position position = new Position(new FilePosition("/tmp/pos.txt"), "id");
+		Position position = new Position(new RedisPosition(stringRedisTemplate, this.getClass().getName()), "id");
 
 		// // StdinInput stdin = new StdinInput();
 		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_users"));
@@ -91,36 +92,17 @@ public class UserData implements ApplicationRunner {
 		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_users"));
 		output.add(new StdoutOutput());
 
-		// // input.add(new FileInput(file.getURI().getPath()));
-
 		process.add(new MapReplace("parent_id", null, "NULL"));
 		process.add(new MapRemove("accept_type"));
 		process.add(new MapPut("created_by", "import"));
 		process.add(new MapReplace("user_pwd", null, "123456"));
 
 		InputProcessOutput ipo = new InputProcessOutput();
-		//
-		// // Thread exit = new Thread(new Runnable() {
-		// // @Override
-		// // public void run() {
-		// // try {
-		// // Thread.sleep(10000);
-		// // ipo.shutdown();
-		// // } catch (InterruptedException e) {
-		// // // TODO Auto-generated catch block
-		// // e.printStackTrace();
-		// // }
-		// //
-		// // }
-		// // });
-		// // exit.setName("shutdown");
-		// // exit.start();
-		//
+
 		ipo.setInput(input);
 		ipo.setProcess(process);
 		ipo.setOutput(output);
-		// ipo.setPosition(position);
-		// ipo.setPipeline(true);
+		ipo.setPosition(position);
 		ipo.launch();
 
 	}

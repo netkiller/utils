@@ -8,13 +8,8 @@ package cn.netkiller.test;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.netkiller.ipo.Input;
-import cn.netkiller.ipo.InputProcessOutput;
-import cn.netkiller.ipo.Output;
-import cn.netkiller.ipo.Process;
-import cn.netkiller.ipo.input.FileInput;
-import cn.netkiller.ipo.output.StdoutOutput;
-import cn.netkiller.ipo.process.string.Replace;
+import org.apache.commons.text.StringEscapeUtils;
+
 import cn.netkiller.ipo.util.SqlUtil;
 
 /**
@@ -29,12 +24,19 @@ public class Test {
 	 */
 	public static void main(String[] args) {
 		// TODO code application logic here
-		System.out.println("Starting...");
+		System.out.println(StringEscapeUtils.escapeJson("{\"name\":\"Neo\"}"));
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", 10);
 		map.put("name", "neo");
 		map.put("age", null);
+		map.put("json", "{\"name\":\"Neo\"}".replace("\\", "\\\\"));
+		// URLEncoder.encode(address,"UTF-8")
+		map.put("test", StringEscapeUtils.escapeJson("{\"name\":\"Neo\"}"));
+
+		// map.put("obj", new Object() {
+		// String name = "Chen";
+		// });
 
 		String s = SqlUtil.join("insert", "test", map);
 		System.out.println(s);

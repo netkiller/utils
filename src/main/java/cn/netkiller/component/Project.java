@@ -1,7 +1,11 @@
 package cn.netkiller.component;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +24,11 @@ import cn.netkiller.ipo.Position;
 import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.JdbcTemplateInput;
 import cn.netkiller.ipo.output.JdbcTemplateOutput;
-import cn.netkiller.ipo.position.FilePosition;
 import cn.netkiller.ipo.position.RedisPosition;
 import cn.netkiller.ipo.process.map.MapLeft;
 import cn.netkiller.ipo.process.map.MapPut;
 import cn.netkiller.ipo.process.map.MapReplace;
+import cn.netkiller.process.AddressProcess;
 import cn.netkiller.ipo.util.SqlUtil.SQL;
 
 @Component
@@ -47,12 +51,34 @@ public class Project implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
+		// outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project where created_by = 'import'");
+
+		Map<Integer, String> province = new HashMap<Integer, String>();
+		Map<Integer, String> city = new HashMap<Integer, String>();
+		Map<String, Integer> address = new HashMap<String, Integer>();
+
+		List<Map<String, Object>> rows = inputJdbcTemplate.queryForList("select id, name from res_country_state");
+		for (Map<String, Object> row : rows) {
+			province.put( (Integer) row.get("id"), (String) row.get("name"));
+		}
+
+		List<Map<String, Object>> citys = inputJdbcTemplate.queryForList("select id, name from res_country_city");
+		for (Map<String, Object> row : citys) {
+			city.put((Integer) row.get("id"), (String) row.get("name"));
+		}
+
+		List<Map<String, Object>> addresses = outputJdbcTemplate.queryForList("select id, addr_name as name from lz_address");
+		for (Map<String, Object> row : addresses) {
+			address.put((String) row.get("name"), (Integer) row.get("id"));
+		}
+		// outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project where created_by = 'import'");
+
 		Input input = new Input(new LinkedHashMap<Object, Object>());
 		Process process = new Process();
 		Output output = new Output();
 		Position position = new Position(new RedisPosition(stringRedisTemplate, this.getClass().getName()), "id");
 		// position.reset();
-		// outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project where created_by = 'import'");
+
 		String id = position.get();
 		String sql = "select * from import_projects";
 		if (id != null) {
@@ -64,12 +90,13 @@ public class Project implements ApplicationRunner {
 		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_project", SQL.REPLACE));
 
 		process.add(new MapReplace("created_time", null, "now()"));
-		// process.add(new MapRemove("accept_type"));
+		process.add(new AddressProcess(province, city, address));
 
 		process.add(new MapPut("created_by", "import"));
 		process.add(new MapPut("company_id", "1"));
 		process.add(new MapPut("building_type", 1));
 		process.add(new MapLeft("addr_detail", 128));
+		process.add(new MapPut("part_b_json", StringEscapeUtils.escapeJson("{\"linkPhone\":\"18310358098\",\"districtId\":440305,\"linkPost\":\"扫地僧\",\"companyTel\":\"53165186518561\",\"projectAddr\":[\"44\",\"4403\",\"440305\"],\"addrDetail\":\"南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"projectAddress\":\"广东省深圳市南山区南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"cityId\":4403,\"linkMan\":\"张三\",\"provinceId\":44}")));
 
 		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
 

@@ -23,6 +23,7 @@ import cn.netkiller.ipo.process.nginx.NginxAccessProcess;
 import cn.netkiller.ipo.process.string.Exclude;
 import cn.netkiller.ipo.process.string.Include;
 import cn.netkiller.ipo.process.string.Replace;
+import cn.netkiller.process.AddressProcess;
 
 import java.util.ArrayList;
 
@@ -122,6 +123,11 @@ public class Process implements ProcessInterface {
 		this.processesMap.add(mapLeft);
 		return this;
 
+	}
+
+	public Process add(AddressProcess addressProcess) {
+		this.processesMap.add(addressProcess);
+		return this;
 	}
 
 	// public Process add(Object object) {
