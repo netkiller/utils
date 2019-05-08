@@ -24,6 +24,7 @@ import cn.netkiller.ipo.process.string.Exclude;
 import cn.netkiller.ipo.process.string.Include;
 import cn.netkiller.ipo.process.string.Replace;
 import cn.netkiller.process.AddressProcess;
+import cn.netkiller.process.PartnerAProcess;
 
 import java.util.ArrayList;
 
@@ -128,6 +129,12 @@ public class Process implements ProcessInterface {
 	public Process add(AddressProcess addressProcess) {
 		this.processesMap.add(addressProcess);
 		return this;
+	}
+
+	public Process add(PartnerAProcess partnerAProcess) {
+		this.processesMap.add(partnerAProcess);
+		return this;
+
 	}
 
 	// public Process add(Object object) {

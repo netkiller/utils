@@ -67,21 +67,7 @@ public class Command implements ApplicationRunner {
 	// //
 	// InputProcessOutput ipo = new InputProcessOutput();
 	//
-	//// Thread exit = new Thread(new Runnable() {
-	//// @Override
-	//// public void run() {
-	//// try {
-	//// Thread.sleep(10000);
-	//// ipo.shutdown();
-	//// } catch (InterruptedException e) {
-	//// // TODO Auto-generated catch block
-	//// e.printStackTrace();
-	//// }
-	////
-	//// }
-	//// });
-	//// exit.setName("shutdown");
-	//// exit.start();
+	
 	//
 	// ipo.setInput(input);
 	// ipo.setProcess(process);

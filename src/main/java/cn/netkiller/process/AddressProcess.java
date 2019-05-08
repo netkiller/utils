@@ -9,10 +9,12 @@ public class AddressProcess implements ProcessMapInterface {
 	private Map<Integer, String> province;
 	private Map<Integer, String> city;
 	private Map<String, Integer> address;
+	private Map<Integer, String> district;
 
-	public AddressProcess(Map<Integer, String> province, Map<Integer, String> city, Map<String, Integer> address) {
+	public AddressProcess(Map<Integer, String> province, Map<Integer, String> city, Map<Integer, String> district, Map<String, Integer> address) {
 		this.province = province;
 		this.city = city;
+		this.district = district;
 		this.address = address;
 	}
 
@@ -38,8 +40,8 @@ public class AddressProcess implements ProcessMapInterface {
 			}
 		}
 
-		if (this.city.containsKey(district_id)) {
-			String name = this.city.get(district_id);
+		if (this.district.containsKey(district_id)) {
+			String name = this.district.get(district_id);
 			if (this.address.containsKey(name)) {
 				row.put("district_id", this.address.get(name));
 

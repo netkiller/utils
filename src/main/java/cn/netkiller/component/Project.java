@@ -27,8 +27,10 @@ import cn.netkiller.ipo.output.JdbcTemplateOutput;
 import cn.netkiller.ipo.position.RedisPosition;
 import cn.netkiller.ipo.process.map.MapLeft;
 import cn.netkiller.ipo.process.map.MapPut;
+import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
 import cn.netkiller.process.AddressProcess;
+import cn.netkiller.process.PartnerAProcess;
 import cn.netkiller.ipo.util.SqlUtil.SQL;
 
 @Component
@@ -50,16 +52,97 @@ public class Project implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
+		// this.crm();
+		// this.account();
+		this.project();
+		System.exit(0);
+	}
 
+	private void crm() {
+		logger.debug("==================================================");
+		logger.debug("==================== CRM ====================");
+		logger.debug("==================================================");
+
+		outputJdbcTemplate.execute("ALTER TABLE lz_cloud_om_dev.om_crm_customer AUTO_INCREMENT=100000");
+		outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_crm_customer where ipo = 'import'");
+
+		Input input = new Input(new LinkedHashMap<Object, Object>());
+		Process process = new Process();
+		Output output = new Output();
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "CRM"), "id");
+
+		String id = position.get();
+		String sql = "select * from import_crm";
+		if (id != null) {
+			sql += " where id > " + id;
+		}
+
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
+
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_crm_customer", SQL.REPLACE));
+
+		process.add(new MapReplace("created_time", null, "now()"));
+		// process.add(new MapRemove("accept_type"));
+		process.add(new MapPut("ipo", "import"));
+		// process.add(new MapPut("company_id", "1"));
+
+		InputProcessOutput ipo = new InputProcessOutput();
+
+		ipo.setInput(input);
+		ipo.setProcess(process);
+		ipo.setOutput(output);
+		ipo.setPosition(position);
+		ipo.launch();
+	}
+
+	private void account() {
+		logger.debug("==================================================");
+		logger.debug("==================== Account ====================");
+		logger.debug("==================================================");
+
+		// outputJdbcTemplate.execute("ALTER TABLE lz_cloud_om_dev.om_finance_account AUTO_INCREMENT=100000");
+		outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_finance_account where ipo = 'import'");
+
+		Input input = new Input(new LinkedHashMap<Object, Object>());
+		Process process = new Process();
+		Output output = new Output();
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "Account"), "id");
+
+		String id = position.get();
+		String sql = "select * from import_account";
+		if (id != null) {
+			sql += " where id > " + id;
+		}
+
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
+
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_finance_account", SQL.INSERT));
+
+		process.add(new MapReplace("created_time", null, "now()"));
+		process.add(new MapRemove("id"));
+		process.add(new MapPut("ipo", "import"));
+		// process.add(new MapPut("company_id", "1"));
+
+		InputProcessOutput ipo = new InputProcessOutput();
+
+		ipo.setInput(input);
+		ipo.setProcess(process);
+		ipo.setOutput(output);
+		ipo.setPosition(position);
+		ipo.launch();
+	}
+
+	private void project() {
 		// outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project where created_by = 'import'");
 
 		Map<Integer, String> province = new HashMap<Integer, String>();
 		Map<Integer, String> city = new HashMap<Integer, String>();
+		Map<Integer, String> district = new HashMap<Integer, String>();
 		Map<String, Integer> address = new HashMap<String, Integer>();
 
 		List<Map<String, Object>> rows = inputJdbcTemplate.queryForList("select id, name from res_country_state");
 		for (Map<String, Object> row : rows) {
-			province.put( (Integer) row.get("id"), (String) row.get("name"));
+			province.put((Integer) row.get("id"), (String) row.get("name"));
 		}
 
 		List<Map<String, Object>> citys = inputJdbcTemplate.queryForList("select id, name from res_country_city");
@@ -67,16 +150,20 @@ public class Project implements ApplicationRunner {
 			city.put((Integer) row.get("id"), (String) row.get("name"));
 		}
 
+		List<Map<String, Object>> districts = inputJdbcTemplate.queryForList("select id, name from res_city_district");
+		for (Map<String, Object> row : districts) {
+			district.put((Integer) row.get("id"), (String) row.get("name"));
+		}
+
 		List<Map<String, Object>> addresses = outputJdbcTemplate.queryForList("select id, addr_name as name from lz_address");
 		for (Map<String, Object> row : addresses) {
 			address.put((String) row.get("name"), (Integer) row.get("id"));
 		}
-		// outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project where created_by = 'import'");
 
 		Input input = new Input(new LinkedHashMap<Object, Object>());
 		Process process = new Process();
 		Output output = new Output();
-		Position position = new Position(new RedisPosition(stringRedisTemplate, this.getClass().getName()), "id");
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "Project"), "id");
 		// position.reset();
 
 		String id = position.get();
@@ -90,9 +177,9 @@ public class Project implements ApplicationRunner {
 		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_project", SQL.REPLACE));
 
 		process.add(new MapReplace("created_time", null, "now()"));
-		process.add(new AddressProcess(province, city, address));
-
-		process.add(new MapPut("created_by", "import"));
+		process.add(new AddressProcess(province, city, district, address));
+		process.add(new PartnerAProcess(inputJdbcTemplate));
+		process.add(new MapPut("ipo", "import"));
 		process.add(new MapPut("company_id", "1"));
 		process.add(new MapPut("building_type", 1));
 		process.add(new MapLeft("addr_detail", 128));
@@ -105,8 +192,6 @@ public class Project implements ApplicationRunner {
 		ipo.setOutput(output);
 		ipo.setPosition(position);
 		ipo.launch();
-
-		System.exit(0);
-
 	}
+
 }
