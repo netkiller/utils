@@ -35,7 +35,7 @@ import cn.netkiller.process.PartnerAProcess;
 import cn.netkiller.ipo.util.SqlUtil.SQL;
 
 @Component
-@Order(1)
+@Order(5)
 // @Order(50)
 public class Project implements ApplicationRunner {
 	private final static Logger logger = LoggerFactory.getLogger(Project.class);
@@ -205,7 +205,7 @@ public class Project implements ApplicationRunner {
 		logger.debug("==================================================");
 
 		outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project_contract where ipo = 'import'");
-		
+
 		Input input = new Input(new LinkedHashMap<Object, Object>());
 		Process process = new Process();
 		Output output = new Output();
@@ -225,7 +225,7 @@ public class Project implements ApplicationRunner {
 		process.add(new MapReplace("created_by", null, ""));
 		process.add(new MapReplace("created_time", null, "now()"));
 		// process.add(new AddressProcess(province, city, district, address));
-//		process.add(new PartnerAProcess(inputJdbcTemplate));
+		// process.add(new PartnerAProcess(inputJdbcTemplate));
 		process.add(new MapPut("ipo", "import"));
 		process.add(new MapPut("company_id", "1"));
 		// process.add(new MapPut("building_type", 1));

@@ -1,5 +1,6 @@
 package cn.netkiller.ipo.input;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.Map;
 
 public class MapInput implements InputInterface {
 
-	private List<Map<String, Object>> data;
+	private List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
 
 	private Iterator<Map<String, Object>> iterator = null;
 

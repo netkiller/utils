@@ -5,10 +5,6 @@
  */
 package cn.netkiller.ipo;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +58,7 @@ public class InputProcessOutput implements Runnable {
 
 	@Override
 	public void run() {
-		logger.debug("==================== Begin {} ====================", this.name);
+		logger.debug("==================== Begin ====================");
 		this.input.open();
 		this.output.open();
 		if (this.pipeline) {
@@ -82,7 +78,7 @@ public class InputProcessOutput implements Runnable {
 		} else {
 			do {
 				this.execute();
-				logger.debug("==================== " + this.name + " ====================");
+				logger.debug("---------- " + this.name + " ----------");
 				if (exit) {
 					break;
 				}
@@ -90,21 +86,21 @@ public class InputProcessOutput implements Runnable {
 		}
 		this.input.close();
 		this.output.close();
-		logger.debug("==================== End {} ====================", this.name);
+		logger.debug("==================== End ====================");
 	}
 
 	private boolean execute() {
-//		Object dataType = input.getDataType();
+		// Object dataType = input.getDataType();
 		// logger.debug(input.getDataType().getClass().getTypeName());
-//		if (dataType instanceof String) {
-//			this.string();
-//		}
-//
-//		if (dataType instanceof HashMap || dataType instanceof LinkedHashMap) {
-//			this.map();
-//		}
+		// if (dataType instanceof String) {
+		// this.string();
+		// }
+		//
+		// if (dataType instanceof HashMap || dataType instanceof LinkedHashMap) {
+		// this.map();
+		// }
 
-		 Object row = input.readLine();
+		Object row = input.readLine();
 		if (row != null) {
 			if (this.process != null) {
 				row = this.process.run(row);
@@ -116,40 +112,40 @@ public class InputProcessOutput implements Runnable {
 				}
 			}
 		}
-		
+
 		return false;
 
 	}
 
-//	private void string() {
-//
-//		String line = (String) input.readLine();
-//		if (line != null) {
-//			String tmp = this.process.run(line);
-//			if (tmp != null) {
-//				this.output.write(tmp);
-//			}
-//		}
-//
-//	}
-//
-//	private void map() {
-//
-//		@SuppressWarnings("unchecked")
-//		Map<String, Object> output = (Map<String, Object>) input.readLine();
-//		if (output != null) {
-//			if (this.process != null) {
-//				output = this.process.run(output);
-//			}
-//			if (output != null) {
-//				this.output.write(output);
-//				if (this.position != null) {
-//					this.position.set(output);
-//				}
-//			}
-//		}
-//
-//	}
+	// private void string() {
+	//
+	// String line = (String) input.readLine();
+	// if (line != null) {
+	// String tmp = this.process.run(line);
+	// if (tmp != null) {
+	// this.output.write(tmp);
+	// }
+	// }
+	//
+	// }
+	//
+	// private void map() {
+	//
+	// @SuppressWarnings("unchecked")
+	// Map<String, Object> output = (Map<String, Object>) input.readLine();
+	// if (output != null) {
+	// if (this.process != null) {
+	// output = this.process.run(output);
+	// }
+	// if (output != null) {
+	// this.output.write(output);
+	// if (this.position != null) {
+	// this.position.set(output);
+	// }
+	// }
+	// }
+	//
+	// }
 
 	public void shutdown() {
 		this.exit = true;

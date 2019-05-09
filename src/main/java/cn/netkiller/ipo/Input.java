@@ -6,7 +6,6 @@
 package cn.netkiller.ipo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -60,20 +59,29 @@ public class Input implements InputInterface {
 	public Object readLine() {
 		this.hasNext = false;
 		for (InputInterface input : this.inputs) {
-			if (input.hasNext()) {
-				this.dataType = input.getDataType();
-				// logger.warn(this.dataType.getClass().getTypeName());
-				if (input.getDataType() instanceof String) {
-					String tmp = (String) input.readLine();
-					if (tmp != null && !tmp.equals("")) {
-						this.hasNext = input.hasNext();
-						return tmp;
-					}
-				}
-				if (input.getDataType() instanceof HashMap) {
-					this.hasNext = input.hasNext();
-					return input.readLine();
-				}
+			this.hasNext = input.hasNext();
+			if (this.hasNext) {
+
+				Object tmp = input.readLine();
+				logger.debug(tmp.toString());
+				return tmp;
+
+				// this.dataType = input.getDataType();
+				// // logger.warn(this.dataType.getClass().getTypeName());
+				// if (input.getDataType() instanceof String) {
+				// String tmp = (String) input.readLine();
+				// if (tmp != null && !tmp.equals("")) {
+				// this.hasNext = input.hasNext();
+				// logger.debug(tmp.toString());
+				// return tmp;
+				// }
+				// }
+				// if (input.getDataType() instanceof HashMap) {
+				// this.hasNext = input.hasNext();
+				// Object tmp = input.readLine();
+				// logger.debug(tmp.toString());
+				// return tmp;
+				// }
 			}
 		}
 		return null;

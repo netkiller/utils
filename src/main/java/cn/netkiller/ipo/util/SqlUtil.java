@@ -1,5 +1,6 @@
 package cn.netkiller.ipo.util;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,8 @@ public class SqlUtil {
 		StringBuffer fields = new StringBuffer();
 		StringBuffer values = new StringBuffer();
 
-		List<String> function = List.of("now()", "current_date");
+		// List<String> function = List.of("now()", "current_date");
+		List<String> function = Arrays.asList("now()", "current_date");
 
 		while (entries.hasNext()) {
 

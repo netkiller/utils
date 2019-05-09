@@ -38,6 +38,7 @@ public class Output implements OutputInterface {
 
 	public void open() {
 		for (OutputInterface output : this.outputs) {
+			logger.debug("Open {}", output.getClass().getName());
 			output.open();
 		}
 	}
@@ -45,8 +46,8 @@ public class Output implements OutputInterface {
 	public void write(Object tmp) {
 		if (tmp != null) {
 			for (OutputInterface output : this.outputs) {
-				logger.debug("Output: {}", output.getClass().getName());
 				output.write(tmp);
+				logger.debug(tmp.toString());
 			}
 		}
 
@@ -55,6 +56,7 @@ public class Output implements OutputInterface {
 	public void close() {
 		for (OutputInterface output : this.outputs) {
 			output.close();
+			logger.debug("Close {}", output.getClass().getName());
 		}
 	}
 

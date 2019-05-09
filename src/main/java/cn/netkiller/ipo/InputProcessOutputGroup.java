@@ -6,12 +6,16 @@ import java.util.List;
 public class InputProcessOutputGroup {
 	private final List<InputProcessOutput> inputProcessOutputGroups = new ArrayList<InputProcessOutput>();
 
-	public InputProcessOutputGroup(InputProcessOutput inputProcessOutputGroup) {
-		this.inputProcessOutputGroups.add(inputProcessOutputGroup);
+	public InputProcessOutputGroup() {
+		super();
 	}
 
-	public InputProcessOutputGroup add(InputProcessOutput inputProcessOutputGroup) {
-		this.inputProcessOutputGroups.add(inputProcessOutputGroup);
+	public InputProcessOutputGroup(InputProcessOutput inputProcessOutput) {
+		this.inputProcessOutputGroups.add(inputProcessOutput);
+	}
+
+	public InputProcessOutputGroup add(InputProcessOutput inputProcessOutput) {
+		this.inputProcessOutputGroups.add(inputProcessOutput);
 		return this;
 	}
 
@@ -25,7 +29,7 @@ public class InputProcessOutputGroup {
 
 				}
 			}).start();
-			;
+
 		}
 
 	}
