@@ -26,6 +26,7 @@ import cn.netkiller.ipo.position.RedisPosition;
 import cn.netkiller.ipo.process.map.MapPut;
 import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
+import cn.netkiller.ipo.util.SqlUtil.SQL;
 
 @Component
 @Order(30)
@@ -84,7 +85,7 @@ public class UserData implements ApplicationRunner {
 		Input input = new Input(new LinkedHashMap<Object, Object>());
 		Process process = new Process();
 		Output output = new Output();
-		Position position = new Position(new RedisPosition(stringRedisTemplate, this.getClass().getName()), "id");
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "User"), "id");
 
 		// // StdinInput stdin = new StdinInput();
 		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_users"));
@@ -107,4 +108,73 @@ public class UserData implements ApplicationRunner {
 
 	}
 
+	public void department() {
+		// if (args.containsOption("table")) {
+		// if (!args.getOptionValues("table").equals("department")) {
+		// return;
+		// }
+		// }
+		logger.debug("==================== Department ====================");
+
+		outputJdbcTemplate.execute("delete from lz_departments where created_by = 'import'");
+
+		Input input = new Input(new LinkedHashMap<Object, Object>());
+		Process process = new Process();
+		Output output = new Output();
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "Department"), "id");
+
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_departments"));
+
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_departments"));
+		// output.add(new StdoutOutput());
+
+		process.add(new MapReplace("created_time", null, "now()"));
+		// process.add(new MapRemove("accept_type"));
+		process.add(new MapPut("created_by", "import"));
+		process.add(new MapPut("company_id", "1"));
+
+		InputProcessOutput ipo = new InputProcessOutput();
+
+		ipo.setInput(input);
+		ipo.setProcess(process);
+		ipo.setOutput(output);
+		ipo.setPosition(position);
+		ipo.launch();
+	}
+
+	public void departmentsHasUser() {
+
+		// if (args.containsOption("table")) {
+		// if (!args.getOptionValues("table").get(0).equals("departments_has_user")) {
+		// return;
+		// }
+		// }
+
+		outputJdbcTemplate.execute("delete from lz_auth where created_by = 'import'");
+
+		Input input = new Input(new LinkedHashMap<Object, Object>());
+		Process process = new Process();
+		Output output = new Output();
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "departmentsHasUser"), "id");
+
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_departments_has_user"));
+
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_auth", SQL.REPLACE));
+
+		process.add(new MapReplace("created_time", null, "now()"));
+		// process.add(new MapRemove("accept_type"));
+
+		process.add(new MapPut("created_by", "import"));
+		process.add(new MapPut("company_id", "1"));
+		process.add(new MapPut("biz_post_id", "1"));
+
+		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
+
+		ipo.setInput(input);
+		ipo.setProcess(process);
+		ipo.setOutput(output);
+		ipo.setPosition(position);
+		ipo.launch();
+
+	}
 }

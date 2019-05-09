@@ -18,6 +18,7 @@ import cn.netkiller.ipo.process.map.MapLeft;
 import cn.netkiller.ipo.process.map.MapPut;
 import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
+import cn.netkiller.ipo.process.map.MapTrim;
 import cn.netkiller.ipo.process.nginx.NginxAccessGetParameterProcess;
 import cn.netkiller.ipo.process.nginx.NginxAccessProcess;
 import cn.netkiller.ipo.process.string.Exclude;
@@ -133,6 +134,12 @@ public class Process implements ProcessInterface {
 
 	public Process add(PartnerAProcess partnerAProcess) {
 		this.processesMap.add(partnerAProcess);
+		return this;
+
+	}
+
+	public Process add(MapTrim mapTrim) {
+		this.processesMap.add(mapTrim);
 		return this;
 
 	}

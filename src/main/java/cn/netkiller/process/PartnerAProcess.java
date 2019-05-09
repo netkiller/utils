@@ -24,6 +24,8 @@ public class PartnerAProcess implements ProcessMapInterface {
 	public Map<String, Object> run(Map<String, Object> row) {
 		String sql = "select * from import_crm where id = " + row.get("part_a_id");
 		Map<String, Object> map = this.inputJdbcTemplate.queryForMap(sql);
+		System.out.println(">>>>>>");
+		System.out.println(map.toString());
 
 		if (map != null) {
 			PartyA part = new PartyA();
