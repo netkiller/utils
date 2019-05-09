@@ -29,28 +29,25 @@ public class MultiDataSourceConfig {
 
 	@Bean("JdbcTemplate")
 	@Primary
-	public JdbcTemplate defaultJdbcTemplate(@Qualifier("defaultDataSource") DataSource Master) {
-		return new JdbcTemplate(Master);
+	public JdbcTemplate defaultJdbcTemplate(@Qualifier("defaultDataSource") DataSource dataSource) {
+		return new JdbcTemplate(dataSource);
 	}
 
 	@Bean
-	// @Primary
 	@ConfigurationProperties("spring.datasource.input")
 	public DataSourceProperties inputDataSourceProperties() {
 		return new DataSourceProperties();
 	}
 
-	@Bean("Master")
-	// @Primary
+	@Bean("Input")
 	@ConfigurationProperties("spring.datasource.input")
 	public DataSource inputDataSource() {
 		return inputDataSourceProperties().initializeDataSourceBuilder().build();
 	}
 
 	@Bean("inputJdbcTemplate")
-	// @Primary
-	public JdbcTemplate inputJdbcTemplate(@Qualifier("Master") DataSource Master) {
-		return new JdbcTemplate(Master);
+	public JdbcTemplate inputJdbcTemplate(@Qualifier("Input") DataSource dataSource) {
+		return new JdbcTemplate(dataSource);
 	}
 
 	@Bean
@@ -59,15 +56,15 @@ public class MultiDataSourceConfig {
 		return new DataSourceProperties();
 	}
 
-	@Bean(name = "Slave")
+	@Bean(name = "Output")
 	@ConfigurationProperties("spring.datasource.output")
 	public DataSource outputDataSource() {
 		return outputDataSourceProperties().initializeDataSourceBuilder().build();
 	}
 
 	@Bean("outputJdbcTemplate")
-	public JdbcTemplate outputJdbcTemplate(@Qualifier("Slave") DataSource Master) {
-		return new JdbcTemplate(Master);
+	public JdbcTemplate outputJdbcTemplate(@Qualifier("Output") DataSource dataSource) {
+		return new JdbcTemplate(dataSource);
 	}
 
 }

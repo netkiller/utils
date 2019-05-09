@@ -140,6 +140,11 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>com.aliyun.oss</groupId>
+			<artifactId>aliyun-sdk-oss</artifactId>
+			<version>3.4.2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<!-- <resources> <resource> <directory>src/main/resources</directory> <targetPath>${project.build.directory}/project</targetPath> </resource> </resources> -->

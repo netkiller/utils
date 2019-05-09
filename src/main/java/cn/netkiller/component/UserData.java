@@ -87,11 +87,11 @@ public class UserData implements ApplicationRunner {
 		Output output = new Output();
 		Position position = new Position(new RedisPosition(stringRedisTemplate, "User"), "id");
 
-		// // StdinInput stdin = new StdinInput();
+		// StdinInput stdin = new StdinInput();
 		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_users"));
 
 		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_users"));
-		output.add(new StdoutOutput());
+		// output.add(new StdoutOutput());
 
 		process.add(new MapReplace("parent_id", null, "NULL"));
 		process.add(new MapRemove("accept_type"));

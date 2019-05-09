@@ -41,6 +41,10 @@ public class Process implements ProcessInterface {
 	public Process() {
 	}
 
+	public Process(Object object) {
+		this.processes.add((ProcessInterface) object);
+	}
+
 	public Process add(Replace process) {
 		this.processes.add(process);
 		return this;
@@ -144,8 +148,4 @@ public class Process implements ProcessInterface {
 
 	}
 
-	// public Process add(Object object) {
-	// this.processes.add((ProcessInterface) object);
-	// return this;
-	// }
 }

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.netkiller.ipo.output.OutputInterface;
+import cn.netkiller.ipo.output.AliyunOssOutput;
 import cn.netkiller.ipo.output.JdbcOutput;
 import cn.netkiller.ipo.output.JdbcTemplateOutput;
 import cn.netkiller.ipo.output.JsonOutput;
@@ -70,6 +71,12 @@ public class Output implements OutputInterface {
 
 	public Output add(JdbcTemplateOutput jdbcTemplateOutput) {
 		this.outputs.add(jdbcTemplateOutput);
+		return this;
+
+	}
+
+	public Output add(AliyunOssOutput aliyunOssOutput) {
+		this.outputs.add(aliyunOssOutput);
 		return this;
 
 	}

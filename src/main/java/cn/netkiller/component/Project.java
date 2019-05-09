@@ -55,7 +55,8 @@ public class Project implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 		// this.crm();
 		// this.account();
-		this.project();
+		// this.project();
+		this.contract();
 		System.exit(0);
 	}
 
@@ -134,7 +135,7 @@ public class Project implements ApplicationRunner {
 	}
 
 	private void project() {
-		// outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project where created_by = 'import'");
+		// outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project where ipo = 'import'");
 
 		Map<Integer, String> province = new HashMap<Integer, String>();
 		Map<Integer, String> city = new HashMap<Integer, String>();
@@ -182,7 +183,7 @@ public class Project implements ApplicationRunner {
 		process.add(new PartnerAProcess(inputJdbcTemplate));
 		process.add(new MapPut("ipo", "import"));
 		process.add(new MapPut("company_id", "1"));
-		process.add(new MapPut("building_type", 1));
+		// process.add(new MapPut("building_type", 1));
 		process.add(new MapLeft("addr_detail", 128));
 		process.add(new MapTrim("part_a_name"));
 
@@ -197,4 +198,48 @@ public class Project implements ApplicationRunner {
 		ipo.launch();
 	}
 
+	private void contract() {
+
+		logger.debug("==================================================");
+		logger.debug("==================== Contract ====================");
+		logger.debug("==================================================");
+
+		outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project_contract where ipo = 'import'");
+		
+		Input input = new Input(new LinkedHashMap<Object, Object>());
+		Process process = new Process();
+		Output output = new Output();
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "Contract"), "id");
+		// position.reset();
+
+		String id = position.get();
+		String sql = "select * from import_contract";
+		if (id != null) {
+			sql += " where id > " + id;
+		}
+
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
+
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_project_contract", SQL.REPLACE));
+
+		process.add(new MapReplace("created_by", null, ""));
+		process.add(new MapReplace("created_time", null, "now()"));
+		// process.add(new AddressProcess(province, city, district, address));
+//		process.add(new PartnerAProcess(inputJdbcTemplate));
+		process.add(new MapPut("ipo", "import"));
+		process.add(new MapPut("company_id", "1"));
+		// process.add(new MapPut("building_type", 1));
+		process.add(new MapLeft("addr_detail", 128));
+		process.add(new MapTrim("part_a_name"));
+
+		process.add(new MapPut("part_b_json", StringEscapeUtils.escapeJson("{\"linkPhone\":\"18310358098\",\"districtId\":440305,\"linkPost\":\"扫地僧\",\"companyTel\":\"53165186518561\",\"projectAddr\":[\"44\",\"4403\",\"440305\"],\"addrDetail\":\"南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"projectAddress\":\"广东省深圳市南山区南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"cityId\":4403,\"linkMan\":\"张三\",\"provinceId\":44}")));
+
+		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
+
+		ipo.setInput(input);
+		ipo.setProcess(process);
+		ipo.setOutput(output);
+		ipo.setPosition(position);
+		ipo.launch();
+	}
 }
