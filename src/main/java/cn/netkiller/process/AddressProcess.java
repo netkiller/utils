@@ -2,9 +2,9 @@ package cn.netkiller.process;
 
 import java.util.Map;
 
-import cn.netkiller.ipo.process.ProcessMapInterface;
+import cn.netkiller.ipo.process.ProcessInterface;
 
-public class AddressProcess implements ProcessMapInterface {
+public class AddressProcess implements ProcessInterface {
 
 	private Map<Integer, String> province;
 	private Map<Integer, String> city;
@@ -19,7 +19,10 @@ public class AddressProcess implements ProcessMapInterface {
 	}
 
 	@Override
-	public Map<String, Object> run(Map<String, Object> row) {
+	public Object run(Object data) {
+		@SuppressWarnings("unchecked")
+		Map<String, Object> row = (Map<String, Object>) data;
+
 		int province_id = (Integer) row.get("province_id");
 		int city_id = (Integer) row.get("city_id");
 		int district_id = (Integer) row.get("district_id");

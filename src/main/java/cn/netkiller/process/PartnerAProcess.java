@@ -9,10 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.google.gson.Gson;
 
-import cn.netkiller.ipo.process.ProcessMapInterface;
+import cn.netkiller.ipo.process.ProcessInterface;
 import cn.netkiller.pojo.PartyA;
 
-public class PartnerAProcess implements ProcessMapInterface {
+public class PartnerAProcess implements ProcessInterface {
 
 	private JdbcTemplate inputJdbcTemplate;
 
@@ -21,7 +21,9 @@ public class PartnerAProcess implements ProcessMapInterface {
 	}
 
 	@Override
-	public Map<String, Object> run(Map<String, Object> row) {
+	public Object run( Object data) {
+		@SuppressWarnings("unchecked")
+		Map<String, Object> row = (Map<String, Object>) data;
 		String sql = "select * from import_crm where id = " + row.get("part_a_id");
 		Map<String, Object> map = this.inputJdbcTemplate.queryForMap(sql);
 		System.out.println(">>>>>>");

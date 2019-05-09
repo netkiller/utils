@@ -16,6 +16,6 @@ public interface ProcessInterface {
 	 * @param tmp
 	 * @return
 	 */
-	public String run(String line);
+	public Object run(Object data);
 
 }

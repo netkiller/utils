@@ -28,13 +28,13 @@ public class NginxAccessProcess implements ProcessInterface {
 	}
 
 	@Override
-	public String run(String line) {
+	public Object run(Object line) {
 		// throw new UnsupportedOperationException("Not supported yet.");
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		Pattern pattern = Pattern.compile(this.regex);
 
 		// 现在创建 matcher 对象
-		Matcher matcher = pattern.matcher(line);
+		Matcher matcher = pattern.matcher((String)line);
 		if (matcher.find()) {
 			// log_format main '$remote_addr - $remote_user [$time_local] "$request"
 			// ''$status $body_bytes_sent "$http_referer" ' '"$http_user_agent"

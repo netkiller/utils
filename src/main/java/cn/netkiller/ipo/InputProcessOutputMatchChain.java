@@ -63,9 +63,9 @@ public class InputProcessOutputMatchChain extends InputProcessOutput {
 
 	private boolean execute() {
 		boolean isNextBatch = false;
-		List<String> inputLines = new ArrayList<String>();
+		List<Object> inputLines = new ArrayList<Object>();
 
-		String line = (String) this.getInput().readLine();
+		Object line = this.getInput().readLine();
 		if (line != null) {
 			inputLines.add(line);
 			isNextBatch = true;
@@ -74,16 +74,16 @@ public class InputProcessOutputMatchChain extends InputProcessOutput {
 		for (Entry<ProcessInterface, OutputInterface> entry : chains.entrySet()) {
 			entry.getValue().open();
 
-			List<String> processLines = new ArrayList<String>();
+			List<Object> processLines = new ArrayList<Object>();
 
-			for (String proc : inputLines) {
+			for (Object proc : inputLines) {
 				line = entry.getKey().run(proc);
 				if (line != null) {
 					processLines.add(line);
 				}
 			}
 
-			for (String out : processLines) {
+			for (Object out : processLines) {
 				entry.getValue().write(out);
 			}
 

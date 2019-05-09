@@ -94,49 +94,62 @@ public class InputProcessOutput implements Runnable {
 	}
 
 	private boolean execute() {
-		Object dataType = input.getDataType();
+//		Object dataType = input.getDataType();
 		// logger.debug(input.getDataType().getClass().getTypeName());
-		if (dataType instanceof String) {
-			this.string();
-		}
+//		if (dataType instanceof String) {
+//			this.string();
+//		}
+//
+//		if (dataType instanceof HashMap || dataType instanceof LinkedHashMap) {
+//			this.map();
+//		}
 
-		if (dataType instanceof HashMap || dataType instanceof LinkedHashMap) {
-			this.map();
+		 Object row = input.readLine();
+		if (row != null) {
+			if (this.process != null) {
+				row = this.process.run(row);
+			}
+			if (row != null) {
+				this.output.write(row);
+				if (this.position != null) {
+					this.position.set(row);
+				}
+			}
 		}
-
+		
 		return false;
 
 	}
 
-	private void string() {
-
-		String line = (String) input.readLine();
-		if (line != null) {
-			String tmp = this.process.run(line);
-			if (tmp != null) {
-				this.output.write(tmp);
-			}
-		}
-
-	}
-
-	private void map() {
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> output = (Map<String, Object>) input.readLine();
-		if (output != null) {
-			if (this.process != null) {
-				output = this.process.run(output);
-			}
-			if (output != null) {
-				this.output.write(output);
-				if (this.position != null) {
-					this.position.set(output);
-				}
-			}
-		}
-
-	}
+//	private void string() {
+//
+//		String line = (String) input.readLine();
+//		if (line != null) {
+//			String tmp = this.process.run(line);
+//			if (tmp != null) {
+//				this.output.write(tmp);
+//			}
+//		}
+//
+//	}
+//
+//	private void map() {
+//
+//		@SuppressWarnings("unchecked")
+//		Map<String, Object> output = (Map<String, Object>) input.readLine();
+//		if (output != null) {
+//			if (this.process != null) {
+//				output = this.process.run(output);
+//			}
+//			if (output != null) {
+//				this.output.write(output);
+//				if (this.position != null) {
+//					this.position.set(output);
+//				}
+//			}
+//		}
+//
+//	}
 
 	public void shutdown() {
 		this.exit = true;

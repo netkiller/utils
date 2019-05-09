@@ -5,13 +5,11 @@
  */
 package cn.netkiller.ipo.process.string;
 
-import java.util.Map;
-
 import cn.netkiller.ipo.process.ProcessInterface;
 
 /**
  *
- * @author neoch
+ * @author netkiller
  */
 public class Replace implements ProcessInterface {
 
@@ -25,7 +23,8 @@ public class Replace implements ProcessInterface {
 	}
 
 	@Override
-	public String run(String tmp) {
+	public Object run(Object data) {
+		String tmp = (String) data;
 		if (tmp == null) {
 			return "";
 		}

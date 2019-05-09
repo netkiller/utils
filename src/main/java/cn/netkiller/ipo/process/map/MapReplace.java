@@ -2,9 +2,9 @@ package cn.netkiller.ipo.process.map;
 
 import java.util.Map;
 
-import cn.netkiller.ipo.process.ProcessMapInterface;
+import cn.netkiller.ipo.process.ProcessInterface;
 
-public class MapReplace implements ProcessMapInterface {
+public class MapReplace implements ProcessInterface {
 	private final String oldString;
 	private final String newString;
 	private final String key;
@@ -16,7 +16,9 @@ public class MapReplace implements ProcessMapInterface {
 	}
 
 	@Override
-	public Map<String, Object> run(Map<String, Object> row) {
+	public Object run(Object data) {
+		@SuppressWarnings("unchecked")
+		Map<String, Object> row = (Map<String, Object>) data;
 		if (row == null) {
 			return null;
 		}

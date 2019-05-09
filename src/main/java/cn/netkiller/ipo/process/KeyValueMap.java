@@ -1,7 +1,5 @@
 package cn.netkiller.ipo.process;
 
-import java.util.Map;
-
 public class KeyValueMap implements ProcessInterface {
 
 	public KeyValueMap(String query_string) {
@@ -9,7 +7,7 @@ public class KeyValueMap implements ProcessInterface {
 	}
 
 	@Override
-	public String run(String line) {
+	public Object run(Object line) {
 		// TODO Auto-generated method stub
 		return null;
 	}

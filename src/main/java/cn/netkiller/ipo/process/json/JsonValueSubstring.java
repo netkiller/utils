@@ -22,9 +22,9 @@ public class JsonValueSubstring implements ProcessInterface {
 	}
 
 	@Override
-	public String run(String line) {
+	public Object run(Object line) {
 
-		Map<String, String> map = gson.fromJson(line, new TypeToken<Map<String, String>>() {
+		Map<String, String> map = gson.fromJson((String)line, new TypeToken<Map<String, String>>() {
 		}.getType());
 		for (String key : this.mapping.keySet()) {
 			if (map.containsKey(key)) {

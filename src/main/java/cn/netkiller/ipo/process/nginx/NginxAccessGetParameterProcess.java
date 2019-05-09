@@ -27,9 +27,9 @@ public class NginxAccessGetParameterProcess extends NginxAccessProcess implement
 	}
 
 	@Override
-	public String run(String line) {
+	public Object run(Object line) {
 		logger.info("Process line {}", line);
-		String newLine = super.run(line);
+		String newLine = (String) super.run(line);
 		try {
 
 			Map<String, String> map = gson.fromJson(newLine, new TypeToken<Map<String, String>>() {

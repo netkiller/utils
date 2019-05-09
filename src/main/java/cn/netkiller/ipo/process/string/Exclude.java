@@ -1,7 +1,5 @@
 package cn.netkiller.ipo.process.string;
 
-import java.util.Map;
-
 import cn.netkiller.ipo.process.ProcessInterface;
 
 public class Exclude implements ProcessInterface {
@@ -13,7 +11,8 @@ public class Exclude implements ProcessInterface {
 	}
 
 	@Override
-	public String run(String line) {
+	public Object run(Object data) {
+		String line = (String) data;
 		if (line.contains(this.string)) {
 			return null;
 		} else {

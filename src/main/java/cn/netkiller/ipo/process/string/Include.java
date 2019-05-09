@@ -11,7 +11,8 @@ public class Include implements ProcessInterface {
 	}
 
 	@Override
-	public String run(String line) {
+	public Object run(Object data) {
+		String line = (String) data;
 		// System.out.println(line);
 		if (line.contains(this.string)) {
 			return line;

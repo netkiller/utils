@@ -61,6 +61,7 @@ public class JdbcOutput implements OutputInterface {
 		logger.info("jdbc.password {}", "******");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void open() {
 		try {

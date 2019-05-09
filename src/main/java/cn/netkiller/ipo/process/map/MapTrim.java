@@ -2,9 +2,9 @@ package cn.netkiller.ipo.process.map;
 
 import java.util.Map;
 
-import cn.netkiller.ipo.process.ProcessMapInterface;
+import cn.netkiller.ipo.process.ProcessInterface;
 
-public class MapTrim implements ProcessMapInterface {
+public class MapTrim implements ProcessInterface {
 
 	private String key;
 
@@ -14,7 +14,9 @@ public class MapTrim implements ProcessMapInterface {
 	}
 
 	@Override
-	public Map<String, Object> run(Map<String, Object> row) {
+	public Object run(Object data) {
+		@SuppressWarnings("unchecked")
+		Map<String, Object> row = (Map<String, Object>) data;
 		if (row.containsKey(this.key)) {
 			if (row.get(this.key) instanceof String) {
 				row.put(this.key, ((String) row.get(this.key)).trim());
@@ -23,5 +25,4 @@ public class MapTrim implements ProcessMapInterface {
 
 		return row;
 	}
-
 }

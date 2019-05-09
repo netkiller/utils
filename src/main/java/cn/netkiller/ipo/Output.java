@@ -12,15 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.netkiller.ipo.output.OutputInterface;
-import cn.netkiller.ipo.output.AliyunOssOutput;
-import cn.netkiller.ipo.output.JdbcOutput;
-import cn.netkiller.ipo.output.JdbcTemplateOutput;
-import cn.netkiller.ipo.output.JsonOutput;
-import cn.netkiller.ipo.output.StdoutOutput;
 
 /**
  *
- * @author neoch
+ * @author netkiller
  */
 public class Output implements OutputInterface {
 
@@ -29,6 +24,16 @@ public class Output implements OutputInterface {
 	private final List<OutputInterface> outputs = new ArrayList<OutputInterface>();
 
 	public Output() {
+		super();
+	}
+
+	public Output(OutputInterface outputInterface) {
+		this.outputs.add(outputInterface);
+	}
+
+	public Output add(OutputInterface outputInterface) {
+		this.outputs.add(outputInterface);
+		return this;
 	}
 
 	public void open() {
@@ -51,34 +56,6 @@ public class Output implements OutputInterface {
 		for (OutputInterface output : this.outputs) {
 			output.close();
 		}
-	}
-
-	public Output add(StdoutOutput outputStdout) {
-		this.outputs.add(outputStdout);
-		return this;
-	}
-
-	public Output add(JsonOutput outputJson) {
-		this.outputs.add(outputJson);
-		return this;
-
-	}
-
-	public Output add(JdbcOutput outputJdbc) {
-		this.outputs.add(outputJdbc);
-		return this;
-	}
-
-	public Output add(JdbcTemplateOutput jdbcTemplateOutput) {
-		this.outputs.add(jdbcTemplateOutput);
-		return this;
-
-	}
-
-	public Output add(AliyunOssOutput aliyunOssOutput) {
-		this.outputs.add(aliyunOssOutput);
-		return this;
-
 	}
 
 }

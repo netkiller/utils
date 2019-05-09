@@ -12,14 +12,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-
-import cn.netkiller.ipo.input.FileInput;
 import cn.netkiller.ipo.input.InputInterface;
-import cn.netkiller.ipo.input.JdbcTemplateInput;
-import cn.netkiller.ipo.input.KafkaInput;
-import cn.netkiller.ipo.input.StdinInput;
 
 /**
  *
@@ -34,8 +27,17 @@ public class Input implements InputInterface {
 	public Input() {
 	}
 
+	public Input(InputInterface inputInterface) {
+		this.inputs.add(inputInterface);
+	}
+
 	public Input(Object dataType) {
 		this.dataType = dataType;
+	}
+
+	public Input add(InputInterface inputInterface) {
+		this.inputs.add(inputInterface);
+		return this;
 	}
 
 	public boolean open() {
@@ -53,12 +55,6 @@ public class Input implements InputInterface {
 		}
 		return true;
 	}
-
-	// public boolean hasNextLine() {
-	// throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	// // logger.debug(String.valueOf(this.nextLine));
-	// return this.nextLine;
-	// }
 
 	@Override
 	public Object readLine() {
@@ -81,28 +77,6 @@ public class Input implements InputInterface {
 			}
 		}
 		return null;
-	}
-
-	public Input add(FileInput input) {
-		this.inputs.add(input);
-		return this;
-	}
-
-	public Input add(StdinInput stdinInput) {
-		this.inputs.add(stdinInput);
-		return this;
-	}
-
-	public Input add(KafkaInput kafkaInput) {
-		this.inputs.add(kafkaInput);
-		return this;
-	}
-
-	public Input add(JdbcTemplateInput jdbcTemplateInput) {
-		this.inputs.add(jdbcTemplateInput);
-		this.dataType = jdbcTemplateInput.getDataType();
-		return this;
-
 	}
 
 	@Override

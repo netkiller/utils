@@ -21,9 +21,9 @@ public class JsonValueLength implements ProcessInterface {
 	}
 
 	@Override
-	public String run(String line) {
-
-		Map<String, String> map = gson.fromJson(line, new TypeToken<Map<String, String>>() {
+	public Object run(Object line) {
+		
+		Map<String, String> map = gson.fromJson((String)line, new TypeToken<Map<String, String>>() {
 		}.getType());
 		for (String key : map.keySet()) {
 			if (map.get(key).length() > this.maxLength) {
