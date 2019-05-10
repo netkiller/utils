@@ -4,15 +4,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 
+import cn.netkiller.component.Project;
+
 @Service
 public class AliyunOssService {
-
+	private final static Logger logger = LoggerFactory.getLogger(AliyunOssService.class);
 	@Value("${aliyun.oss.endpoint}")
 	private String endpoint;
 	@Value("${aliyun.oss.accessKeyId}")
@@ -37,16 +41,18 @@ public class AliyunOssService {
 		ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
 	}
 
-	public void uploadFromUrl(String objectName, String url) {
+	public boolean uploadFromUrl(String objectName, String url) {
 
 		InputStream inputStream;
 		try {
 			inputStream = new URL(url).openStream();
 			ossClient.putObject(this.bucketName, objectName, inputStream);
 		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
+			logger.error(e.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	public void close() {

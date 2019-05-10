@@ -16,7 +16,7 @@ import cn.netkiller.ipo.process.ProcessInterface;
  *
  * @author netkiller
  */
-public class InputProcessOutput implements Runnable {
+public class InputProcessOutput {
 	private final static Logger logger = LoggerFactory.getLogger(InputProcessOutput.class);
 
 	private Input input;
@@ -56,7 +56,6 @@ public class InputProcessOutput implements Runnable {
 		this.run();
 	}
 
-	@Override
 	public void run() {
 		this.input.open();
 		this.output.open();

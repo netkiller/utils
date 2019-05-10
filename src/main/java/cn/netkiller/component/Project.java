@@ -35,8 +35,8 @@ import cn.netkiller.process.PartnerAProcess;
 import cn.netkiller.ipo.util.SqlUtil.SQL;
 
 @Component
-@Order(5)
-// @Order(50)
+
+@Order(50)
 public class Project implements ApplicationRunner {
 	private final static Logger logger = LoggerFactory.getLogger(Project.class);
 

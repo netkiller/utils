@@ -1,11 +1,16 @@
 package cn.netkiller.process;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.google.gson.Gson;
 
 import cn.netkiller.ipo.input.JdbcTemplateInput;
 import cn.netkiller.ipo.process.ProcessInterface;
@@ -25,14 +30,33 @@ public class AttachmentProcess implements ProcessInterface {
 	public Object run(Object data) {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = (Map<String, Object>) data;
-		String sql = "select * from import__contract_attachment where contract_id =" + map.get("id");
+
+		List<Map<String, String>> images = new ArrayList<Map<String, String>>();
+		String sql = "select * from import_contract_attachment where contract_id=" + map.get("id");
 		Iterator<Map<String, Object>> iterator = inputJdbcTemplate.queryForList(sql).iterator();
-		if (iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			Map<String, Object> row = iterator.next();
 			// logger.debug(line.toString());
+			String name = "contract/" + (String) row.get("name");
 			String url = String.format("http://120.76.214.182:8086/web/binary/saveas?model=ir.attachment&field=datas&filename_field=datas_fname&id=%s", row.get("id"));
-			this.aliyunOssService.uploadFromUrl((String) row.get("name"), url);
+
+			boolean status = this.aliyunOssService.uploadFromUrl(name, url);
+			if (status) {
+				Map<String, String> image = new HashMap<String, String>();
+				image.put("name", name);
+				image.put("url", "http://lz-omcloud-test.oss-cn-shenzhen.aliyuncs.com/" + name);
+
+				images.add(image);
+
+				Gson gson = new Gson();
+
+				// convert java object to JSON format, and returned as JSON formatted string
+				String json = gson.toJson(images);
+				map.put("contract_img_url", json);
+			}
 		}
+
+		// [{"name":"vcbgcb.jpg","url":"http://lz-omcloud-test.oss-cn-shenzhen.aliyuncs.com/file/l/file-870e109d5b3c40b2b922d5de42139f49.jpg"}
 
 		return map;
 	}
