@@ -45,12 +45,13 @@ public class JdbcTemplateOutput implements OutputInterface {
 	}
 
 	@Override
-	public void open() {
+	public boolean open() {
+		return false;
 
 	}
 
 	@Override
-	public void write(Object output) {
+	public boolean write(Object output) {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> tmp = (Map<String, Object>) output;
@@ -81,11 +82,13 @@ public class JdbcTemplateOutput implements OutputInterface {
 			e.printStackTrace();
 			System.exit(0);
 		}
+		return false;
 
 	}
 
 	@Override
-	public void close() {
+	public boolean close() {
+		return false;
 
 	}
 

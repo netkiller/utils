@@ -29,23 +29,26 @@ public class KafkaOutput implements OutputInterface {
 	}
 
 	@Override
-	public void open() {
+	public boolean open() {
 		this.producer = new KafkaProducer<String, String>(this.properties);
 		this.logger.debug("Kafka Output open()");
+		return false;
 	}
 
 	@Override
-	public void write(Object output) {
+	public boolean write(Object output) {
 		for (String topic : this.topics) {
 			this.producer.send(new ProducerRecord<String, String>(topic, (String) output));
 			this.logger.debug("Kafka Output Topic: {}, Value: {}", topic, output);
 		}
+		return false;
 	}
 
 	@Override
-	public void close() {
+	public boolean close() {
 		producer.close();
 		this.logger.debug("Kafka Output close()");
+		return false;
 	}
 
 }

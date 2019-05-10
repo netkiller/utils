@@ -41,7 +41,7 @@ public class Input implements InputInterface {
 
 	public boolean open() {
 		for (InputInterface input : this.inputs) {
-			logger.debug("Open input source: {}", input.getClass().getName());
+			logger.debug("Open {}", input.getClass().getName());
 			input.open();
 		}
 		return true;
@@ -49,7 +49,7 @@ public class Input implements InputInterface {
 
 	public boolean close() {
 		for (InputInterface input : this.inputs) {
-			logger.debug("Close input source: {}", input.getClass().getName());
+			logger.debug("Close {}", input.getClass().getName());
 			input.close();
 		}
 		return true;

@@ -1,32 +1,19 @@
 package cn.netkiller.component;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import cn.netkiller.ipo.Input;
-import cn.netkiller.ipo.InputProcessOutput;
-import cn.netkiller.ipo.InputProcessOutputGroup;
-import cn.netkiller.ipo.Output;
-import cn.netkiller.ipo.input.MapInput;
-import cn.netkiller.ipo.input.StringInput;
-import cn.netkiller.ipo.output.RedisMessagePublisher;
+import cn.netkiller.service.AsyncService;
 import cn.netkiller.ipo.Process;
+import cn.netkiller.ipo.service.AliyunOssService;
 
 @Component
 @Order(1)
@@ -47,7 +34,10 @@ public class Command implements ApplicationRunner {
 	private JdbcTemplate outputJdbcTemplate;
 
 	@Autowired
-	private StringRedisTemplate stringRedisTemplate;
+	private AsyncService asyncService;
+
+	@Autowired
+	private AliyunOssService aliyunOssService;
 
 	// @Autowired
 	// private RedisTemplate<String, Object> redisTemplate;
@@ -60,50 +50,19 @@ public class Command implements ApplicationRunner {
 		// System.out.println("==getOptionValues=======" + args.getOptionValues("developer.name"));
 
 		// InputProcessOutputGroup group = new InputProcessOutputGroup();
-		// group.add(this.first());
+		// group.add(asyncService.first());
 		// group.launch();
 
-		this.first();
+		// asyncService.first();
+		// asyncService.second();
 
+//		String objectName = "test/aabbcc.png";
+//		this.aliyunOssService.open();
+//		this.aliyunOssService.uploadFromUrl(objectName, "https://www.baidu.com/img/bd_logo1.png");
+//		this.aliyunOssService.close();
+//		logger.debug("http://lz-omcloud-test.oss-cn-shenzhen.aliyuncs.com/" + objectName);
+//
 //		System.exit(0);
-	}
-
-	public InputProcessOutput first() {
-
-		Map<String, Object> data = new HashMap<String, Object>() {
-			{
-				put("name", "neo");
-			}
-		};
-
-		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
-
-		// Input input = new Input(new MapInput(data));
-		Input input = new Input(new StringInput("Helloworld!!!"));
-		Output output = new Output(new RedisMessagePublisher(stringRedisTemplate, "test"));
-		// // StdinInput stdin = new StdinInput();
-		// // input.add(new StdinInput());
-		// input.add(new FileInput(file.getURI().getPath()));
-
-		// output.add(new StdoutOutput());
-		//
-		Process process = new Process();
-		// process.add(new Replace("Hello", "Netkiller "));
-		// process.add(new Replace("Neo", "<Neo>"));
-		// process.add(new Replace("Tom", "[Tom]"));
-		// //
-		InputProcessOutput ipo = new InputProcessOutput();
-
-		ipo.setInput(input);
-		ipo.setProcess(process);
-		ipo.setOutput(output);
-		ipo.launch();
-		return ipo;
-	}
-
-	public void s22s() {
-
-		// Map<String, Integer> left = ImmutableMap.of("a", 1, "b", 2, "c", 3);
 	}
 
 	// System.out.println("初始化业务");

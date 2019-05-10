@@ -44,7 +44,6 @@ public class AliyunOssService {
 			inputStream = new URL(url).openStream();
 			ossClient.putObject(this.bucketName, objectName, inputStream);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

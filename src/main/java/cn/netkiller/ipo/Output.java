@@ -36,28 +36,32 @@ public class Output implements OutputInterface {
 		return this;
 	}
 
-	public void open() {
+	public boolean open() {
 		for (OutputInterface output : this.outputs) {
 			logger.debug("Open {}", output.getClass().getName());
 			output.open();
 		}
+		return false;
 	}
 
-	public void write(Object tmp) {
+	public boolean write(Object tmp) {
 		if (tmp != null) {
 			for (OutputInterface output : this.outputs) {
-				output.write(tmp);
 				logger.debug(tmp.toString());
+				output.write(tmp);
+
 			}
 		}
+		return false;
 
 	}
 
-	public void close() {
+	public boolean close() {
 		for (OutputInterface output : this.outputs) {
 			output.close();
 			logger.debug("Close {}", output.getClass().getName());
 		}
+		return false;
 	}
 
 }

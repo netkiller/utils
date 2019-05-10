@@ -11,9 +11,9 @@ package cn.netkiller.ipo.output;
  */
 public interface OutputInterface {
 
-    public void open();
+	public boolean open();
 
-    public void write(Object output);
+	public boolean write(Object output);
 
-    public void close();
+	public boolean close();
 }

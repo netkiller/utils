@@ -11,16 +11,19 @@ package cn.netkiller.ipo.output;
  */
 public class StdoutOutput implements OutputInterface {
 
-    public void open() {
+    public boolean open() {
+		return false;
 
     }
 
-    public void write(Object output) {
+    public boolean write(Object output) {
     	
         System.out.println(output);
+		return false;
     }
 
-    public void close() {
+    public boolean close() {
+		return false;
 
     }
 

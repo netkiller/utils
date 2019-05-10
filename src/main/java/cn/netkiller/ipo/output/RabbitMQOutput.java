@@ -31,7 +31,7 @@ public class RabbitMQOutput implements OutputInterface {
 	}
 
 	@Override
-	public void open() {
+	public boolean open() {
 		try {
 			ConnectionFactory factory = new ConnectionFactory();
 			// factory.setHost( );
@@ -48,21 +48,23 @@ public class RabbitMQOutput implements OutputInterface {
 		} catch (Exception e) {
 			logger.warn(e.getMessage());
 		}
+		return false;
 	}
 
 	@Override
-	public void write(Object tmp) {
+	public boolean write(Object tmp) {
 		String output = (String) tmp;
 		try {
 			channel.basicPublish("", this.queue, null, output.getBytes());
 		} catch (IOException e) {
 			logger.warn(e.getMessage());
 		}
+		return false;
 
 	}
 
 	@Override
-	public void close() {
+	public boolean close() {
 		try {
 			channel.close();
 			connection.close();
@@ -72,6 +74,7 @@ public class RabbitMQOutput implements OutputInterface {
 			logger.warn(e.getMessage());
 
 		}
+		return false;
 
 	}
 

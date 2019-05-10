@@ -17,22 +17,27 @@ public class RedisMessagePublisher implements OutputInterface {
 	}
 
 	@Override
-	public void open() {
-		logger.debug(topic.getTopic());
+	public boolean open() {
+		logger.debug("Channel {}", topic.getTopic());
+		// stringRedisTemplate.opsForValue().set("name", "Neo");
+		// stringRedisTemplate.convertAndSend(topic.getTopic(), "Channel OK");
+		return false;
 	}
 
 	@Override
-	public void write(Object message) {
+	public boolean write(Object message) {
 		logger.debug(message.toString());
-		stringRedisTemplate.opsForValue().set("name", "Neo");
-		logger.debug("REDIS: " + stringRedisTemplate.opsForValue().get("name"));
-
-		stringRedisTemplate.convertAndSend(topic.getTopic(), message.toString());
+		stringRedisTemplate.convertAndSend(topic.getTopic(), message);
+		return false;
 
 	}
 
 	@Override
-	public void close() {
+	public boolean close() {
+		return false;
+		// logger.debug("Done");
+		// logger.debug("REDIS: " + stringRedisTemplate.opsForValue().get("name"));
+		// stringRedisTemplate.delete("name");
 
 	}
 }

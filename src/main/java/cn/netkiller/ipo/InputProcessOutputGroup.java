@@ -22,13 +22,13 @@ public class InputProcessOutputGroup {
 	public void launch() {
 		for (InputProcessOutput ipo : this.inputProcessOutputGroups) {
 
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					ipo.launch();
+			// new Thread(new Runnable() {
+			// @Override
+			// public void run() {
+			ipo.launch();
 
-				}
-			}).start();
+			// }
+			// }).start();
 
 		}
 

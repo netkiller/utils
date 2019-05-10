@@ -15,12 +15,13 @@ import cn.netkiller.ipo.Position;
 import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.JdbcTemplateInput;
 import cn.netkiller.ipo.output.AliyunOssOutput;
-import cn.netkiller.ipo.output.JdbcTemplateOutput;
+import cn.netkiller.ipo.output.JdbcTemplateUpdateOutput;
 import cn.netkiller.ipo.position.RedisPosition;
 import cn.netkiller.ipo.process.map.MapPut;
 import cn.netkiller.ipo.process.map.MapReplace;
 import cn.netkiller.ipo.service.AliyunOssService;
 import cn.netkiller.ipo.util.SqlUtil.SQL;
+import cn.netkiller.process.AttachmentProcess;
 
 @Component
 public class Attachment {
@@ -43,6 +44,9 @@ public class Attachment {
 	}
 
 	private void project() {
+
+		//
+
 		// outputJdbcTemplate.execute("delete from lz_auth where created_by = 'import'");
 
 		Input input = new Input(new LinkedHashMap<Object, Object>());
@@ -50,15 +54,14 @@ public class Attachment {
 		Output output = new Output();
 		Position position = new Position(new RedisPosition(stringRedisTemplate, "Attachment"), "id");
 
-		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_departments_has_user"));
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select id, contract_img_url from lz_cloud_om_dev.om_project_contract where ipo='import'"));
 
-		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_auth", SQL.REPLACE));
-		output.add(new AliyunOssOutput(aliyunOssService));
+		output.add(new JdbcTemplateUpdateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_project_contract", "id"));
 
 		process.add(new MapReplace("created_time", null, "now()"));
 		process.add(new MapPut("created_by", "import"));
 		process.add(new MapPut("company_id", "1"));
-		process.add(new MapPut("biz_post_id", "1"));
+		process.add(new AttachmentProcess(aliyunOssService, inputJdbcTemplate));
 
 		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
 

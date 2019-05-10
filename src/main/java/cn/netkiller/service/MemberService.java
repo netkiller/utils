@@ -1,3 +1,4 @@
+package cn.netkiller.service;
 //package cn.netkiller;
 //
 //import cn.netkiller.entity.secondary.Member;

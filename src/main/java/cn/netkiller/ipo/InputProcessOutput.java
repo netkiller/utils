@@ -58,9 +58,10 @@ public class InputProcessOutput implements Runnable {
 
 	@Override
 	public void run() {
-		logger.debug("==================== Begin ====================");
 		this.input.open();
 		this.output.open();
+		this.process.open();
+		logger.debug("==================== Begin ====================");
 		if (this.pipeline) {
 			try {
 				do {
@@ -84,9 +85,11 @@ public class InputProcessOutput implements Runnable {
 				}
 			} while (this.input.hasNext());
 		}
-		this.input.close();
-		this.output.close();
+
 		logger.debug("==================== End ====================");
+		this.process.open();
+		this.output.close();
+		this.input.close();
 	}
 
 	private boolean execute() {

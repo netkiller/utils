@@ -11,6 +11,7 @@ public class SqlUtil {
 	final public static class SQL {
 		public final static String INSERT = "INSERT";
 		public final static String REPLACE = "REPLACE";
+		public final static String UPDATE = "UPDATE";
 	}
 
 	public static String join(String method, String table, Map<String, Object> map) {
@@ -53,6 +54,46 @@ public class SqlUtil {
 		sql.append(method);
 		sql.append(" INTO " + table + " (").append(fields.toString()).append(") VALUE(").append(values.toString()).append(")");
 
+		return sql.toString();
+	}
+
+	public static String insert(String method, String table, Map<String, Object> map) {
+		return join(SQL.INSERT, table, map);
+
+	}
+
+	public static String replace(String method, String table, Map<String, Object> map) {
+		return join(SQL.REPLACE, table, map);
+
+	}
+
+	public static String update(String table, Map<String, Object> map, String where) throws Exception {
+
+		if (!map.containsKey(where)) {
+			throw new Exception("The field isn't exist!");
+		}
+
+		StringBuffer sql = new StringBuffer(SQL.UPDATE);
+		sql.append(" " + table + " SET ");
+
+		Iterator<Entry<String, Object>> entries = map.entrySet().iterator();
+		while (entries.hasNext()) {
+			Entry<String, Object> entry = entries.next();
+			if (entry.getKey().equals(where)) {
+				continue;
+			}
+			if (entry.getValue() == null) {
+				sql.append(String.format("%s = %s", entry.getKey(), "null"));
+			} else if (entry.getValue() instanceof Integer) {
+				sql.append(String.format("%s = %d", entry.getKey(), entry.getValue()));
+			} else if (entry.getValue() instanceof String) {
+				sql.append(String.format("%s = \'%s\'", entry.getKey(), entry.getValue()));
+			} else {
+				sql.append(String.format("%s = \'%s\'", entry.getKey(), entry.getValue()));
+			}
+
+		}
+		sql.append(String.format(" WHERE %s=\'%s\'", where, map.get(where)));
 		return sql.toString();
 	}
 }

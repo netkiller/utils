@@ -12,19 +12,22 @@ public class AliyunOssOutput implements OutputInterface {
 	}
 
 	@Override
-	public void open() {
+	public boolean open() {
 		aliyunOssService.open();
+		return false;
 
 	}
 
 	@Override
-	public void write(Object output) {
+	public boolean write(Object output) {
+		return false;
 
 	}
 
 	@Override
-	public void close() {
+	public boolean close() {
 		aliyunOssService.close();
+		return false;
 	}
 
 }

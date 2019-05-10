@@ -26,12 +26,12 @@ public class JsonOutput implements OutputInterface {
         this.colume = colume;
     }
     @Override
-    public void open() {
+    public boolean open() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void write(Object output) {
+    public boolean write(Object output) {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         String[] array = ((String) output).split(",");
         List<String> tmpList = new ArrayList<String>(Arrays.asList(array));
@@ -41,10 +41,11 @@ public class JsonOutput implements OutputInterface {
         }
         Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
         System.out.println(gson.toJson(map));
+		return false;
     }
 
     @Override
-    public void close() {
+    public boolean close() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

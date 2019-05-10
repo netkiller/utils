@@ -63,7 +63,7 @@ public class JdbcOutput implements OutputInterface {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void open() {
+	public boolean open() {
 		try {
 
 			Class.forName(this.driver).newInstance();
@@ -79,11 +79,12 @@ public class JdbcOutput implements OutputInterface {
 		} finally {
 
 		}
+		return false;
 
 	}
 
 	@Override
-	public void write(Object tmp) {
+	public boolean write(Object tmp) {
 		String output = (String) tmp;
 		logger.info("Output {}", output);
 
@@ -112,16 +113,18 @@ public class JdbcOutput implements OutputInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return false;
 
 	}
 
 	@Override
-	public void close() {
+	public boolean close() {
 		try {
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 
 }

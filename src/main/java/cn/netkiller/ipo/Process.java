@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cn.netkiller.ipo;
 
 import java.util.List;
@@ -35,20 +30,39 @@ public class Process implements ProcessInterface {
 	}
 
 	public Object run(Object row) {
-		// String line = tmp;
-		logger.debug("Process source: {}", row.toString());
+
 		for (ProcessInterface process : this.processes) {
+			logger.debug("{} source: {}", process.getClass().getName(), row.toString());
 			row = process.run(row);
 			if (row == null) {
 				break;
 			}
+			logger.debug("{} target: {}", process.getClass().getName(), row.toString());
 		}
-		logger.debug("Process target: {}", row.toString());
+
 		// this.processes.forEach((proc) -> {
 		// System.out.println(proc.toString());
 		// line = proc.run(line);
 		// });
 		return row;
+	}
+
+	@Override
+	public boolean open() {
+		for (ProcessInterface process : this.processes) {
+			logger.debug("Open {}", process.getClass().getName());
+			process.open();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean close() {
+		for (ProcessInterface process : this.processes) {
+			process.close();
+			logger.debug("Close {}", process.getClass().getName());
+		}
+		return false;
 	}
 
 }
