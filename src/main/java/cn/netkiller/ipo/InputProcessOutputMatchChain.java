@@ -29,7 +29,6 @@ public class InputProcessOutputMatchChain extends InputProcessOutput {
 		return this;
 	}
 
-	@Override
 	public void run() {
 		logger.debug("==================== Begin {} ====================", this.getName());
 		this.getInput().open();

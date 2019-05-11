@@ -2,11 +2,11 @@ package cn.netkiller.ipo.process.string;
 
 import cn.netkiller.ipo.process.ProcessInterface;
 
-public class Include implements ProcessInterface {
+public class StringInclude implements ProcessInterface {
 
 	private String string;
 
-	public Include(String string) {
+	public StringInclude(String string) {
 		this.string = string;
 	}
 

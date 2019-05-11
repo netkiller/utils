@@ -8,7 +8,7 @@ import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.KafkaInput;
 import cn.netkiller.ipo.output.StdoutOutput;
-import cn.netkiller.ipo.process.string.Replace;
+import cn.netkiller.ipo.process.string.StringReplace;
 
 public class KafkaConsumer {
 
@@ -32,7 +32,7 @@ public class KafkaConsumer {
 		// }
 
 		Process process = new Process();
-		process.add(new Replace("Hello", "Helloworld!!!"));
+		process.add(new StringReplace("Hello", "Helloworld!!!"));
 
 		Output output = new Output();
 		output.add(new StdoutOutput());

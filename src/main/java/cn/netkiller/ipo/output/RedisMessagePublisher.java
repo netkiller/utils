@@ -21,20 +21,20 @@ public class RedisMessagePublisher implements OutputInterface {
 		logger.debug("Channel {}", topic.getTopic());
 		// stringRedisTemplate.opsForValue().set("name", "Neo");
 		// stringRedisTemplate.convertAndSend(topic.getTopic(), "Channel OK");
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean write(Object message) {
 		logger.debug(message.toString());
 		stringRedisTemplate.convertAndSend(topic.getTopic(), message);
-		return false;
+		return true;
 
 	}
 
 	@Override
 	public boolean close() {
-		return false;
+		return true;
 		// logger.debug("Done");
 		// logger.debug("REDIS: " + stringRedisTemplate.opsForValue().get("name"));
 		// stringRedisTemplate.delete("name");

@@ -7,12 +7,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class FilePosition implements PositionInterface {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class FilePosition implements PositionInterface {
+	private final static Logger logger = LoggerFactory.getLogger(FilePosition.class);
 	private String filename;
 
 	public FilePosition(String filename) {
 		this.filename = filename;
+		logger.debug("Position file {}", filename);
 	}
 
 	@Override

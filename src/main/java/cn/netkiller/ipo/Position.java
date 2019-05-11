@@ -24,14 +24,20 @@ public class Position {
 		this.key = key;
 	}
 
-	public void set(Object data) {
+	public boolean set(Object data) throws Exception {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = (Map<String, Object>) data;
 
-		String current = String.valueOf(map.get(this.key));
-		logger.debug("Current position: {} => {}", this.key, current);
-		this.position.set(current);
+		if (map.containsKey(this.key)) {
+			String current = String.valueOf(map.get(this.key));
+			this.position.set(current);
+			logger.debug("Current position {} => {}", this.key, current);
+			return true;
+		} else {
+			// throw new Exception("The " + this.key + " isn't exist!");
+			return false;
+		}
 
 	}
 

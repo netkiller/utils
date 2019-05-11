@@ -3,7 +3,6 @@ package cn.netkiller.ipo;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.netkiller.test.MyRunnable;
 
 public class Batch extends Thread {
 	private List<InputProcessOutput> tasks = new ArrayList<InputProcessOutput>();
@@ -22,7 +21,7 @@ public class Batch extends Thread {
 
 	public void run() {
 		for (InputProcessOutput task : tasks) {
-			new Thread(new MyRunnable(task.getName())).start();
+//			new Thread(new MyRunnable(task.getName())).start();
 		}
 	}
 }

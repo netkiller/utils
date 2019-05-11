@@ -56,7 +56,7 @@ public class Project implements ApplicationRunner {
 		// this.crm();
 		// this.account();
 		// this.project();
-		this.contract();
+		// this.contract();
 		System.exit(0);
 	}
 

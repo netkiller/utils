@@ -15,7 +15,7 @@ import cn.netkiller.ipo.input.FileInput;
 import cn.netkiller.ipo.output.JdbcOutput;
 import cn.netkiller.ipo.output.StdoutOutput;
 import cn.netkiller.ipo.process.nginx.NginxAccessGetParameterProcess;
-import cn.netkiller.ipo.process.string.Include;
+import cn.netkiller.ipo.process.string.StringInclude;
 
 public class NginxToJdbc {
 	private final static Logger logger = LoggerFactory.getLogger(NginxToJdbc.class);
@@ -35,7 +35,7 @@ public class NginxToJdbc {
 		// input.add(new FileInput("D:\\workspace\\import\\target\\project\\access.log-20171125"));
 
 		Process process = new Process();
-		process.add(new Include("logType=3")).add(new Include("businessPlatform=3"));
+		process.add(new StringInclude("logType=3")).add(new StringInclude("businessPlatform=3"));
 		// process.add(new NginxAccessProcess());
 		process.add(new NginxAccessGetParameterProcess());
 		// process.add(new ExcludeProcess("\"logType\":\"1\""));

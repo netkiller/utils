@@ -6,8 +6,8 @@ import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.FileInput;
 import cn.netkiller.ipo.output.StdoutOutput;
-import cn.netkiller.ipo.process.string.Include;
-import cn.netkiller.ipo.process.string.Replace;
+import cn.netkiller.ipo.process.string.StringInclude;
+import cn.netkiller.ipo.process.string.StringReplace;
 
 public class InputProcessOutputMatchChainTest {
 
@@ -17,12 +17,12 @@ public class InputProcessOutputMatchChainTest {
 		input.add(new FileInput("D:\\workspace\\ipo\\target\\project\\input.txt"));
 
 		Process process = new Process();
-		process.add(new Include("Neo"));
-		process.add(new Replace("Neo", "Netkiller "));
+		process.add(new StringInclude("Neo"));
+		process.add(new StringReplace("Neo", "Netkiller "));
 
 		Process process1 = new Process();
-		process1.add(new Include("Hello"));
-		process1.add(new Replace("Hello", "Helloworld!!!"));
+		process1.add(new StringInclude("Hello"));
+		process1.add(new StringReplace("Hello", "Helloworld!!!"));
 
 		Output output = new Output();
 		output.add(new StdoutOutput());
@@ -33,7 +33,7 @@ public class InputProcessOutputMatchChainTest {
 		mc.match(process1, output);
 		mc.launch();
 		// mc.match(new JsonPrcess(), new JsonOutput());
-		
+
 	}
 
 }

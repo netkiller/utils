@@ -19,34 +19,36 @@ import java.util.Map;
  */
 public class JsonOutput implements OutputInterface {
 
-    private List<String> colume = new ArrayList<String>();
+	private List<String> colume = new ArrayList<String>();
 
+	public JsonOutput(List<String> colume) {
+		this.colume = colume;
+	}
 
-    public JsonOutput(List<String> colume) {
-        this.colume = colume;
-    }
-    @Override
-    public boolean open() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public boolean open() {
+		// throw new UnsupportedOperationException("Not supported yet.");
+		return true;
+	}
 
-    @Override
-    public boolean write(Object output) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        String[] array = ((String) output).split(",");
-        List<String> tmpList = new ArrayList<String>(Arrays.asList(array));
-        Map<String, String> map = new HashMap<String, String>();
-        for (int i = 0; i < this.colume.size(); i++) {
-            map.put(this.colume.get(i), tmpList.get(i));
-        }
-        Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
-        System.out.println(gson.toJson(map));
-		return false;
-    }
+	@Override
+	public boolean write(Object output) {
+		// throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		String[] array = ((String) output).split(",");
+		List<String> tmpList = new ArrayList<String>(Arrays.asList(array));
+		Map<String, String> map = new HashMap<String, String>();
+		for (int i = 0; i < this.colume.size(); i++) {
+			map.put(this.colume.get(i), tmpList.get(i));
+		}
+		Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+		System.out.println(gson.toJson(map));
+		return true;
+	}
 
-    @Override
-    public boolean close() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public boolean close() {
+		// throw new UnsupportedOperationException("Not supported yet.");
+		return true;
+	}
 
 }

@@ -22,7 +22,7 @@ public class JdbcTemplateUpdateOutput implements OutputInterface {
 
 	@Override
 	public boolean open() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -36,6 +36,7 @@ public class JdbcTemplateUpdateOutput implements OutputInterface {
 			int id = this.outputJdbcTemplate.update(sql);
 			logger.debug(sql);
 			logger.debug("Insert ID {}", id);
+			return true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -46,7 +47,7 @@ public class JdbcTemplateUpdateOutput implements OutputInterface {
 
 	@Override
 	public boolean close() {
-		return false;
+		return true;
 	}
 
 }

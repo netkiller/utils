@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cn.netkiller.ipo;
 
 import org.slf4j.Logger;
@@ -53,10 +48,7 @@ public class InputProcessOutput {
 	}
 
 	public void launch() {
-		this.run();
-	}
 
-	public void run() {
 		this.input.open();
 		this.output.open();
 		this.process.open();
@@ -86,7 +78,7 @@ public class InputProcessOutput {
 		}
 
 		logger.debug("==================== End ====================");
-		this.process.open();
+		this.process.close();
 		this.output.close();
 		this.input.close();
 	}
@@ -101,53 +93,28 @@ public class InputProcessOutput {
 		// if (dataType instanceof HashMap || dataType instanceof LinkedHashMap) {
 		// this.map();
 		// }
-
-		Object row = input.readLine();
-		if (row != null) {
+		try {
+			Object row = input.readLine();
+			if (row == null) {
+				return false;
+			}
 			if (this.process != null) {
 				row = this.process.run(row);
 			}
 			if (row != null) {
-				this.output.write(row);
-				if (this.position != null) {
+				boolean outputStatus = this.output.write(row);
+				if (outputStatus) {
 					this.position.set(row);
 				}
 			}
-		}
 
+			return true;
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
 		return false;
 
 	}
-
-	// private void string() {
-	//
-	// String line = (String) input.readLine();
-	// if (line != null) {
-	// String tmp = this.process.run(line);
-	// if (tmp != null) {
-	// this.output.write(tmp);
-	// }
-	// }
-	//
-	// }
-	//
-	// private void map() {
-	//
-	// @SuppressWarnings("unchecked")
-	// Map<String, Object> output = (Map<String, Object>) input.readLine();
-	// if (output != null) {
-	// if (this.process != null) {
-	// output = this.process.run(output);
-	// }
-	// if (output != null) {
-	// this.output.write(output);
-	// if (this.position != null) {
-	// this.position.set(output);
-	// }
-	// }
-	// }
-	//
-	// }
 
 	public void shutdown() {
 		this.exit = true;

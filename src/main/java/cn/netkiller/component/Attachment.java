@@ -25,7 +25,7 @@ import cn.netkiller.ipo.service.AliyunOssService;
 import cn.netkiller.process.AttachmentProcess;
 
 @Component
-@Order(5)
+@Order(60)
 public class Attachment implements ApplicationRunner {
 
 	@Qualifier("inputJdbcTemplate")
@@ -46,8 +46,6 @@ public class Attachment implements ApplicationRunner {
 	}
 
 	private void contract() {
-
-		//
 
 		// outputJdbcTemplate.execute("delete from lz_auth where created_by = 'import'");
 
@@ -77,8 +75,8 @@ public class Attachment implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		this.contract();
-		System.exit(0);
+		// this.contract();
+		// System.exit(0);
 
 	}
 

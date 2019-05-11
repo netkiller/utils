@@ -12,7 +12,7 @@ public class RedisPosition implements PositionInterface {
 	public RedisPosition(StringRedisTemplate stringRedisTemplate, String cacheKey) {
 		this.stringRedisTemplate = stringRedisTemplate;
 		this.cacheKey = String.format("%s:%s", this.getClass().getName(), cacheKey);
-		logger.debug("Cache key: {}", this.cacheKey);
+		logger.debug("Cache key {}", this.cacheKey);
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class RedisPosition implements PositionInterface {
 	@Override
 	public void reset() {
 		stringRedisTemplate.delete(this.cacheKey);
-		
+
 	}
 
 }

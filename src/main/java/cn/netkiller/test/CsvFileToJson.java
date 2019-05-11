@@ -10,7 +10,7 @@ import cn.netkiller.ipo.InputProcessOutput;
 import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.input.CsvFileInput;
 import cn.netkiller.ipo.output.JsonOutput;
-import cn.netkiller.ipo.process.string.Replace;
+import cn.netkiller.ipo.process.string.StringReplace;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +42,7 @@ public class CsvFileToJson {
         output.add(json);
 
         cn.netkiller.ipo.Process process = new cn.netkiller.ipo.Process();
-        process.add(new Replace("Hello", "Netkiller "));
+        process.add(new StringReplace("Hello", "Netkiller "));
 
         InputProcessOutput ipo = new InputProcessOutput();
         ipo.setInput(input);

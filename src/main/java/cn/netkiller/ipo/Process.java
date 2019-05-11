@@ -15,7 +15,6 @@ import java.util.ArrayList;
 public class Process implements ProcessInterface {
 	private final static Logger logger = LoggerFactory.getLogger(Process.class);
 	private final List<ProcessInterface> processes = new ArrayList<ProcessInterface>();
-	// private final List<ProcessMapInterface> processes = new ArrayList<ProcessMapInterface>();
 
 	public Process() {
 	}

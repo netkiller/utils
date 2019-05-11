@@ -12,12 +12,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.google.gson.Gson;
 
-import cn.netkiller.ipo.input.JdbcTemplateInput;
 import cn.netkiller.ipo.process.ProcessInterface;
 import cn.netkiller.ipo.service.AliyunOssService;
 
 public class AttachmentProcess implements ProcessInterface {
-	// private final static Logger logger = LoggerFactory.getLogger(AttachmentProcess.class);
+	private final static Logger logger = LoggerFactory.getLogger(AttachmentProcess.class);
 	private AliyunOssService aliyunOssService;
 	private JdbcTemplate inputJdbcTemplate;
 
@@ -37,7 +36,7 @@ public class AttachmentProcess implements ProcessInterface {
 		while (iterator.hasNext()) {
 			Map<String, Object> row = iterator.next();
 			// logger.debug(line.toString());
-			String name = "contract/" + (String) row.get("name");
+			String name = String.format("contract/%s/%s", row.get("id"), (String) row.get("name"));
 			String url = String.format("http://120.76.214.182:8086/web/binary/saveas?model=ir.attachment&field=datas&filename_field=datas_fname&id=%s", row.get("id"));
 
 			boolean status = this.aliyunOssService.uploadFromUrl(name, url);

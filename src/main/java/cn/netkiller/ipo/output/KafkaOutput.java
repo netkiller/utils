@@ -32,7 +32,7 @@ public class KafkaOutput implements OutputInterface {
 	public boolean open() {
 		this.producer = new KafkaProducer<String, String>(this.properties);
 		this.logger.debug("Kafka Output open()");
-		return false;
+		return true;
 	}
 
 	@Override
@@ -41,14 +41,14 @@ public class KafkaOutput implements OutputInterface {
 			this.producer.send(new ProducerRecord<String, String>(topic, (String) output));
 			this.logger.debug("Kafka Output Topic: {}, Value: {}", topic, output);
 		}
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean close() {
 		producer.close();
 		this.logger.debug("Kafka Output close()");
-		return false;
+		return true;
 	}
 
 }

@@ -1,30 +1,32 @@
 package cn.netkiller.ipo.input;
 
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public class JdbcTemplateInput implements InputInterface {
-	private final static Logger logger = LoggerFactory.getLogger(JdbcTemplateInput.class);
-
+public class JdbcTemplateTableInput implements InputInterface {
+	private final static Logger logger = LoggerFactory.getLogger(JdbcTemplateTableInput.class);
 	private JdbcTemplate inputJdbcTemplate;
 
 	private String sql = null;
 	private Iterator<Map<String, Object>> iterator = null;
 
-	public JdbcTemplateInput(JdbcTemplate inputJdbcTemplate, String sql) {
+	public JdbcTemplateTableInput(JdbcTemplate inputJdbcTemplate, String table) {
 		this.inputJdbcTemplate = inputJdbcTemplate;
-		this.sql = sql;
-
+		this.sql = "SELECT * FROM " + table;
 	}
 
-	public JdbcTemplateInput(JdbcTemplate inputJdbcTemplate, String sql, String where) {
+	public JdbcTemplateTableInput(JdbcTemplate inputJdbcTemplate, String table, String fields) {
 		this.inputJdbcTemplate = inputJdbcTemplate;
-		this.sql = sql + " WHERE " + where;
+		this.sql = "SELECT " + fields + " FROM " + table;
+	}
+
+	public JdbcTemplateTableInput(JdbcTemplate inputJdbcTemplate, String table, String fields, String where) {
+		this.inputJdbcTemplate = inputJdbcTemplate;
+		this.sql = "SELECT " + fields + " FROM " + table + " WHERE " + where;
 	}
 
 	@Override
@@ -38,11 +40,10 @@ public class JdbcTemplateInput implements InputInterface {
 	}
 
 	@Override
-	public Map<String, Object> readLine() {
-
+	public Object readLine() {
 		if (this.iterator.hasNext()) {
-			Map<String, Object> line = this.iterator.next();
-			logger.debug(line.toString());
+			Object line = this.iterator.next();
+			// logger.debug(line.toString());
 			return line;
 		}
 		return null;
@@ -50,15 +51,19 @@ public class JdbcTemplateInput implements InputInterface {
 
 	@Override
 	public boolean close() {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public Object getDataType() {
-		return new LinkedHashMap<String, Object>();
+		// TODO Auto-generated method stub
+		return null;
 	}
 
+	@Override
 	public boolean hasNext() {
 		return this.iterator.hasNext();
 	}
+
 }

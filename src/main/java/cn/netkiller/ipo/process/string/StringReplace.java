@@ -11,13 +11,13 @@ import cn.netkiller.ipo.process.ProcessInterface;
  *
  * @author netkiller
  */
-public class Replace implements ProcessInterface {
+public class StringReplace implements ProcessInterface {
 
 	private final String oldString;
 	private final String newString;
 	private String tmp;
 
-	public Replace(String oldString, String newString) {
+	public StringReplace(String oldString, String newString) {
 		this.oldString = oldString;
 		this.newString = newString;
 	}

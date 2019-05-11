@@ -51,6 +51,7 @@ public class Output implements OutputInterface {
 				output.write(tmp);
 
 			}
+			return true;
 		}
 		return false;
 

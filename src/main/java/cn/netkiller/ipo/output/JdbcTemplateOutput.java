@@ -46,7 +46,7 @@ public class JdbcTemplateOutput implements OutputInterface {
 
 	@Override
 	public boolean open() {
-		return false;
+		return true;
 
 	}
 
@@ -76,8 +76,9 @@ public class JdbcTemplateOutput implements OutputInterface {
 				sql = SqlUtil.join(this.method, this.table, tmp);
 			}
 
-			logger.debug("SQL: {};", sql);
+			logger.debug("Output SQL {};", sql);
 			outputJdbcTemplate.execute(sql);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);
@@ -88,7 +89,7 @@ public class JdbcTemplateOutput implements OutputInterface {
 
 	@Override
 	public boolean close() {
-		return false;
+		return true;
 
 	}
 

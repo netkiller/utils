@@ -45,6 +45,7 @@ public class RabbitMQOutput implements OutputInterface {
 			this.connection = factory.newConnection();
 			this.channel = this.connection.createChannel();
 			channel.queueDeclare(this.queue, false, false, false, null);
+			return true;
 		} catch (Exception e) {
 			logger.warn(e.getMessage());
 		}
@@ -56,6 +57,7 @@ public class RabbitMQOutput implements OutputInterface {
 		String output = (String) tmp;
 		try {
 			channel.basicPublish("", this.queue, null, output.getBytes());
+			return true;
 		} catch (IOException e) {
 			logger.warn(e.getMessage());
 		}
@@ -68,6 +70,7 @@ public class RabbitMQOutput implements OutputInterface {
 		try {
 			channel.close();
 			connection.close();
+			return true;
 		} catch (IOException | TimeoutException e) {
 			logger.warn(e.getMessage());
 		} catch (Exception e) {

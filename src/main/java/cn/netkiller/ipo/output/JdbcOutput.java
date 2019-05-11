@@ -68,7 +68,7 @@ public class JdbcOutput implements OutputInterface {
 
 			Class.forName(this.driver).newInstance();
 			this.connection = DriverManager.getConnection(this.url, this.username, this.password);
-
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -110,6 +110,7 @@ public class JdbcOutput implements OutputInterface {
 			Statement stmt = this.connection.createStatement();
 			stmt.execute(sql);
 			stmt.close();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -121,6 +122,7 @@ public class JdbcOutput implements OutputInterface {
 	public boolean close() {
 		try {
 			connection.close();
+			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

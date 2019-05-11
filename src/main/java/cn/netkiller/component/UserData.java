@@ -55,9 +55,16 @@ public class UserData implements ApplicationRunner {
 			if (!args.getOptionValues("table").equals("user")) {
 				return;
 			}
-
+			if (!args.getOptionValues("table").equals("department")) {
+				return;
+			}
 		}
+		this.users();
+		this.department();
+		this.departmentsHasUser();
+	}
 
+	public void users() {
 		logger.debug("==================== User ====================");
 
 		// String query = "SELECT id, title, content from article where id = ";
@@ -80,17 +87,23 @@ public class UserData implements ApplicationRunner {
 		// logger.warn(string);
 
 		// TRUNCATE `test`.`lz_users`;
-		outputJdbcTemplate.execute("delete from lz_users where created_by = 'import'");
 
 		Input input = new Input(new LinkedHashMap<Object, Object>());
 		Process process = new Process();
 		Output output = new Output();
-		Position position = new Position(new RedisPosition(stringRedisTemplate, "User"), "id");
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "User"), "user_id");
+		// position.reset();
+
+		String id = position.get();
+		String sql = "select * from import_users";
+		if (id != null) {
+			sql += " where user_id > " + id;
+		}
 
 		// StdinInput stdin = new StdinInput();
-		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_users"));
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
 
-		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_users"));
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_users", SQL.REPLACE));
 		// output.add(new StdoutOutput());
 
 		process.add(new MapReplace("parent_id", null, "NULL"));
@@ -105,25 +118,24 @@ public class UserData implements ApplicationRunner {
 		ipo.setOutput(output);
 		ipo.setPosition(position);
 		ipo.launch();
-
 	}
 
 	public void department() {
-		// if (args.containsOption("table")) {
-		// if (!args.getOptionValues("table").equals("department")) {
-		// return;
-		// }
-		// }
-		logger.debug("==================== Department ====================");
 
-		outputJdbcTemplate.execute("delete from lz_departments where created_by = 'import'");
+		logger.debug("==================== Department ====================");
 
 		Input input = new Input(new LinkedHashMap<Object, Object>());
 		Process process = new Process();
 		Output output = new Output();
-		Position position = new Position(new RedisPosition(stringRedisTemplate, "Department"), "id");
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "Department"), "dept_id");
 
-		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_departments"));
+		String dept_id = position.get();
+		String sql = "select * from import_departments";
+		if (dept_id != null) {
+			sql += " where dept_id > " + dept_id;
+		}
+
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
 
 		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_departments"));
 		// output.add(new StdoutOutput());
@@ -144,20 +156,18 @@ public class UserData implements ApplicationRunner {
 
 	public void departmentsHasUser() {
 
-		// if (args.containsOption("table")) {
-		// if (!args.getOptionValues("table").get(0).equals("departments_has_user")) {
-		// return;
-		// }
-		// }
-
-		outputJdbcTemplate.execute("delete from lz_auth where created_by = 'import'");
-
 		Input input = new Input(new LinkedHashMap<Object, Object>());
 		Process process = new Process();
 		Output output = new Output();
 		Position position = new Position(new RedisPosition(stringRedisTemplate, "departmentsHasUser"), "id");
 
-		input.add(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_departments_has_user"));
+		String id = position.get();
+		String sql = "select * from import_departments_has_user";
+		if (id != null) {
+			sql += " where id > " + id;
+		}
+
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
 
 		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_auth", SQL.REPLACE));
 

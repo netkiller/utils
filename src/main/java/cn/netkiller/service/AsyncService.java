@@ -16,7 +16,7 @@ import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.MapInput;
 import cn.netkiller.ipo.input.StringInput;
 import cn.netkiller.ipo.output.RedisMessagePublisher;
-import cn.netkiller.ipo.process.string.Replace;
+import cn.netkiller.ipo.process.string.StringReplace;
 
 @Service
 public class AsyncService {
@@ -44,7 +44,7 @@ public class AsyncService {
 		Process process = new Process();
 		// process.add(new Replace("Hello", "Netkiller "));
 		// process.add(new Replace("Neo", "<Neo>"));
-		process.add(new Replace("Linux", "FreeBSD"));
+		process.add(new StringReplace("Linux", "FreeBSD"));
 
 		InputProcessOutput ipo = new InputProcessOutput();
 
