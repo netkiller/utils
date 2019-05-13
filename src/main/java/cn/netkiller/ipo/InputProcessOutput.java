@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import cn.netkiller.ipo.input.InputInterface;
 import cn.netkiller.ipo.output.OutputInterface;
+import cn.netkiller.ipo.position.PositionInterface;
 import cn.netkiller.ipo.process.ProcessInterface;
 
 /**
@@ -14,10 +15,10 @@ import cn.netkiller.ipo.process.ProcessInterface;
 public class InputProcessOutput {
 	private final static Logger logger = LoggerFactory.getLogger(InputProcessOutput.class);
 
-	private Input input;
-	private Output output;
-	private Process process;
-	private Position position;
+	private InputInterface input;
+	private ProcessInterface process;
+	private OutputInterface output;
+	private PositionInterface position;
 
 	private boolean exit = false;
 	private boolean pipeline = false;
@@ -39,12 +40,56 @@ public class InputProcessOutput {
 		this.name = name;
 	}
 
+	public InputProcessOutput setInput(InputInterface input) {
+		this.input = input;
+		return this;
+	}
+
+	public InputInterface getInput() {
+		return input;
+	}
+
+	public InputProcessOutput setProcess(ProcessInterface process) {
+		this.process = process;
+		return this;
+	}
+
+	public ProcessInterface getProcess() {
+		return process;
+	}
+
+	public InputProcessOutput setOutput(OutputInterface output) {
+		this.output = output;
+		return this;
+	}
+
+	public OutputInterface getOutput() {
+		return output;
+	}
+
+	public InputProcessOutput setPosition(PositionInterface position) {
+		this.position = position;
+		return this;
+	}
+
+	public PositionInterface getPosition() {
+		return this.position;
+	}
+
 	public void setPipeline(boolean pipeline) {
 		this.pipeline = pipeline;
 	}
 
 	public boolean getPipeline() {
 		return this.pipeline;
+	}
+
+	public boolean isExit() {
+		return exit;
+	}
+
+	public void setExit(boolean exit) {
+		this.exit = exit;
 	}
 
 	public void launch() {
@@ -118,58 +163,6 @@ public class InputProcessOutput {
 
 	public void shutdown() {
 		this.exit = true;
-	}
-
-	public void setInput(InputInterface input) {
-		this.input = (Input) input;
-	}
-
-	public void setProcess(ProcessInterface process) {
-		this.process = (Process) process;
-	}
-
-	public void setOutput(OutputInterface output) {
-		this.output = (Output) output;
-	}
-
-	public Input getInput() {
-		return input;
-	}
-
-	public void setInput(Input input) {
-		this.input = input;
-	}
-
-	public Output getOutput() {
-		return output;
-	}
-
-	public void setOutput(Output output) {
-		this.output = output;
-	}
-
-	public Process getProcess() {
-		return process;
-	}
-
-	public void setProcess(Process process) {
-		this.process = process;
-	}
-
-	public boolean isExit() {
-		return exit;
-	}
-
-	public void setExit(boolean exit) {
-		this.exit = exit;
-	}
-
-	public Position getPosition() {
-		return position;
-	}
-
-	public void setPosition(Position position) {
-		this.position = position;
 	}
 
 }

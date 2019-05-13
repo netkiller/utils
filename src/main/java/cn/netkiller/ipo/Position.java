@@ -9,7 +9,7 @@ import cn.netkiller.ipo.position.FilePosition;
 import cn.netkiller.ipo.position.PositionInterface;
 import cn.netkiller.ipo.position.RedisPosition;
 
-public class Position {
+public class Position implements PositionInterface {
 	private final static Logger logger = LoggerFactory.getLogger(Position.class);
 	private PositionInterface position;
 	private String key;
@@ -24,7 +24,8 @@ public class Position {
 		this.key = key;
 	}
 
-	public boolean set(Object data) throws Exception {
+	@Override
+	public boolean set(Object data) {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> map = (Map<String, Object>) data;
@@ -48,4 +49,5 @@ public class Position {
 	public void reset() {
 		this.position.reset();
 	}
+
 }

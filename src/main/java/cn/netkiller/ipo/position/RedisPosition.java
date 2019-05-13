@@ -16,9 +16,10 @@ public class RedisPosition implements PositionInterface {
 	}
 
 	@Override
-	public void set(String pos) {
+	public boolean set(Object pos) {
 
-		stringRedisTemplate.opsForValue().set(this.cacheKey, pos);
+		stringRedisTemplate.opsForValue().set(this.cacheKey, (String) pos);
+		return true;
 
 	}
 

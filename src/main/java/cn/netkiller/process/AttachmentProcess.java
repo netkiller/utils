@@ -52,6 +52,8 @@ public class AttachmentProcess implements ProcessInterface {
 				// convert java object to JSON format, and returned as JSON formatted string
 				String json = gson.toJson(images);
 				map.put("contract_img_url", json);
+
+				logger.debug(json);
 			}
 		}
 

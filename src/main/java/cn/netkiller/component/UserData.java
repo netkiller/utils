@@ -15,16 +15,14 @@ import org.springframework.stereotype.Component;
 
 import cn.netkiller.ipo.Input;
 import cn.netkiller.ipo.InputProcessOutput;
+import cn.netkiller.ipo.InputProcessOutputGroup;
 import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.Position;
 import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.JdbcTemplateInput;
 import cn.netkiller.ipo.output.JdbcTemplateOutput;
-import cn.netkiller.ipo.output.StdoutOutput;
-import cn.netkiller.ipo.position.FilePosition;
 import cn.netkiller.ipo.position.RedisPosition;
 import cn.netkiller.ipo.process.map.MapPut;
-import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
 import cn.netkiller.ipo.util.SqlUtil.SQL;
 
@@ -59,12 +57,13 @@ public class UserData implements ApplicationRunner {
 				return;
 			}
 		}
-		this.users();
+		this.users(false);
+
 		this.department();
 		this.departmentsHasUser();
 	}
 
-	public void users() {
+	public void users(boolean reset) {
 		logger.debug("==================== User ====================");
 
 		// String query = "SELECT id, title, content from article where id = ";
@@ -81,24 +80,23 @@ public class UserData implements ApplicationRunner {
 		// logger.warn(row.toString());
 		// }
 
-		// String input = inputJdbcTemplate.queryForObject("select name from test limit 1", String.class);
-		// logger.warn(input);
-		// String string = outputJdbcTemplate.queryForObject("select name from lz_users limit 1", String.class);
-		// logger.warn(string);
-
 		// TRUNCATE `test`.`lz_users`;
 
 		Input input = new Input(new LinkedHashMap<Object, Object>());
 		Process process = new Process();
 		Output output = new Output();
 		Position position = new Position(new RedisPosition(stringRedisTemplate, "User"), "user_id");
-		// position.reset();
-
+		if (reset) {
+			position.reset();
+			outputJdbcTemplate.execute("ALTER TABLE lz_cloud_dev.lz_users AUTO_INCREMENT=100000");
+			outputJdbcTemplate.execute("delete from lz_users where ipo = 'import'");
+		}
 		String id = position.get();
 		String sql = "select * from import_users";
 		if (id != null) {
 			sql += " where user_id > " + id;
 		}
+		// sql += " order by id desc";
 
 		// StdinInput stdin = new StdinInput();
 		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
@@ -107,17 +105,47 @@ public class UserData implements ApplicationRunner {
 		// output.add(new StdoutOutput());
 
 		process.add(new MapReplace("parent_id", null, "NULL"));
-		process.add(new MapRemove("accept_type"));
-		process.add(new MapPut("created_by", "import"));
+		process.add(new MapPut("ipo", "import"));
 		process.add(new MapReplace("user_pwd", null, "123456"));
 
-		InputProcessOutput ipo = new InputProcessOutput();
+		InputProcessOutput ipo = new InputProcessOutput("User append");
 
 		ipo.setInput(input);
 		ipo.setProcess(process);
 		ipo.setOutput(output);
 		ipo.setPosition(position);
-		ipo.launch();
+		// ipo.launch();
+
+		// Position positionUpdate = new Position(new RedisPosition(stringRedisTemplate, "UserUpdate"), "updated_time");
+		// String where = "";
+		// String updated_time = positionUpdate.get();
+		// if(updated_time == null) {
+		// where = "";
+		// }else {
+		// where = "";
+		// }
+		// Input inputUdate = new Input(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_users where updated_time"));
+		//
+		// InputProcessOutput update = new InputProcessOutput("User update");
+		// update.setInput(inputUdate).setProcess(process).setOutput(output).setPosition(positionUpdate);
+		//
+		InputProcessOutputGroup inputProcessOutputGroup = new InputProcessOutputGroup();
+		inputProcessOutputGroup.add(ipo);
+		//
+		// inputProcessOutputGroup.add(update);
+		//
+		inputProcessOutputGroup.launch();
+
+		int inputCount = inputJdbcTemplate.queryForObject("select count(*) from import_users", Integer.class);
+		int outputCount = outputJdbcTemplate.queryForObject("select count(*) from lz_users where ipo='import'", Integer.class);
+		if (inputCount == outputCount) {
+			logger.info("---------- Check OK source {}, target {} ----------", inputCount, outputCount);
+		} else {
+			logger.warn("---------- Check ERROR source {}, target {} ----------", inputCount, outputCount);
+		}
+
+		System.exit(0);
+
 	}
 
 	public void department() {
@@ -141,7 +169,6 @@ public class UserData implements ApplicationRunner {
 		// output.add(new StdoutOutput());
 
 		process.add(new MapReplace("created_time", null, "now()"));
-		// process.add(new MapRemove("accept_type"));
 		process.add(new MapPut("created_by", "import"));
 		process.add(new MapPut("company_id", "1"));
 

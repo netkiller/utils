@@ -3,7 +3,11 @@ package cn.netkiller.ipo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class InputProcessOutputGroup {
+	private final static Logger logger = LoggerFactory.getLogger(InputProcessOutputGroup.class);
 	private final List<InputProcessOutput> inputProcessOutputGroups = new ArrayList<InputProcessOutput>();
 
 	public InputProcessOutputGroup() {
@@ -29,7 +33,7 @@ public class InputProcessOutputGroup {
 
 			// }
 			// }).start();
-
+			logger.debug("==================== Done {} ====================", ipo.getName());
 		}
 
 	}

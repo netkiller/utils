@@ -20,19 +20,20 @@ public class FilePosition implements PositionInterface {
 	}
 
 	@Override
-	public void set(String pos) {
+	public boolean set(Object pos) {
 		PrintWriter output = null;
 		try {
 			output = new PrintWriter(this.filename);
 			output.print(pos);
 			output.flush();
+			return true;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			output.close();
 		}
-
+		return false;
 	}
 
 	@Override

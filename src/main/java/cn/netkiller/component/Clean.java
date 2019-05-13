@@ -30,9 +30,9 @@ public class Clean implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
-//		outputJdbcTemplate.execute("delete from lz_users where created_by = 'import'");
-//		outputJdbcTemplate.execute("delete from lz_departments where created_by = 'import'");
-//		outputJdbcTemplate.execute("delete from lz_auth where created_by = 'import'");
+		//
+		// outputJdbcTemplate.execute("delete from lz_departments where created_by = 'import'");
+		// outputJdbcTemplate.execute("delete from lz_auth where created_by = 'import'");
 
 	}
 
