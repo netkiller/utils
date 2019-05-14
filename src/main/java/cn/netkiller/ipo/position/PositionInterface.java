@@ -1,10 +1,12 @@
 package cn.netkiller.ipo.position;
 
 public interface PositionInterface {
-	public boolean set(Object pos);
+	public boolean set(Object data);
 
 	public String get();
 
-	public void reset();
+	public boolean reset();
+
+	public Object get(String hashKey);
 
 }

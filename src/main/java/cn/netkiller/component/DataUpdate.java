@@ -1,22 +1,23 @@
 package cn.netkiller.component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
-@Order(60)
-public class Attachment implements ApplicationRunner {
 
-	public Attachment() {
-	}
+@Order(50)
+public class DataUpdate implements ApplicationRunner {
+	private final static Logger logger = LoggerFactory.getLogger(DataUpdate.class);
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		// this.contract();
-		// System.exit(0);
 
+		//
+		System.exit(0);
 	}
 
 }

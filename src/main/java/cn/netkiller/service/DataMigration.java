@@ -1,4 +1,4 @@
-package cn.netkiller.component;
+package cn.netkiller.service;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -10,35 +10,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import cn.netkiller.ipo.Input;
 import cn.netkiller.ipo.InputProcessOutput;
+import cn.netkiller.ipo.InputProcessOutputGroup;
 import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.Position;
 import cn.netkiller.ipo.Process;
 import cn.netkiller.ipo.input.JdbcTemplateInput;
 import cn.netkiller.ipo.output.JdbcTemplateOutput;
+import cn.netkiller.ipo.output.JdbcTemplateUpdateOutput;
 import cn.netkiller.ipo.position.RedisPosition;
 import cn.netkiller.ipo.process.map.MapLeft;
 import cn.netkiller.ipo.process.map.MapPut;
 import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
 import cn.netkiller.ipo.process.map.MapTrim;
-import cn.netkiller.process.AddressProcess;
-import cn.netkiller.process.PartnerAProcess;
+import cn.netkiller.ipo.service.AliyunOssService;
 import cn.netkiller.ipo.util.SqlUtil.SQL;
+import cn.netkiller.process.AddressProcess;
+import cn.netkiller.process.AttachmentProcess;
+import cn.netkiller.process.PartnerAProcess;
 
-@Component
-
-@Order(50)
-public class Project implements ApplicationRunner {
-	private final static Logger logger = LoggerFactory.getLogger(Project.class);
+@Service
+public class DataMigration {
+	private final static Logger logger = LoggerFactory.getLogger(DataMigration.class);
 
 	@Qualifier("inputJdbcTemplate")
 	@Autowired
@@ -51,16 +50,168 @@ public class Project implements ApplicationRunner {
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
-	@Override
-	public void run(ApplicationArguments args) throws Exception {
-		this.crm();
-		this.account();
-		this.project();
-		// this.contract();
-		System.exit(0);
+	@Autowired
+	private AliyunOssService aliyunOssService;
+
+	public DataMigration() {
+		// TODO Auto-generated constructor stub
 	}
 
-	private void crm() {
+	public void users(boolean reset, boolean update) {
+		logger.debug("==================== User ====================");
+
+		// String query = "SELECT id, title, content from article where id = ";
+
+		// jdbcTemplate.queryForObject(query, (resultSet, i) -> {
+		// System.out.println(resultSet.getLong(1)+","+ resultSet.getString(2)+","+ resultSet.getString(3));
+		// });
+
+		// String jdbc = jdbcTemplate.queryForObject("select name from saas.tbl_eos_contracts limit 1", String.class);
+		// logger.warn(jdbc);
+
+		// var rows = inputJdbcTemplate.queryForList("select * from saas.tbl_eos_contracts");
+		// for (Map<String, Object> row : rows) {
+		// logger.warn(row.toString());
+		// }
+
+		Input input = new Input();
+		Process process = new Process();
+		Output output = new Output();
+		Position position = new Position();
+
+		String sql = "select * from import_users";
+		if (update) {
+			position.set(new RedisPosition(stringRedisTemplate, "UserUpdate", "updated_time"));
+		} else {
+			position.set(new RedisPosition(stringRedisTemplate, "User", "user_id"));
+		}
+
+		if (reset) {
+			position.reset();
+			outputJdbcTemplate.execute("ALTER TABLE lz_cloud_dev.lz_users AUTO_INCREMENT=100000");
+			outputJdbcTemplate.execute("delete from lz_users where ipo = 'import'");
+		}
+		// String id = position.get();
+		// if (id != null) {
+		// sql += " where user_id > " + id;
+		// }
+		// sql += position.getSqlWhere();
+
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_users", SQL.REPLACE));
+
+		process.add(new MapReplace("parent_id", null, "NULL"));
+		process.add(new MapPut("ipo", "import"));
+		process.add(new MapReplace("user_pwd", null, "123456"));
+
+		InputProcessOutput ipo = new InputProcessOutput("User append");
+
+		ipo.setInput(input);
+		ipo.setProcess(process);
+		ipo.setOutput(output);
+		ipo.setPosition(position);
+		// ipo.launch();
+
+		// Position positionUpdate = new Position();
+		// String where = "";
+		// String updated_time = positionUpdate.get();
+		// if(updated_time == null) {
+		// where = "";
+		// }else {
+		// where = "";
+		// }
+		// Input inputUdate = new Input(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_users where updated_time"));
+		//
+		// InputProcessOutput update = new InputProcessOutput("User update");
+		// update.setInput(inputUdate).setProcess(process).setOutput(output).setPosition(positionUpdate);
+		//
+		InputProcessOutputGroup inputProcessOutputGroup = new InputProcessOutputGroup();
+		inputProcessOutputGroup.add(ipo);
+		//
+		// inputProcessOutputGroup.add(update);
+		//
+		inputProcessOutputGroup.launch();
+
+		int inputCount = inputJdbcTemplate.queryForObject("select count(*) from import_users", Integer.class);
+		int outputCount = outputJdbcTemplate.queryForObject("select count(*) from lz_users where ipo='import'", Integer.class);
+		if (inputCount == outputCount) {
+			logger.info("---------- Check OK source {}, target {} ----------", inputCount, outputCount);
+		} else {
+			logger.warn("---------- Check ERROR source {}, target {} ----------", inputCount, outputCount);
+		}
+
+		System.exit(0);
+
+	}
+
+	public void department() {
+
+		logger.debug("==================== Department ====================");
+
+		Input input = new Input();
+		Process process = new Process();
+		Output output = new Output();
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "Department", "dept_id"));
+
+		String dept_id = position.get();
+		String sql = "select * from import_departments";
+		if (dept_id != null) {
+			sql += " where dept_id > " + dept_id;
+		}
+
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
+
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_departments"));
+		// output.add(new StdoutOutput());
+
+		process.add(new MapReplace("created_time", null, "now()"));
+		process.add(new MapPut("created_by", "import"));
+		process.add(new MapPut("company_id", "1"));
+
+		InputProcessOutput ipo = new InputProcessOutput();
+
+		ipo.setInput(input);
+		ipo.setProcess(process);
+		ipo.setOutput(output);
+		ipo.setPosition(position);
+		ipo.launch();
+	}
+
+	public void departmentsHasUser() {
+
+		Input input = new Input();
+		Process process = new Process();
+		Output output = new Output();
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "departmentsHasUser", "id"));
+
+		String id = position.get();
+		String sql = "select * from import_departments_has_user";
+		if (id != null) {
+			sql += " where id > " + id;
+		}
+
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
+
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_auth", SQL.REPLACE));
+
+		process.add(new MapReplace("created_time", null, "now()"));
+		// process.add(new MapRemove("accept_type"));
+
+		process.add(new MapPut("created_by", "import"));
+		process.add(new MapPut("company_id", "1"));
+		process.add(new MapPut("biz_post_id", "1"));
+
+		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
+
+		ipo.setInput(input);
+		ipo.setProcess(process);
+		ipo.setOutput(output);
+		ipo.setPosition(position);
+		ipo.launch();
+
+	}
+
+	public void crm() {
 		logger.debug("==================================================");
 		logger.debug("==================== CRM ====================");
 		logger.debug("==================================================");
@@ -68,10 +219,10 @@ public class Project implements ApplicationRunner {
 		outputJdbcTemplate.execute("ALTER TABLE lz_cloud_om_dev.om_crm_customer AUTO_INCREMENT=100000");
 		outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_crm_customer where ipo = 'import'");
 
-		Input input = new Input(new LinkedHashMap<Object, Object>());
+		Input input = new Input();
 		Process process = new Process();
 		Output output = new Output();
-		Position position = new Position(new RedisPosition(stringRedisTemplate, "CRM"), "id");
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "CRM", "id"));
 
 		String id = position.get();
 		String sql = "select * from import_crm";
@@ -97,7 +248,7 @@ public class Project implements ApplicationRunner {
 		ipo.launch();
 	}
 
-	private void account() {
+	public void account() {
 		logger.debug("==================================================");
 		logger.debug("==================== Account ====================");
 		logger.debug("==================================================");
@@ -105,10 +256,10 @@ public class Project implements ApplicationRunner {
 		// outputJdbcTemplate.execute("ALTER TABLE lz_cloud_om_dev.om_finance_account AUTO_INCREMENT=100000");
 		outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_finance_account where ipo = 'import'");
 
-		Input input = new Input(new LinkedHashMap<Object, Object>());
+		Input input = new Input();
 		Process process = new Process();
 		Output output = new Output();
-		Position position = new Position(new RedisPosition(stringRedisTemplate, "Account"), "id");
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "Account", "id"));
 
 		String id = position.get();
 		String sql = "select * from import_account";
@@ -134,7 +285,7 @@ public class Project implements ApplicationRunner {
 		ipo.launch();
 	}
 
-	private void project() {
+	public void project() {
 		// outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project where ipo = 'import'");
 
 		Map<Integer, String> province = new HashMap<Integer, String>();
@@ -162,10 +313,10 @@ public class Project implements ApplicationRunner {
 			address.put((String) row.get("name"), (Integer) row.get("id"));
 		}
 
-		Input input = new Input(new LinkedHashMap<Object, Object>());
+		Input input = new Input();
 		Process process = new Process();
 		Output output = new Output();
-		Position position = new Position(new RedisPosition(stringRedisTemplate, "Project"), "id");
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "Project", "id"));
 		// position.reset();
 
 		String id = position.get();
@@ -198,7 +349,7 @@ public class Project implements ApplicationRunner {
 		ipo.launch();
 	}
 
-	private void contract() {
+	public void contract() {
 
 		logger.debug("==================================================");
 		logger.debug("==================== Contract ====================");
@@ -206,10 +357,10 @@ public class Project implements ApplicationRunner {
 
 		outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project_contract where ipo = 'import'");
 
-		Input input = new Input(new LinkedHashMap<Object, Object>());
+		Input input = new Input();
 		Process process = new Process();
 		Output output = new Output();
-		Position position = new Position(new RedisPosition(stringRedisTemplate, "Contract"), "id");
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "Contract", "id"));
 		// position.reset();
 
 		String id = position.get();
@@ -241,5 +392,30 @@ public class Project implements ApplicationRunner {
 		ipo.setOutput(output);
 		ipo.setPosition(position);
 		ipo.launch();
+	}
+
+	public void attachment() {
+
+		outputJdbcTemplate.update("update lz_cloud_om_dev.om_project_contract set contract_img_url=''");
+
+		Input input = new Input();
+		Process process = new Process();
+		Output output = new Output();
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "Attachment", "id"));
+
+		input.add(new JdbcTemplateInput(outputJdbcTemplate, "select id, contract_img_url from lz_cloud_om_dev.om_project_contract where ipo='import'"));
+
+		output.add(new JdbcTemplateUpdateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_project_contract", "id"));
+
+		process.add(new AttachmentProcess(aliyunOssService, inputJdbcTemplate));
+
+		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
+
+		ipo.setInput(input);
+		ipo.setProcess(process);
+		ipo.setOutput(output);
+		ipo.setPosition(position);
+		ipo.launch();
+
 	}
 }

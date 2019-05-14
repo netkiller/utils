@@ -1,44 +1,40 @@
 package cn.netkiller.ipo;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cn.netkiller.ipo.position.FilePosition;
 import cn.netkiller.ipo.position.PositionInterface;
-import cn.netkiller.ipo.position.RedisPosition;
 
 public class Position implements PositionInterface {
 	private final static Logger logger = LoggerFactory.getLogger(Position.class);
+	// private final Map<String, PositionInterface> positions = new LinkedHashMap<String, PositionInterface>();
 	private PositionInterface position;
-	private String key;
 
-	public Position(FilePosition filePosition, String key) {
-		this.position = filePosition;
-		this.key = key;
+	public Position() {
+
 	}
 
-	public Position(RedisPosition redisPosition, String key) {
-		this.position = redisPosition;
-		this.key = key;
+	public Position(PositionInterface positionInterface) {
+		this.position = positionInterface;
 	}
 
 	@Override
 	public boolean set(Object data) {
 
-		@SuppressWarnings("unchecked")
-		Map<String, Object> map = (Map<String, Object>) data;
+		// for (Map.Entry<String, PositionInterface> entry : positions.entrySet()) {
+		// System.out.println(String.format("%s:%d", entry.getKey(), entry.getValue()));
 
-		if (map.containsKey(this.key)) {
-			String current = String.valueOf(map.get(this.key));
-			this.position.set(current);
-			logger.debug("Current position {} => {}", this.key, current);
-			return true;
-		} else {
-			// throw new Exception("The " + this.key + " isn't exist!");
-			return false;
-		}
+		// String key = entry.getKey();
+		// PositionInterface position = entry.getValue();
+
+		// }
+
+		return position.set(data);
 
 	}
 
@@ -46,8 +42,22 @@ public class Position implements PositionInterface {
 		return this.position.get();
 	}
 
-	public void reset() {
-		this.position.reset();
+	public String getSqlWhere(String field) {
+		if (this.get() == null) {
+			return "";
+		} else {
+			return String.format(" WHERE %s > %s", field, this.get());
+		}
+	}
+
+	@Override
+	public boolean reset() {
+		return this.position.reset();
+	}
+
+	@Override
+	public Object get(String hashKey) {
+		return this.position.get(hashKey);
 	}
 
 }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 
-import cn.netkiller.component.Project;
+import cn.netkiller.component.DataUpdate;
 
 @Service
 public class AliyunOssService {

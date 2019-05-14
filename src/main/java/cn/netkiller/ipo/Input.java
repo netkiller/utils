@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cn.netkiller.ipo;
 
 import java.util.ArrayList;
@@ -28,10 +23,6 @@ public class Input implements InputInterface {
 
 	public Input(InputInterface inputInterface) {
 		this.inputs.add(inputInterface);
-	}
-
-	public Input(Object dataType) {
-		this.dataType = dataType;
 	}
 
 	public Input add(InputInterface inputInterface) {
@@ -66,22 +57,6 @@ public class Input implements InputInterface {
 				logger.debug(tmp.toString());
 				return tmp;
 
-				// this.dataType = input.getDataType();
-				// // logger.warn(this.dataType.getClass().getTypeName());
-				// if (input.getDataType() instanceof String) {
-				// String tmp = (String) input.readLine();
-				// if (tmp != null && !tmp.equals("")) {
-				// this.hasNext = input.hasNext();
-				// logger.debug(tmp.toString());
-				// return tmp;
-				// }
-				// }
-				// if (input.getDataType() instanceof HashMap) {
-				// this.hasNext = input.hasNext();
-				// Object tmp = input.readLine();
-				// logger.debug(tmp.toString());
-				// return tmp;
-				// }
 			}
 		}
 		return null;

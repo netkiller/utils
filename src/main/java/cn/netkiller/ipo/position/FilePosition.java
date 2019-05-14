@@ -20,11 +20,11 @@ public class FilePosition implements PositionInterface {
 	}
 
 	@Override
-	public boolean set(Object pos) {
+	public boolean set(Object data) {
 		PrintWriter output = null;
 		try {
 			output = new PrintWriter(this.filename);
-			output.print(pos);
+			output.print(data);
 			output.flush();
 			return true;
 		} catch (FileNotFoundException e) {
@@ -64,10 +64,16 @@ public class FilePosition implements PositionInterface {
 	}
 
 	@Override
-	public void reset() {
+	public boolean reset() {
 		File file = new File(this.filename);
 		file.delete();
+		return true;
+	}
 
+	@Override
+	public Object get(String hashKey) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
