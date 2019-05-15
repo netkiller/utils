@@ -1,7 +1,7 @@
 package cn.netkiller.service;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import cn.netkiller.ipo.Input;
 import cn.netkiller.ipo.InputProcessOutput;
 import cn.netkiller.ipo.InputProcessOutputGroup;
+import cn.netkiller.ipo.InputProcessOutputMatchChain;
 import cn.netkiller.ipo.Output;
 import cn.netkiller.ipo.Position;
 import cn.netkiller.ipo.Process;
@@ -24,6 +25,7 @@ import cn.netkiller.ipo.input.JdbcTemplateInput;
 import cn.netkiller.ipo.output.JdbcTemplateOutput;
 import cn.netkiller.ipo.output.JdbcTemplateUpdateOutput;
 import cn.netkiller.ipo.position.RedisPosition;
+import cn.netkiller.ipo.process.map.MapKeyInclude;
 import cn.netkiller.ipo.process.map.MapLeft;
 import cn.netkiller.ipo.process.map.MapPut;
 import cn.netkiller.ipo.process.map.MapRemove;
@@ -57,7 +59,7 @@ public class DataMigration {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void users(boolean reset, boolean update) {
+	public void users(boolean reset) {
 		logger.debug("==================== User ====================");
 
 		// String query = "SELECT id, title, content from article where id = ";
@@ -77,25 +79,21 @@ public class DataMigration {
 		Input input = new Input();
 		Process process = new Process();
 		Output output = new Output();
-		Position position = new Position();
-
-		String sql = "select * from import_users";
-		if (update) {
-			position.set(new RedisPosition(stringRedisTemplate, "UserUpdate", "updated_time"));
-		} else {
-			position.set(new RedisPosition(stringRedisTemplate, "User", "user_id"));
-		}
+		RedisPosition redis = new RedisPosition(stringRedisTemplate, "import_users", "user_id");
+		Position position = new Position(redis);
 
 		if (reset) {
 			position.reset();
-			outputJdbcTemplate.execute("ALTER TABLE lz_cloud_dev.lz_users AUTO_INCREMENT=100000");
+			outputJdbcTemplate.execute("ALTER TABLE lz_cloud_dev.lz_users AUTO_INCREMENT=1000000000000000000");
 			outputJdbcTemplate.execute("delete from lz_users where ipo = 'import'");
 		}
+
+		String sql = "select * from import_users";
 		// String id = position.get();
 		// if (id != null) {
 		// sql += " where user_id > " + id;
 		// }
-		// sql += position.getSqlWhere();
+		sql += redis.getSqlWhere();
 
 		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
 		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_users", SQL.REPLACE));
@@ -119,17 +117,17 @@ public class DataMigration {
 		// where = "";
 		// }else {
 		// where = "";
+		// position.set(new RedisPosition(stringRedisTemplate, "UserUpdate", "updated_time"));
 		// }
-		// Input inputUdate = new Input(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_users where updated_time"));
-		//
-		// InputProcessOutput update = new InputProcessOutput("User update");
-		// update.setInput(inputUdate).setProcess(process).setOutput(output).setPosition(positionUpdate);
-		//
+
+		InputProcessOutputMatchChain ipomc = new InputProcessOutputMatchChain("User update");
+		ipomc.setInput(new Input(new JdbcTemplateInput(inputJdbcTemplate, "select * from import_users where user_id in (select param from import where table in ('res_users','hr_employee'))")));
+		ipomc.match(process, output);
+		ipomc.match(new Process(new MapKeyInclude(Arrays.asList("id"))), new Output(new JdbcTemplateOutput(inputJdbcTemplate, "import")));
+
 		InputProcessOutputGroup inputProcessOutputGroup = new InputProcessOutputGroup();
 		inputProcessOutputGroup.add(ipo);
-		//
-		// inputProcessOutputGroup.add(update);
-		//
+		// inputProcessOutputGroup.add(ipomc);
 		inputProcessOutputGroup.launch();
 
 		int inputCount = inputJdbcTemplate.queryForObject("select count(*) from import_users", Integer.class);
@@ -140,18 +138,22 @@ public class DataMigration {
 			logger.warn("---------- Check ERROR source {}, target {} ----------", inputCount, outputCount);
 		}
 
-		System.exit(0);
-
 	}
 
-	public void department() {
+	public void department(boolean reset) {
 
 		logger.debug("==================== Department ====================");
 
 		Input input = new Input();
 		Process process = new Process();
 		Output output = new Output();
-		Position position = new Position(new RedisPosition(stringRedisTemplate, "Department", "dept_id"));
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "import_departments", "dept_id"));
+
+		if (reset) {
+			position.reset();
+			outputJdbcTemplate.execute("ALTER TABLE lz_departments AUTO_INCREMENT=1000000000000000000");
+			outputJdbcTemplate.execute("delete from lz_departments where ipo = 'import'");
+		}
 
 		String dept_id = position.get();
 		String sql = "select * from import_departments";
@@ -162,10 +164,13 @@ public class DataMigration {
 		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
 
 		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_departments"));
-		// output.add(new StdoutOutput());
 
+		process.add(new MapReplace("dept_code", null, "001"));
+		process.add(new MapReplace("created_by", null, "admin"));
+		process.add(new MapReplace("updated_by", null, "admin"));
 		process.add(new MapReplace("created_time", null, "now()"));
-		process.add(new MapPut("created_by", "import"));
+		process.add(new MapReplace("updated_time", null, "now()"));
+		process.add(new MapPut("ipo", "import"));
 		process.add(new MapPut("company_id", "1"));
 
 		InputProcessOutput ipo = new InputProcessOutput();
@@ -177,12 +182,18 @@ public class DataMigration {
 		ipo.launch();
 	}
 
-	public void departmentsHasUser() {
+	public void departmentsHasUser(boolean reset) {
 
 		Input input = new Input();
 		Process process = new Process();
 		Output output = new Output();
-		Position position = new Position(new RedisPosition(stringRedisTemplate, "departmentsHasUser", "id"));
+		Position position = new Position(new RedisPosition(stringRedisTemplate, "import_departments_has_user", "id"));
+
+		if (reset) {
+			position.reset();
+			outputJdbcTemplate.execute("ALTER TABLE lz_auth AUTO_INCREMENT=1000000000000000000");
+			outputJdbcTemplate.execute("delete from lz_auth where ipo = 'import'");
+		}
 
 		String id = position.get();
 		String sql = "select * from import_departments_has_user";
@@ -209,6 +220,45 @@ public class DataMigration {
 		ipo.setPosition(position);
 		ipo.launch();
 
+	}
+
+	public void business_manager(boolean reset) {
+		Input input = new Input();
+		Process process = new Process();
+		Output output = new Output();
+		RedisPosition redis = new RedisPosition(stringRedisTemplate, "import_business_manager", "id");
+		Position position = new Position(redis);
+
+		if (reset) {
+			position.reset();
+			outputJdbcTemplate.execute("ALTER TABLE lz_cloud_dev.lz_companys AUTO_INCREMENT=1000000000000000000");
+			outputJdbcTemplate.execute("delete from lz_companys where ipo = 'import'");
+		}
+
+		// String id = position.get();
+		String sql = "select * from import_business_manager";
+		// if (id != null) {
+		// sql += " where id > " + id;
+		// }
+		sql += redis.getSqlWhere();
+		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
+
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_companys", SQL.REPLACE));
+
+		// process.add(new MapReplace("created_time", null, "now()"));
+		// process.add(new MapRemove("accept_type"));
+
+		process.add(new MapPut("created_by", "import"));
+		// process.add(new MapPut("company_id", "1"));
+		// process.add(new MapPut("biz_post_id", "1"));
+
+		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
+
+		ipo.setInput(input);
+		ipo.setProcess(process);
+		ipo.setOutput(output);
+		ipo.setPosition(position);
+		ipo.launch();
 	}
 
 	public void crm() {

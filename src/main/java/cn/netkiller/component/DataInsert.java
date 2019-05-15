@@ -30,13 +30,15 @@ public class DataInsert implements ApplicationRunner {
 				return;
 			}
 		}
-		dataMigration.users(false, false);
-		// dataMigration.department(false);
-		// dataMigration.departmentsHasUser(false);
+		dataMigration.users(false);
+		dataMigration.department(false);
+		dataMigration.departmentsHasUser(false);
+		dataMigration.business_manager(false);
 		// dataMigration.crm(false);
 		// dataMigration.account(false);
 		// dataMigration.project(false);
 		// dataMigration.contract(false);
+		System.exit(0);
 	}
 
 }

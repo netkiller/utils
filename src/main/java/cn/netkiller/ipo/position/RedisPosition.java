@@ -27,7 +27,7 @@ public class RedisPosition implements PositionInterface {
 		if (map.containsKey(this.hashKey)) {
 			String current = String.valueOf(map.get(this.hashKey));
 			stringRedisTemplate.opsForValue().set(this.cacheKey, (String) current);
-			logger.debug("Current position {} {} => {}", this.getClass().getName(), this.hashKey, current);
+			logger.debug("Current position {} {} => {}", this.cacheKey, this.hashKey, current);
 		} else {
 			// throw new Exception("The " + this.key + " isn't exist!");
 			return false;
@@ -57,4 +57,11 @@ public class RedisPosition implements PositionInterface {
 		return null;
 	}
 
+	public String getSqlWhere() {
+		if (this.get() == null) {
+			return "";
+		} else {
+			return String.format(" WHERE %s > %s", this.hashKey, this.get());
+		}
+	}
 }
