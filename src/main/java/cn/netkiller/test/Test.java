@@ -1,21 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cn.netkiller.test;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.text.StringEscapeUtils;
-
-import cn.netkiller.ipo.util.SqlUtil;
-
-/**
- *
- * @author neoch
- */
 public class Test {
 
 	/**
@@ -24,22 +8,28 @@ public class Test {
 	 */
 	public static void main(String[] args) {
 		// TODO code application logic here
-		System.out.println(StringEscapeUtils.escapeJson("{\"name\":\"Neo\"}"));
 
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("id", 10);
-		map.put("name", "neo");
-		map.put("age", null);
-		map.put("json", "{\"name\":\"Neo\"}".replace("\\", "\\\\"));
-		// URLEncoder.encode(address,"UTF-8")
-		map.put("test", StringEscapeUtils.escapeJson("{\"name\":\"Neo\"}"));
+		String string = new String("http://www.netkiller.cn");
+
+		System.out.println("查找字符 . 第一次出现的位置: " + string.indexOf('.'));
+		System.out.println("从第15个字符位置查找字符 . 出现的位置:" + string.indexOf('.', 15));
+
+		// System.out.println(StringEscapeUtils.escapeJson("{\"name\":\"Neo\"}"));
+		//
+		// Map<String, Object> map = new HashMap<String, Object>();
+		// map.put("id", 10);
+		// map.put("name", "neo");
+		// map.put("age", null);
+		// map.put("json", "{\"name\":\"Neo\"}".replace("\\", "\\\\"));
+		// // URLEncoder.encode(address,"UTF-8")
+		// map.put("test", StringEscapeUtils.escapeJson("{\"name\":\"Neo\"}"));
 
 		// map.put("obj", new Object() {
 		// String name = "Chen";
 		// });
-
-		String s = SqlUtil.join("insert", "test", map);
-		System.out.println(s);
+		//
+		// String s = SqlUtil.join("insert", "test", map);
+		// System.out.println(s);
 
 		// String test="INSERT INTO `lz_departments`(`dept_id`,`dept_code`,`dept_name`,`company_id`,`created_by`,`created_time`) value(\"22\",\"001\",\"广州分公司\",\"1\",\"import\",\"now()\");";
 		// System.out.println(test.replace("now()", "aaa"));

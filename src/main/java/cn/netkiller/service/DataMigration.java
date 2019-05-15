@@ -35,6 +35,7 @@ import cn.netkiller.ipo.service.AliyunOssService;
 import cn.netkiller.ipo.util.SqlUtil.SQL;
 import cn.netkiller.process.AddressProcess;
 import cn.netkiller.process.AttachmentProcess;
+import cn.netkiller.process.BizPostId;
 import cn.netkiller.process.PartnerAProcess;
 
 @Service
@@ -206,11 +207,9 @@ public class DataMigration {
 		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_auth", SQL.REPLACE));
 
 		process.add(new MapReplace("created_time", null, "now()"));
-		// process.add(new MapRemove("accept_type"));
-
-		process.add(new MapPut("created_by", "import"));
-		process.add(new MapPut("company_id", "1"));
-		process.add(new MapPut("biz_post_id", "1"));
+		process.add(new BizPostId());
+		process.add(new MapPut("ipo", "import"));
+		// process.add(new MapPut("company_id", "1"));
 
 		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
 

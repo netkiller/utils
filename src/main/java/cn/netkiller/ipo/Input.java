@@ -54,7 +54,7 @@ public class Input implements InputInterface {
 			if (this.hasNext) {
 
 				Object tmp = input.readLine();
-				logger.debug(tmp.toString());
+				logger.debug("{} {}", input.getClass().getName(), tmp.toString());
 				return tmp;
 
 			}

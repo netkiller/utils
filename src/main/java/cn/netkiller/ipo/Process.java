@@ -31,18 +31,15 @@ public class Process implements ProcessInterface {
 	public Object run(Object row) {
 
 		for (ProcessInterface process : this.processes) {
-			logger.debug("{} source: {}", process.getClass().getName(), row.toString());
+			// logger.debug("{} source: {}", process.getClass().getName(), row.toString());
 			row = process.run(row);
 			if (row == null) {
 				break;
 			}
-			logger.debug("{} target: {}", process.getClass().getName(), row.toString());
+			// logger.debug("{} target: {}", process.getClass().getName(), row.toString());
+			logger.debug("{} {}", process.getClass().getName(), row.toString());
 		}
 
-		// this.processes.forEach((proc) -> {
-		// System.out.println(proc.toString());
-		// line = proc.run(line);
-		// });
 		return row;
 	}
 
@@ -64,4 +61,9 @@ public class Process implements ProcessInterface {
 		return false;
 	}
 
+	public void list() {
+		this.processes.forEach((process) -> {
+			System.out.println(process.getClass().getName());
+		});
+	}
 }
