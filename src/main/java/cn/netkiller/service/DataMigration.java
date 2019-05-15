@@ -25,6 +25,7 @@ import cn.netkiller.ipo.input.JdbcTemplateInput;
 import cn.netkiller.ipo.output.JdbcTemplateOutput;
 import cn.netkiller.ipo.output.JdbcTemplateUpdateOutput;
 import cn.netkiller.ipo.position.RedisPosition;
+import cn.netkiller.ipo.process.map.MapCopy;
 import cn.netkiller.ipo.process.map.MapKeyInclude;
 import cn.netkiller.ipo.process.map.MapLeft;
 import cn.netkiller.ipo.process.map.MapPut;
@@ -260,18 +261,21 @@ public class DataMigration {
 		ipo.launch();
 	}
 
-	public void crm() {
+	public void crm(boolean reset) {
 		logger.debug("==================================================");
 		logger.debug("==================== CRM ====================");
 		logger.debug("==================================================");
-
-		outputJdbcTemplate.execute("ALTER TABLE lz_cloud_om_dev.om_crm_customer AUTO_INCREMENT=100000");
-		outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_crm_customer where ipo = 'import'");
 
 		Input input = new Input();
 		Process process = new Process();
 		Output output = new Output();
 		Position position = new Position(new RedisPosition(stringRedisTemplate, "CRM", "id"));
+
+		if (reset) {
+			position.reset();
+			outputJdbcTemplate.execute("ALTER TABLE lz_cloud_om_dev.om_crm_customer AUTO_INCREMENT=100000000000000000");
+			outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_crm_customer where ipo = 'import'");
+		}
 
 		String id = position.get();
 		String sql = "select * from import_crm";
@@ -284,7 +288,6 @@ public class DataMigration {
 		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_crm_customer", SQL.REPLACE));
 
 		process.add(new MapReplace("created_time", null, "now()"));
-		// process.add(new MapRemove("accept_type"));
 		process.add(new MapPut("ipo", "import"));
 		// process.add(new MapPut("company_id", "1"));
 
@@ -297,18 +300,21 @@ public class DataMigration {
 		ipo.launch();
 	}
 
-	public void account() {
+	public void account(boolean reset) {
 		logger.debug("==================================================");
 		logger.debug("==================== Account ====================");
 		logger.debug("==================================================");
-
-		// outputJdbcTemplate.execute("ALTER TABLE lz_cloud_om_dev.om_finance_account AUTO_INCREMENT=100000");
-		outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_finance_account where ipo = 'import'");
 
 		Input input = new Input();
 		Process process = new Process();
 		Output output = new Output();
 		Position position = new Position(new RedisPosition(stringRedisTemplate, "Account", "id"));
+
+		if (reset) {
+			position.reset();
+			outputJdbcTemplate.execute("ALTER TABLE lz_cloud_om_dev.om_finance_account AUTO_INCREMENT=1000000000");
+			outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_finance_account where ipo = 'import'");
+		}
 
 		String id = position.get();
 		String sql = "select * from import_account";
@@ -318,10 +324,10 @@ public class DataMigration {
 
 		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
 
-		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_finance_account", SQL.INSERT));
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_finance_account", SQL.REPLACE));
 
 		process.add(new MapReplace("created_time", null, "now()"));
-		process.add(new MapRemove("id"));
+		// process.add(new MapRemove("id"));
 		process.add(new MapPut("ipo", "import"));
 		// process.add(new MapPut("company_id", "1"));
 
@@ -334,8 +340,10 @@ public class DataMigration {
 		ipo.launch();
 	}
 
-	public void project() {
-		// outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project where ipo = 'import'");
+	public void project(boolean reset) {
+		logger.debug("==================================================");
+		logger.debug("==================== Project ====================");
+		logger.debug("==================================================");
 
 		Map<Integer, String> province = new HashMap<Integer, String>();
 		Map<Integer, String> city = new HashMap<Integer, String>();
@@ -366,8 +374,10 @@ public class DataMigration {
 		Process process = new Process();
 		Output output = new Output();
 		Position position = new Position(new RedisPosition(stringRedisTemplate, "Project", "id"));
-		// position.reset();
-
+		if (reset) {
+			position.reset();
+			outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project where ipo = 'import'");
+		}
 		String id = position.get();
 		String sql = "select * from import_projects";
 		if (id != null) {
@@ -383,11 +393,11 @@ public class DataMigration {
 		process.add(new PartnerAProcess(inputJdbcTemplate));
 		process.add(new MapPut("ipo", "import"));
 		process.add(new MapPut("company_id", "1"));
-		// process.add(new MapPut("building_type", 1));
+		process.add(new MapLeft("remark", 512));
 		process.add(new MapLeft("addr_detail", 128));
 		process.add(new MapTrim("part_a_name"));
 
-		process.add(new MapPut("part_b_json", StringEscapeUtils.escapeJson("{\"linkPhone\":\"18310358098\",\"districtId\":440305,\"linkPost\":\"扫地僧\",\"companyTel\":\"53165186518561\",\"projectAddr\":[\"44\",\"4403\",\"440305\"],\"addrDetail\":\"南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"projectAddress\":\"广东省深圳市南山区南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"cityId\":4403,\"linkMan\":\"张三\",\"provinceId\":44}")));
+		process.add(new MapPut("part_b_json", "{\"linkPhone\":\"18310358098\",\"districtId\":440305,\"linkPost\":\"扫地僧\",\"companyTel\":\"53165186518561\",\"projectAddr\":[\"44\",\"4403\",\"440305\"],\"addrDetail\":\"南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"projectAddress\":\"广东省深圳市南山区南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"cityId\":4403,\"linkMan\":\"张三\",\"provinceId\":44}"));
 
 		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
 
@@ -398,20 +408,20 @@ public class DataMigration {
 		ipo.launch();
 	}
 
-	public void contract() {
+	public void contract(boolean reset) {
 
 		logger.debug("==================================================");
 		logger.debug("==================== Contract ====================");
 		logger.debug("==================================================");
 
-		outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project_contract where ipo = 'import'");
-
 		Input input = new Input();
 		Process process = new Process();
 		Output output = new Output();
 		Position position = new Position(new RedisPosition(stringRedisTemplate, "Contract", "id"));
-		// position.reset();
-
+		if (reset) {
+			position.reset();
+			outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project_contract where ipo = 'import'");
+		}
 		String id = position.get();
 		String sql = "select * from import_contract";
 		if (id != null) {
@@ -428,11 +438,11 @@ public class DataMigration {
 		// process.add(new PartnerAProcess(inputJdbcTemplate));
 		process.add(new MapPut("ipo", "import"));
 		process.add(new MapPut("company_id", "1"));
-		// process.add(new MapPut("building_type", 1));
 		process.add(new MapLeft("addr_detail", 128));
+		process.add(new MapCopy("part_b_id", "manager_company_id")); // 商务经理的公司ID
 		process.add(new MapTrim("part_a_name"));
 
-		process.add(new MapPut("part_b_json", StringEscapeUtils.escapeJson("{\"linkPhone\":\"18310358098\",\"districtId\":440305,\"linkPost\":\"扫地僧\",\"companyTel\":\"53165186518561\",\"projectAddr\":[\"44\",\"4403\",\"440305\"],\"addrDetail\":\"南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"projectAddress\":\"广东省深圳市南山区南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"cityId\":4403,\"linkMan\":\"张三\",\"provinceId\":44}")));
+		process.add(new MapPut("part_b_json", "{\"linkPhone\":\"18310358098\",\"districtId\":440305,\"linkPost\":\"扫地僧\",\"companyTel\":\"53165186518561\",\"projectAddr\":[\"44\",\"4403\",\"440305\"],\"addrDetail\":\"南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"projectAddress\":\"广东省深圳市南山区南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"cityId\":4403,\"linkMan\":\"张三\",\"provinceId\":44}"));
 
 		InputProcessOutput ipo = new InputProcessOutput("Contract");
 

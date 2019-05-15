@@ -14,6 +14,8 @@ public class SqlUtil {
 		public final static String UPDATE = "UPDATE";
 	}
 
+	public final static String QUOTE = "\'";
+
 	public static String join(String method, String table, Map<String, Object> map) {
 
 		Iterator<Entry<String, Object>> entries = map.entrySet().iterator();
@@ -39,10 +41,10 @@ public class SqlUtil {
 				if (function.contains(((String) entry.getValue()).toLowerCase())) {
 					values.append(String.format("%s", entry.getValue()));
 				} else {
-					values.append(String.format("\"%s\"", entry.getValue()));
+					values.append(String.format("'%s'", entry.getValue()));
 				}
 			} else {
-				values.append(String.format("\"%s\"", entry.getValue()));
+				values.append(String.format("'%s'", entry.getValue()));
 			}
 
 			if (entries.hasNext()) {

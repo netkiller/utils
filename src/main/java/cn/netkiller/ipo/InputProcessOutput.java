@@ -155,7 +155,9 @@ public class InputProcessOutput {
 
 			return true;
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			// logger.error(e.getMessage());
+			e.printStackTrace();
+			System.exit(1);
 		}
 		return false;
 

@@ -7,6 +7,7 @@ import org.apache.commons.text.StringEscapeUtils;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.google.gson.Gson;
 
 import cn.netkiller.ipo.process.ProcessInterface;
@@ -21,13 +22,14 @@ public class PartnerAProcess implements ProcessInterface {
 	}
 
 	@Override
-	public Object run( Object data) {
+	public Object run(Object data) {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> row = (Map<String, Object>) data;
 		String sql = "select * from import_crm where id = " + row.get("part_a_id");
+		// System.out.println(">>>>>> " + sql);
 		Map<String, Object> map = this.inputJdbcTemplate.queryForMap(sql);
-		System.out.println(">>>>>>");
-		System.out.println(map.toString());
+
+		// System.out.println(map.toString());
 
 		if (map != null) {
 			PartyA part = new PartyA();
@@ -53,7 +55,12 @@ public class PartnerAProcess implements ProcessInterface {
 
 			// convert java object to JSON format, and returned as JSON formatted string
 			String json = gson.toJson(part);
-			row.put("part_a_json", StringEscapeUtils.escapeJson(json));
+
+			// com.fasterxml.jackson.core.io.
+			// json = JsonStringEncoder.getInstance().quoteAsString(json).toString();
+			// json = StringEscapeUtils.escapeJava(json);
+			row.put("part_a_json", json);
+			// row.put("part_a_json", StringEscapeUtils.escapeJson(json));
 		}
 		return row;
 	}
