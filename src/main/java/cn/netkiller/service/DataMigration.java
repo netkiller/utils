@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import cn.netkiller.ipo.Input;
@@ -104,7 +105,7 @@ public class DataMigration {
 		process.add(new MapPut("ipo", "import"));
 		process.add(new MapReplace("user_pwd", null, "123456"));
 
-		InputProcessOutput ipo = new InputProcessOutput("User append");
+		InputProcessOutput ipo = new InputProcessOutput("User");
 
 		ipo.setInput(input);
 		ipo.setProcess(process);
@@ -175,7 +176,7 @@ public class DataMigration {
 		process.add(new MapPut("ipo", "import"));
 		process.add(new MapPut("company_id", "1"));
 
-		InputProcessOutput ipo = new InputProcessOutput();
+		InputProcessOutput ipo = new InputProcessOutput("Department");
 
 		ipo.setInput(input);
 		ipo.setProcess(process);
@@ -212,7 +213,7 @@ public class DataMigration {
 		process.add(new MapPut("ipo", "import"));
 		// process.add(new MapPut("company_id", "1"));
 
-		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
+		InputProcessOutput ipo = new InputProcessOutput("DepartmentsHasUser");
 
 		ipo.setInput(input);
 		ipo.setProcess(process);
@@ -252,7 +253,7 @@ public class DataMigration {
 		// process.add(new MapPut("company_id", "1"));
 		// process.add(new MapPut("biz_post_id", "1"));
 
-		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
+		InputProcessOutput ipo = new InputProcessOutput("Company");
 
 		ipo.setInput(input);
 		ipo.setProcess(process);
@@ -399,7 +400,7 @@ public class DataMigration {
 
 		process.add(new MapPut("part_b_json", "{\"linkPhone\":\"18310358098\",\"districtId\":440305,\"linkPost\":\"扫地僧\",\"companyTel\":\"53165186518561\",\"projectAddr\":[\"44\",\"4403\",\"440305\"],\"addrDetail\":\"南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"projectAddress\":\"广东省深圳市南山区南头街道马家龙工业区19栋(鼎元宏易大厦)4楼401-405\",\"cityId\":4403,\"linkMan\":\"张三\",\"provinceId\":44}"));
 
-		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
+		InputProcessOutput ipo = new InputProcessOutput("Project");
 
 		ipo.setInput(input);
 		ipo.setProcess(process);
@@ -413,6 +414,31 @@ public class DataMigration {
 		logger.debug("==================================================");
 		logger.debug("==================== Contract ====================");
 		logger.debug("==================================================");
+
+		// Map<Integer, String> province = new HashMap<Integer, String>();
+		// Map<Integer, String> city = new HashMap<Integer, String>();
+		// Map<Integer, String> district = new HashMap<Integer, String>();
+		// Map<String, Integer> address = new HashMap<String, Integer>();
+		//
+		// List<Map<String, Object>> rows = inputJdbcTemplate.queryForList("select id, name from res_country_state");
+		// for (Map<String, Object> row : rows) {
+		// province.put((Integer) row.get("id"), (String) row.get("name"));
+		// }
+		//
+		// List<Map<String, Object>> citys = inputJdbcTemplate.queryForList("select id, name from res_country_city");
+		// for (Map<String, Object> row : citys) {
+		// city.put((Integer) row.get("id"), (String) row.get("name"));
+		// }
+		//
+		// List<Map<String, Object>> districts = inputJdbcTemplate.queryForList("select id, name from res_city_district");
+		// for (Map<String, Object> row : districts) {
+		// district.put((Integer) row.get("id"), (String) row.get("name"));
+		// }
+		//
+		// List<Map<String, Object>> addresses = outputJdbcTemplate.queryForList("select id, addr_name as name from lz_address");
+		// for (Map<String, Object> row : addresses) {
+		// address.put((String) row.get("name"), (Integer) row.get("id"));
+		// }
 
 		Input input = new Input();
 		Process process = new Process();
@@ -435,7 +461,7 @@ public class DataMigration {
 		process.add(new MapReplace("created_by", null, ""));
 		process.add(new MapReplace("created_time", null, "now()"));
 		// process.add(new AddressProcess(province, city, district, address));
-		// process.add(new PartnerAProcess(inputJdbcTemplate));
+		process.add(new PartnerAProcess(inputJdbcTemplate));
 		process.add(new MapPut("ipo", "import"));
 		process.add(new MapPut("company_id", "1"));
 		process.add(new MapLeft("addr_detail", 128));
@@ -468,7 +494,7 @@ public class DataMigration {
 
 		process.add(new AttachmentProcess(aliyunOssService, inputJdbcTemplate));
 
-		InputProcessOutput ipo = new InputProcessOutput(this.getClass().getName());
+		InputProcessOutput ipo = new InputProcessOutput("Attachment");
 
 		ipo.setInput(input);
 		ipo.setProcess(process);
