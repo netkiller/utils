@@ -14,12 +14,12 @@ import cn.netkiller.service.DataMigration;
 @Order(30)
 public class DataInsert implements ApplicationRunner {
 
+	@SuppressWarnings("unused")
 	private final static Logger logger = LoggerFactory.getLogger(DataInsert.class);
 
 	@Autowired
 	private DataMigration dataMigration;
 
-	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
 		if (args.containsOption("table")) {
@@ -30,15 +30,17 @@ public class DataInsert implements ApplicationRunner {
 				return;
 			}
 		}
-		dataMigration.users(false);
-		dataMigration.department(false);
-		dataMigration.departmentsHasUser(false);
-		dataMigration.business_manager(false);
-		dataMigration.crm(false);
-		dataMigration.account(false);
-		dataMigration.project(false);
-		dataMigration.contract(false);
-		dataMigration.attachment();
+		boolean reset = false;
+
+		dataMigration.users(reset);
+		dataMigration.department(reset);
+		dataMigration.departmentsHasUser(reset);
+		dataMigration.business_manager(reset);
+		dataMigration.crm(reset);
+		dataMigration.account(reset);
+		dataMigration.project(reset);
+		dataMigration.contract(reset);
+		// dataMigration.attachment();
 		System.exit(0);
 	}
 

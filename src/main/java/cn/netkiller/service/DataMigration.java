@@ -5,14 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import cn.netkiller.ipo.Input;
@@ -30,7 +28,6 @@ import cn.netkiller.ipo.process.map.MapCopy;
 import cn.netkiller.ipo.process.map.MapKeyInclude;
 import cn.netkiller.ipo.process.map.MapLeft;
 import cn.netkiller.ipo.process.map.MapPut;
-import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
 import cn.netkiller.ipo.process.map.MapTrim;
 import cn.netkiller.ipo.service.AliyunOssService;
@@ -57,6 +54,8 @@ public class DataMigration {
 
 	@Autowired
 	private AliyunOssService aliyunOssService;
+
+	private String omdb = "lz_cloud_om_temp";
 
 	public DataMigration() {
 		// TODO Auto-generated constructor stub
@@ -274,8 +273,8 @@ public class DataMigration {
 
 		if (reset) {
 			position.reset();
-			outputJdbcTemplate.execute("ALTER TABLE lz_cloud_om_dev.om_crm_customer AUTO_INCREMENT=100000000000000000");
-			outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_crm_customer where ipo = 'import'");
+			outputJdbcTemplate.execute("ALTER TABLE " + this.omdb + ".om_crm_customer AUTO_INCREMENT=100000000000000000");
+			outputJdbcTemplate.execute("delete from " + this.omdb + ".om_crm_customer where ipo = 'import'");
 		}
 
 		String id = position.get();
@@ -286,11 +285,11 @@ public class DataMigration {
 
 		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
 
-		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_crm_customer", SQL.REPLACE));
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, this.omdb + ".om_crm_customer", SQL.REPLACE));
 
 		process.add(new MapReplace("created_time", null, "now()"));
 		process.add(new MapPut("ipo", "import"));
-		// process.add(new MapPut("company_id", "1"));
+		process.add(new MapLeft("customer_company_name", 64));
 
 		InputProcessOutput ipo = new InputProcessOutput("Customer");
 
@@ -313,8 +312,8 @@ public class DataMigration {
 
 		if (reset) {
 			position.reset();
-			outputJdbcTemplate.execute("ALTER TABLE lz_cloud_om_dev.om_finance_account AUTO_INCREMENT=1000000000");
-			outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_finance_account where ipo = 'import'");
+			outputJdbcTemplate.execute("ALTER TABLE " + this.omdb + ".om_finance_account AUTO_INCREMENT=1000000000");
+			outputJdbcTemplate.execute("delete from " + this.omdb + ".om_finance_account where ipo = 'import'");
 		}
 
 		String id = position.get();
@@ -325,7 +324,7 @@ public class DataMigration {
 
 		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
 
-		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_finance_account", SQL.REPLACE));
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, this.omdb + ".om_finance_account", SQL.REPLACE));
 
 		process.add(new MapReplace("created_time", null, "now()"));
 		// process.add(new MapRemove("id"));
@@ -377,7 +376,7 @@ public class DataMigration {
 		Position position = new Position(new RedisPosition(stringRedisTemplate, "Project", "id"));
 		if (reset) {
 			position.reset();
-			outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project where ipo = 'import'");
+			outputJdbcTemplate.execute("delete from " + this.omdb + ".om_project where ipo = 'import'");
 		}
 		String id = position.get();
 		String sql = "select * from import_projects";
@@ -387,7 +386,7 @@ public class DataMigration {
 
 		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
 
-		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_project", SQL.REPLACE));
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, this.omdb + ".om_project", SQL.REPLACE));
 
 		process.add(new MapReplace("created_time", null, "now()"));
 		process.add(new AddressProcess(province, city, district, address));
@@ -446,7 +445,7 @@ public class DataMigration {
 		Position position = new Position(new RedisPosition(stringRedisTemplate, "Contract", "id"));
 		if (reset) {
 			position.reset();
-			outputJdbcTemplate.execute("delete from lz_cloud_om_dev.om_project_contract where ipo = 'import'");
+			outputJdbcTemplate.execute("delete from " + this.omdb + ".om_project_contract where ipo = 'import'");
 		}
 		String id = position.get();
 		String sql = "select * from import_contract";
@@ -456,7 +455,7 @@ public class DataMigration {
 
 		input.add(new JdbcTemplateInput(inputJdbcTemplate, sql));
 
-		output.add(new JdbcTemplateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_project_contract", SQL.REPLACE));
+		output.add(new JdbcTemplateOutput(outputJdbcTemplate, this.omdb + ".om_project_contract", SQL.REPLACE));
 
 		process.add(new MapReplace("created_by", null, ""));
 		process.add(new MapReplace("created_time", null, "now()"));
@@ -481,18 +480,18 @@ public class DataMigration {
 
 	public void attachment() {
 
-		outputJdbcTemplate.update("update lz_cloud_om_dev.om_project_contract set contract_img_url=''");
+		outputJdbcTemplate.update("update " + this.omdb + ".om_project_contract set contract_img_url=''");
 
 		Input input = new Input();
 		Process process = new Process();
 		Output output = new Output();
 		RedisPosition redis = new RedisPosition(stringRedisTemplate, "Attachment", "id");
 		Position position = new Position(redis);
-		String sql = "select id, contract_img_url from lz_cloud_om_dev.om_project_contract where ipo='import'";
+		String sql = "select id, contract_img_url from " + this.omdb + ".om_project_contract where ipo='import'";
 		sql += redis.getSqlWhere();
 		input.add(new JdbcTemplateInput(outputJdbcTemplate, sql));
 
-		output.add(new JdbcTemplateUpdateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_project_contract", "id"));
+		output.add(new JdbcTemplateUpdateOutput(outputJdbcTemplate, this.omdb + ".om_project_contract", "id"));
 
 		process.add(new AttachmentProcess(aliyunOssService, inputJdbcTemplate));
 
