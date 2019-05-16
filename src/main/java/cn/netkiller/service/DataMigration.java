@@ -486,9 +486,11 @@ public class DataMigration {
 		Input input = new Input();
 		Process process = new Process();
 		Output output = new Output();
-		Position position = new Position(new RedisPosition(stringRedisTemplate, "Attachment", "id"));
-
-		input.add(new JdbcTemplateInput(outputJdbcTemplate, "select id, contract_img_url from lz_cloud_om_dev.om_project_contract where ipo='import'"));
+		RedisPosition redis = new RedisPosition(stringRedisTemplate, "Attachment", "id");
+		Position position = new Position(redis);
+		String sql = "select id, contract_img_url from lz_cloud_om_dev.om_project_contract where ipo='import'";
+		sql += redis.getSqlWhere();
+		input.add(new JdbcTemplateInput(outputJdbcTemplate, sql));
 
 		output.add(new JdbcTemplateUpdateOutput(outputJdbcTemplate, "lz_cloud_om_dev.om_project_contract", "id"));
 

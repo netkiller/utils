@@ -56,10 +56,10 @@ public class Command implements ApplicationRunner {
 		// asyncService.first();
 		// asyncService.second();
 
-//		String objectName = "test/aabbcc.png";
-//		this.aliyunOssService.open();
-//		this.aliyunOssService.uploadFromUrl(objectName, "https://www.baidu.com/img/bd_logo1.png");
-//		this.aliyunOssService.close();
+		// String objectName = "test/aabbcc.png";
+		// this.aliyunOssService.open();
+		// this.aliyunOssService.uploadFromUrl(objectName, "https://www.baidu.com/img/bd_logo1.png");
+		// this.aliyunOssService.close();
 //		logger.debug("http://lz-omcloud-test.oss-cn-shenzhen.aliyuncs.com/" + objectName);
 //
 //		System.exit(0);
@@ -77,30 +77,7 @@ public class Command implements ApplicationRunner {
 	// logger.warn(file.getURI().getPath());
 	// // this.getClass().getResourceAsStream("/SomeTextFile.txt");
 	//
-	// Input input = new Input();
-	// // StdinInput stdin = new StdinInput();
-	// // input.add(new StdinInput());
-	//
-	// input.add(new FileInput(file.getURI().getPath()));
-	//
-	// Output output = new Output();
-	// output.add(new StdoutOutput());
-	//
-	// Process process = new Process();
-	// process.add(new Replace("Hello", "Netkiller "));
-	// process.add(new Replace("Neo", "<Neo>"));
-	// process.add(new Replace("Tom", "[Tom]"));
-	// //
-	// InputProcessOutput ipo = new InputProcessOutput();
-	//
 
-	//
-	// ipo.setInput(input);
-	// ipo.setProcess(process);
-	// ipo.setOutput(output);
-	// ipo.setBatch(5);
-	// ipo.setPipeline(true);
-	// ipo.launch();
 	//
 	// logger.debug("end...");
 	//

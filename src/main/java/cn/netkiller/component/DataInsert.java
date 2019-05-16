@@ -37,7 +37,8 @@ public class DataInsert implements ApplicationRunner {
 		dataMigration.crm(false);
 		dataMigration.account(false);
 		dataMigration.project(false);
-		dataMigration.contract(true);
+		dataMigration.contract(false);
+		dataMigration.attachment();
 		System.exit(0);
 	}
 

@@ -37,7 +37,9 @@ public class AttachmentProcess implements ProcessInterface {
 			Map<String, Object> row = iterator.next();
 			// logger.debug(line.toString());
 			String name = String.format("contract/%s/%s", row.get("id"), (String) row.get("name"));
-			String url = String.format("http://120.76.214.182:8086/web/binary/saveas?model=ir.attachment&field=datas&filename_field=datas_fname&id=%s", row.get("id"));
+
+			// String url = String.format("http://120.76.214.182:8086/web/binary/saveas?model=ir.attachment&field=datas&filename_field=datas_fname&id=%s", row.get("id"));
+			String url = String.format("http://120.76.214.182:8086/images/%s", row.get("filename"));
 
 			boolean status = this.aliyunOssService.uploadFromUrl(name, url);
 			if (status) {
@@ -65,13 +67,13 @@ public class AttachmentProcess implements ProcessInterface {
 	@Override
 	public boolean open() {
 		aliyunOssService.open();
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean close() {
 		aliyunOssService.close();
-		return false;
+		return true;
 	}
 
 }
