@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 public class DataUpdate implements ApplicationRunner {
 	private final static Logger logger = LoggerFactory.getLogger(DataUpdate.class);
 
-	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
 		//

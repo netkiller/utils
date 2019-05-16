@@ -16,13 +16,11 @@ public class StringInput implements InputInterface {
 		this.data.addAll(lines);
 	}
 
-	@Override
 	public boolean open() {
 		this.iterator = data.iterator();
 		return false;
 	}
 
-	@Override
 	public Object readLine() {
 		if (this.iterator.hasNext()) {
 			return this.iterator.next();
@@ -30,19 +28,10 @@ public class StringInput implements InputInterface {
 		return null;
 	}
 
-	@Override
 	public boolean close() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
-	public Object getDataType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean hasNext() {
 		return this.iterator.hasNext();
 	}

@@ -16,7 +16,6 @@ public class Input implements InputInterface {
 	private final static Logger logger = LoggerFactory.getLogger(Input.class);
 	private final List<InputInterface> inputs = new ArrayList<InputInterface>();
 	private boolean hasNext = false;
-	private Object dataType = new String();
 
 	public Input() {
 	}
@@ -46,7 +45,6 @@ public class Input implements InputInterface {
 		return true;
 	}
 
-	@Override
 	public Object readLine() {
 		this.hasNext = false;
 		for (InputInterface input : this.inputs) {
@@ -62,12 +60,6 @@ public class Input implements InputInterface {
 		return null;
 	}
 
-	@Override
-	public Object getDataType() {
-		return this.dataType;
-	}
-
-	@Override
 	public boolean hasNext() {
 		return this.hasNext;
 	}

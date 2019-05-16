@@ -148,7 +148,8 @@ public class InputProcessOutput {
 			}
 			if (row != null) {
 				boolean outputStatus = this.output.write(row);
-				if (outputStatus) {
+				if (this.position != null && outputStatus) {
+
 					this.position.set(row);
 				}
 			}

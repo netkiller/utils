@@ -22,7 +22,6 @@ public class StdinInput implements InputInterface {
 
 	}
 
-	@Override
 	public boolean open() {
 		try {
 			stdin = new BufferedReader(new InputStreamReader(System.in, "utf-8"), 1024 * 1024 * 1024);
@@ -33,7 +32,6 @@ public class StdinInput implements InputInterface {
 
 	}
 
-	@Override
 	public String readLine() {
 		try {
 			return stdin.readLine();
@@ -49,21 +47,6 @@ public class StdinInput implements InputInterface {
 		return this.nextLine;
 	}
 
-	// public List<String> readLines() {
-	// List<String> lines = new ArrayList<String>();
-	// this.nextLine = false;
-	//
-	// String tmp = this.readLine();
-	// if (tmp != null && !tmp.equals("")) {
-	// lines.add(tmp);
-	// this.nextLine = true;
-	// // logger.debug(tmp);
-	// }
-	//
-	// return lines;
-	// }
-
-	@Override
 	public boolean close() {
 		try {
 			this.stdin.close();
@@ -74,13 +57,11 @@ public class StdinInput implements InputInterface {
 		return true;
 	}
 
-	@Override
 	public Object getDataType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public boolean hasNext() {
 		// TODO Auto-generated method stub
 		return false;

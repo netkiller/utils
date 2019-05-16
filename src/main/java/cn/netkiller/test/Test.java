@@ -1,18 +1,19 @@
 package cn.netkiller.test;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
+import cn.netkiller.ipo.Input;
+import cn.netkiller.ipo.InputProcessOutput;
+import cn.netkiller.ipo.Output;
+import cn.netkiller.ipo.input.QueueInput;
+import cn.netkiller.ipo.output.QueueOutput;
+import cn.netkiller.ipo.process.string.StringReplace;
+import cn.netkiller.ipo.Process;
+
 public class Test {
 
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
 	public static void main(String[] args) {
-		// TODO code application logic here
-
-		String string = new String("http://www.netkiller.cn");
-
-		System.out.println("查找字符 . 第一次出现的位置: " + string.indexOf('.'));
-		System.out.println("从第15个字符位置查找字符 . 出现的位置:" + string.indexOf('.', 15));
 
 		// System.out.println(StringEscapeUtils.escapeJson("{\"name\":\"Neo\"}"));
 		//
@@ -35,26 +36,6 @@ public class Test {
 		// System.out.println(test.replace("now()", "aaa"));
 		// System.out.println(test.replace("\"now()\"", "now()"));
 
-		// FileInput fi = new FileInput("/tmp/adobegc.log");
-		//// System.out.print(fi.readLine());
-		//
-		// Input input = new Input();
-		// input.add(fi);
-		//// input.read();
-		//
-		// Output output = new Output();
-		// output.add(new StdoutOutput());
-		//
-		// Process process = new Process();
-		// process.add(new Replace("Hello","Netkiller "));
-		// process.add(new Replace("Neo","<Neo>"));
-		// process.add(new Replace("Tom","[Tom]"));
-		//
-		// InputProcessOutput ipo = new InputProcessOutput();
-		// ipo.setInput(input);
-		// ipo.setProcess(process);
-		// ipo.setOutput(output);
-		// ipo.launch();
 	}
 
 }

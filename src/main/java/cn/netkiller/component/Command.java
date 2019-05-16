@@ -42,7 +42,6 @@ public class Command implements ApplicationRunner {
 	// @Autowired
 	// private RedisTemplate<String, Object> redisTemplate;
 
-	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		// System.out.println("==ApplicationRunner=====" + Arrays.asList(args.getSourceArgs()));
 		// System.out.println("==getOptionNames========" + args.getOptionNames());
@@ -64,23 +63,4 @@ public class Command implements ApplicationRunner {
 //
 //		System.exit(0);
 	}
-
-	// System.out.println("初始化业务");
-	//
-	// logger.debug("begin...");
-	//
-	// logger.warn("this.getClass().getResource(\"\").getPath() = {}", this.getClass().getResource("").getPath());
-	// // logger.warn(new ClassPathResource("logback.xml").getURI().getPath());
-	// logger.warn("new ClassPathResource(\"\").getURI().getPath() = {}", new ClassPathResource("").getURI().getPath());
-	// // logger.warn(this.getClass().getResource("input.txt").getPath());
-	// // logger.warn(this.getClass().getClassLoader().getResource("classpath:input.txt").getPath());
-	// logger.warn(file.getURI().getPath());
-	// // this.getClass().getResourceAsStream("/SomeTextFile.txt");
-	//
-
-	//
-	// logger.debug("end...");
-	//
-	// }
-	//
 }
