@@ -63,7 +63,7 @@ public class BizPostId implements ProcessInterface {
 			// System.out.println(">>>>>>>> " + value.indexOf("，"));
 			if (value.indexOf('，') >= 1) {
 				String[] tmp = value.split("，");
-				value = tmp[0].strip();
+				value = tmp[0];
 			}
 			String id = title.get(value);
 			map.put("biz_post_id", id);

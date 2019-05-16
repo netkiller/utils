@@ -41,11 +41,6 @@ public class MapInput implements InputInterface {
 	}
 
 	@Override
-	public Object getDataType() {
-		return new LinkedHashMap<String, Object>();
-	}
-
-	@Override
 	public boolean hasNext() {
 		return this.iterator.hasNext();
 	}

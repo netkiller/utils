@@ -1,7 +1,6 @@
 package cn.netkiller.ipo.input;
 
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -51,11 +50,6 @@ public class JdbcTemplateInput implements InputInterface {
 	@Override
 	public boolean close() {
 		return false;
-	}
-
-	@Override
-	public Object getDataType() {
-		return new LinkedHashMap<String, Object>();
 	}
 
 	public boolean hasNext() {

@@ -43,7 +43,6 @@ public class Process implements ProcessInterface {
 		return row;
 	}
 
-	@Override
 	public boolean open() {
 		for (ProcessInterface process : this.processes) {
 			logger.debug("Open {}", process.getClass().getName());
@@ -52,7 +51,6 @@ public class Process implements ProcessInterface {
 		return false;
 	}
 
-	@Override
 	public boolean close() {
 		for (ProcessInterface process : this.processes) {
 			process.close();

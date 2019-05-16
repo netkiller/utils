@@ -19,7 +19,6 @@ public class Position implements PositionInterface {
 		this.position = positionInterface;
 	}
 
-	@Override
 	public boolean set(Object data) {
 
 		return position.set(data);
@@ -30,12 +29,10 @@ public class Position implements PositionInterface {
 		return this.position.get();
 	}
 
-	@Override
 	public boolean reset() {
 		return this.position.reset();
 	}
 
-	@Override
 	public Object get(String hashKey) {
 		return this.position.get(hashKey);
 	}

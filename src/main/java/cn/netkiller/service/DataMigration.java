@@ -132,13 +132,13 @@ public class DataMigration {
 		// inputProcessOutputGroup.add(ipomc);
 		inputProcessOutputGroup.launch();
 
-		int inputCount = inputJdbcTemplate.queryForObject("select count(*) from import_users", Integer.class);
-		int outputCount = outputJdbcTemplate.queryForObject("select count(*) from lz_users where ipo='import'", Integer.class);
-		if (inputCount == outputCount) {
-			logger.info("---------- Check OK source {}, target {} ----------", inputCount, outputCount);
-		} else {
-			logger.warn("---------- Check ERROR source {}, target {} ----------", inputCount, outputCount);
-		}
+		// int inputCount = inputJdbcTemplate.queryForObject("select count(*) from import_users", Integer.class);
+		// int outputCount = outputJdbcTemplate.queryForObject("select count(*) from lz_users where ipo='import'", Integer.class);
+		// if (inputCount == outputCount) {
+		// logger.info("---------- Check OK source {}, target {} ----------", inputCount, outputCount);
+		// } else {
+		// logger.warn("---------- Check ERROR source {}, target {} ----------", inputCount, outputCount);
+		// }
 
 	}
 

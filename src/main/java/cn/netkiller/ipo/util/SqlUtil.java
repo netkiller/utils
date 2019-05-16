@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.sql.Timestamp;
 
 public class SqlUtil {
 
@@ -41,9 +42,15 @@ public class SqlUtil {
 				if (function.contains(((String) entry.getValue()).toLowerCase())) {
 					values.append(String.format("%s", entry.getValue()));
 				} else {
-					values.append(String.format("'%s'", entry.getValue()));
+					String value = (String) entry.getValue();
+					value = value.replace("'", "\\'");
+					// System.out.println(">><<<>>>> " + value);
+					values.append(String.format("'%s'", value));
 				}
+			} else if (entry.getValue() instanceof Timestamp) {
+				values.append(String.format("'%s'", entry.getValue()));
 			} else {
+
 				values.append(String.format("'%s'", entry.getValue()));
 			}
 
@@ -69,10 +76,11 @@ public class SqlUtil {
 
 	}
 
-	public static String update(String table, Map<String, Object> map, String where) throws Exception {
+	public static String update(String table, Map<String, Object> map, String where) {
 
 		if (!map.containsKey(where)) {
-			throw new Exception("The field isn't exist!");
+			// throw new Exception("The field isn't exist!");
+			System.exit(1);
 		}
 
 		StringBuffer sql = new StringBuffer(SQL.UPDATE);

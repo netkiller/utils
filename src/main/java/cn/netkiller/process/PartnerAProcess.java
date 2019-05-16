@@ -10,7 +10,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.google.gson.Gson;
 
 import cn.netkiller.component.DataInsert;

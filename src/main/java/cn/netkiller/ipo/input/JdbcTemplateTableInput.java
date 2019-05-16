@@ -56,12 +56,6 @@ public class JdbcTemplateTableInput implements InputInterface {
 	}
 
 	@Override
-	public Object getDataType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean hasNext() {
 		return this.iterator.hasNext();
 	}
