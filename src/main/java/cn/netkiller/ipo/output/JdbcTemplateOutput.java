@@ -23,6 +23,7 @@ public class JdbcTemplateOutput implements OutputInterface {
 	private JdbcTemplate outputJdbcTemplate;
 
 	private String method = SQL.INSERT;
+	private int insertId;
 
 	public JdbcTemplateOutput(JdbcTemplate outputJdbcTemplate, String table) {
 		this.outputJdbcTemplate = outputJdbcTemplate;
@@ -77,7 +78,7 @@ public class JdbcTemplateOutput implements OutputInterface {
 			}
 
 			logger.debug("Output SQL {};", sql);
-			outputJdbcTemplate.execute(sql);
+			this.insertId = outputJdbcTemplate.update(sql);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,6 +92,10 @@ public class JdbcTemplateOutput implements OutputInterface {
 	public boolean close() {
 		return true;
 
+	}
+
+	public int getId() {
+		return this.insertId;
 	}
 
 }

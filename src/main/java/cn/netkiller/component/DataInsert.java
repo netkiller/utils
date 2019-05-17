@@ -32,15 +32,16 @@ public class DataInsert implements ApplicationRunner {
 		}
 		boolean reset = false;
 
-		dataMigration.users(reset);
-		dataMigration.department(reset);
-		dataMigration.departmentsHasUser(reset);
-		dataMigration.business_manager(reset);
-		dataMigration.crm(reset);
-		dataMigration.account(reset);
+		// dataMigration.users(reset);
+		// dataMigration.department(reset);
+		// dataMigration.departmentsHasUser(reset);
+		// dataMigration.business_manager(reset);
+		// dataMigration.crm(reset);
+		// dataMigration.account(reset);
 		dataMigration.project(reset);
 		dataMigration.contract(reset);
-		dataMigration.attachment(reset);
+		dataMigration.split_project();
+		// dataMigration.attachment(reset);
 		System.exit(0);
 	}
 

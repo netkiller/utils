@@ -13,6 +13,7 @@ public class JdbcTemplateUpdateOutput implements OutputInterface {
 	private JdbcTemplate outputJdbcTemplate;
 	private String table;
 	private String where;
+	private int insertId;
 
 	public JdbcTemplateUpdateOutput(JdbcTemplate outputJdbcTemplate, String table, String where) {
 		this.outputJdbcTemplate = outputJdbcTemplate;
@@ -33,9 +34,9 @@ public class JdbcTemplateUpdateOutput implements OutputInterface {
 		String sql;
 		try {
 			sql = SqlUtil.update(this.table, map, this.where);
-			int id = this.outputJdbcTemplate.update(sql);
+			this.insertId = this.outputJdbcTemplate.update(sql);
 			logger.debug(sql);
-			logger.debug("Insert ID {}", id);
+			logger.debug("Insert ID {}", this.insertId);
 			return true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -50,4 +51,7 @@ public class JdbcTemplateUpdateOutput implements OutputInterface {
 		return true;
 	}
 
+	public int getId() {
+		return this.insertId;
+	}
 }

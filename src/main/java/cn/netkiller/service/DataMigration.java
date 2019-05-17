@@ -2,6 +2,7 @@ package cn.netkiller.service;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ import cn.netkiller.ipo.process.map.MapCopy;
 import cn.netkiller.ipo.process.map.MapKeyInclude;
 import cn.netkiller.ipo.process.map.MapLeft;
 import cn.netkiller.ipo.process.map.MapPut;
+import cn.netkiller.ipo.process.map.MapRemove;
 import cn.netkiller.ipo.process.map.MapReplace;
 import cn.netkiller.ipo.process.map.MapTrim;
 import cn.netkiller.ipo.service.AliyunOssService;
@@ -35,6 +37,7 @@ import cn.netkiller.ipo.util.SqlUtil.SQL;
 import cn.netkiller.process.AddressProcess;
 import cn.netkiller.process.AttachmentProcess;
 import cn.netkiller.process.BizPostId;
+import cn.netkiller.process.CreateProjectProcess;
 import cn.netkiller.process.PartnerAProcess;
 
 @Service
@@ -476,6 +479,56 @@ public class DataMigration {
 		ipo.setOutput(output);
 		ipo.setPosition(position);
 		ipo.launch();
+	}
+
+	public void split_project() {
+		inputJdbcTemplate.queryForList("select * from public.import_repeat_project").forEach(item -> {
+
+			logger.debug(item.toString());
+			int projectId = (Integer) item.get("id");
+			String sql = "select * from import_contract where proj_id = " + projectId;
+
+			Iterator<Map<String, Object>> it = inputJdbcTemplate.queryForList(sql).iterator();
+			boolean first = true;
+			while (it.hasNext()) {
+				Map<String, Object> contract = (Map<String, Object>) it.next();
+				if (first) {
+					first = false;
+					continue;
+				}
+				Input input = new Input();
+				Process process = new Process();
+				Output output = new Output();
+
+				String sqlProject = "select * from " + this.omdb + ".om_project where id = " + projectId;
+
+				input.add(new JdbcTemplateInput(outputJdbcTemplate, sqlProject));
+
+				process.add(new MapRemove("id"));
+				process.add(new MapPut("proj_no", contract.get("contract_no")));
+				process.add(new MapPut("proj_name", contract.get("contract_name")));
+				process.add(new CreateProjectProcess(outputJdbcTemplate, this.omdb + ".om_project"));
+
+				process.add(new MapKeyInclude(Arrays.asList("proj_id")));
+				process.add(new MapPut("id", contract.get("id")));
+
+				output.add(new JdbcTemplateUpdateOutput(outputJdbcTemplate, this.omdb + ".om_project_contract", "id"));
+
+				InputProcessOutput ipo = new InputProcessOutput("Contract split");
+
+				ipo.setInput(input);
+				ipo.setProcess(process);
+				ipo.setOutput(output);
+				// ipo.setExit(true);
+				ipo.launch();
+			}
+
+		});
+
+	}
+
+	public void promission() {
+
 	}
 
 	public void attachment(boolean reset) {

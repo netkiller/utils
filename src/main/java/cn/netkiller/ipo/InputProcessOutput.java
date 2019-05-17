@@ -92,6 +92,10 @@ public class InputProcessOutput {
 		this.exit = exit;
 	}
 
+	public void debug() {
+
+	}
+
 	public void launch() {
 
 		this.input.open();
