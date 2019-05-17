@@ -33,22 +33,26 @@ public class AttachmentProcess implements ProcessInterface {
 		List<Map<String, String>> images = new ArrayList<Map<String, String>>();
 		String sql = "select * from import_contract_attachment where contract_id=" + map.get("id");
 		Iterator<Map<String, Object>> iterator = inputJdbcTemplate.queryForList(sql).iterator();
+		// logger.debug(iterator.toString());
 		while (iterator.hasNext()) {
 			Map<String, Object> row = iterator.next();
-			// logger.debug(line.toString());
-			String name = String.format("contract/%s/%s", row.get("id"), (String) row.get("name"));
+
+			String name = (String) row.get("name");
+			String objectName = String.format("contract/%s/%s", row.get("id"), (String) row.get("name"));
 
 			// String url = String.format("http://120.76.214.182:8086/web/binary/saveas?model=ir.attachment&field=datas&filename_field=datas_fname&id=%s", row.get("id"));
-			String url = String.format("http://120.76.214.182:8086/images/%s", row.get("filename"));
+			// String url = String.format("http://120.76.214.182:8086/images/%s", row.get("filename"));
+			String url = "https://www.baidu.com/img/bd_logo1.png";
 
-			boolean status = this.aliyunOssService.uploadFromUrl(name, url);
+			boolean status = this.aliyunOssService.uploadFromUrl(objectName, url);
 			if (status) {
 				Map<String, String> image = new HashMap<String, String>();
 				image.put("name", name);
-				image.put("url", "http://lz-omcloud-test.oss-cn-shenzhen.aliyuncs.com/" + name);
+				image.put("url", "http://lz-omcloud-test.oss-cn-shenzhen.aliyuncs.com/" + objectName);
 
 				images.add(image);
 
+				logger.debug(images.toString());
 				Gson gson = new Gson();
 
 				// convert java object to JSON format, and returned as JSON formatted string

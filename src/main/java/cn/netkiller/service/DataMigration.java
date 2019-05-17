@@ -478,22 +478,36 @@ public class DataMigration {
 		ipo.launch();
 	}
 
-	public void attachment() {
-
-		outputJdbcTemplate.update("update " + this.omdb + ".om_project_contract set contract_img_url=''");
+	public void attachment(boolean reset) {
 
 		Input input = new Input();
 		Process process = new Process();
 		Output output = new Output();
 		RedisPosition redis = new RedisPosition(stringRedisTemplate, "Attachment", "id");
 		Position position = new Position(redis);
-		String sql = "select id, contract_img_url from " + this.omdb + ".om_project_contract where ipo='import'";
-		sql += redis.getSqlWhere();
+		if (reset) {
+			outputJdbcTemplate.update("update " + this.omdb + ".om_project_contract set contract_img_url=''");
+			position.reset();
+			redis.set(new HashMap<String, Object>() {
+
+				private static final long serialVersionUID = -6337266195218581531L;
+
+				{
+					put("id", "3835");
+				}
+			});
+		}
+		String sql = "select id, contract_img_url from " + this.omdb + ".om_project_contract where ipo='import' ";
+		// sql += redis.getSqlWhere();
+
+		String id = position.get();
+		if (id != null) {
+			sql += " and id > " + id;
+		}
+
 		input.add(new JdbcTemplateInput(outputJdbcTemplate, sql));
-
-		output.add(new JdbcTemplateUpdateOutput(outputJdbcTemplate, this.omdb + ".om_project_contract", "id"));
-
 		process.add(new AttachmentProcess(aliyunOssService, inputJdbcTemplate));
+		output.add(new JdbcTemplateUpdateOutput(outputJdbcTemplate, this.omdb + ".om_project_contract", "id"));
 
 		InputProcessOutput ipo = new InputProcessOutput("Attachment");
 

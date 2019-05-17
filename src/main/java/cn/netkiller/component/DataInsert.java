@@ -40,7 +40,7 @@ public class DataInsert implements ApplicationRunner {
 		dataMigration.account(reset);
 		dataMigration.project(reset);
 		dataMigration.contract(reset);
-		// dataMigration.attachment();
+		dataMigration.attachment(reset);
 		System.exit(0);
 	}
 
