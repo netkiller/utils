@@ -489,13 +489,16 @@ public class DataMigration {
 			String sql = "select * from import_contract where proj_id = " + projectId;
 
 			Iterator<Map<String, Object>> it = inputJdbcTemplate.queryForList(sql).iterator();
+
 			boolean first = true;
 			while (it.hasNext()) {
 				Map<String, Object> contract = (Map<String, Object>) it.next();
+				logger.debug(contract.toString());
 				if (first) {
 					first = false;
 					continue;
 				}
+
 				Input input = new Input();
 				Process process = new Process();
 				Output output = new Output();
