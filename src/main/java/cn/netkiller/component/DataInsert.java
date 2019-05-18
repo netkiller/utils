@@ -38,8 +38,8 @@ public class DataInsert implements ApplicationRunner {
 		// dataMigration.business_manager(reset);
 		// dataMigration.crm(reset);
 		// dataMigration.account(reset);
-		// dataMigration.project(reset);
-		// dataMigration.contract(reset);
+		dataMigration.project(reset);
+		dataMigration.contract(true);
 		dataMigration.split_project();
 		// dataMigration.attachment(reset);
 		System.exit(0);

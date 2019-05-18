@@ -20,9 +20,9 @@ public class Test {
 
 		// System.out.println(StringEscapeUtils.escapeJson("{\"name\":\"Neo\"}"));
 		//
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("id", 10);
-		map.put("name", "neo's");
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("id", 10);
+//		map.put("name", "neo's");
 		// map.put("age", null);
 		// map.put("json", "{\"name\":\"Neo\"}".replace("\\", "\\\\"));
 		// // URLEncoder.encode(address,"UTF-8")
@@ -32,11 +32,11 @@ public class Test {
 		// String name = "Chen";
 		// });
 		//
-		String s = SqlUtil.join("insert", "test", map);
-		System.out.println(s);
+//		String s = SqlUtil.join("insert", "test", map);
+//		System.out.println(s);
 
-		String test = "永旺华南商业有限公司yong'wang东湖店";
-		System.out.println(test.replace("\'", "\\'"));
+		// String test = "永旺华南商业有限公司yong'wang东湖店";
+		// System.out.println(test.replace("\'", "\\'"));
 		// System.out.println(test.replace("\"now()\"", "now()"));
 
 	}

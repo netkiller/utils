@@ -29,7 +29,7 @@ public class MapReplace implements ProcessInterface {
 		} else if (row.get(this.key) instanceof String) {
 			String tmp = (String) row.get(this.key);
 			if (tmp.contains(this.oldString)) {
-				tmp = tmp.replace(this.oldString, this.newString);
+				tmp = tmp.replaceAll(this.oldString, this.newString);
 				row.replace(this.key, tmp);
 			}
 		}
@@ -40,12 +40,12 @@ public class MapReplace implements ProcessInterface {
 	@Override
 	public boolean open() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean close() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 }
