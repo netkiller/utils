@@ -32,14 +32,12 @@ public class MapRemove implements ProcessInterface {
 
 	@Override
 	public boolean open() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean close() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }

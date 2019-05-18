@@ -399,7 +399,6 @@ public class DataMigration {
 		process.add(new MapLeft("remark", 512));
 		process.add(new MapLeft("addr_detail", 128));
 		process.add(new MapTrim("part_a_name"));
-		// process.add(new MapReplace("proj_name", "[\uda00-\udfff]", ""));
 		process.add(new MapReplace("proj_name", "􁵪􁻠􁴹􄲀􀞜􀨨", ""));
 
 		process.add(new MapLeft("part_a_name", 128));
