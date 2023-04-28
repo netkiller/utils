@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class NetkillerThreadManager {
+public class ThreadManager {
 
     public Thread[] listThreads() {
         int count = Thread.activeCount();

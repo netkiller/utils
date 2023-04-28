@@ -6,8 +6,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.*;
 
-import static java.util.stream.IntStream.*;
-
 
 public class TestThread {
 
@@ -102,7 +100,7 @@ public class TestThread {
 
     public static void main(String[] args) throws InterruptedException {
 
-        NetkillerThreadManager ntm = new NetkillerThreadManager();
+        ThreadManager ntm = new ThreadManager();
 //        System.out.println(Arrays.stream(ntm.listThreads()).toList());
 
 
